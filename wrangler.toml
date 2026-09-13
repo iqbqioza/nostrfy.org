@@ -1,3 +1,6 @@
 name = "nostrfy-org"
 compatibility_date = "2026-09-13"
-pages_build_output_dir = "build"
+
+[assets]
+directory = "build"
+not_found_handling = "single-page-application"
