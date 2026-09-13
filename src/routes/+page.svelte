@@ -61,7 +61,31 @@
 		'45', '46', '47', '50', '57', '59', '62', '65', '66', '67', '70', '77', '78', '84', '85',
 		'86', '87', '88', '94', '98', 'A3', 'Blossom'
 	];
+
+	const softwareJsonLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'SoftwareApplication',
+		name: 'nostrfy',
+		description:
+			'All-in-one Nostr relay server engine written in Rust. Spec-complete, built to never go down, configurable from nostrfy.toml.',
+		url: 'https://nostrfy.org/',
+		applicationCategory: 'DeveloperApplication',
+		operatingSystem: 'Linux, FreeBSD',
+		license: 'https://opensource.org/licenses/MIT',
+		offers: {
+			'@type': 'Offer',
+			price: '0',
+			priceCurrency: 'USD'
+		},
+		softwareVersion: '0.1.10',
+		installUrl: 'https://nostrfy.org/docs/quick-start/',
+		screenshot: 'https://nostrfy.org/og-image.png'
+	});
 </script>
+
+<svelte:head>
+	{@html `<script type="application/ld+json">${softwareJsonLd}</script>`}
+</svelte:head>
 
 <PageMeta
 	title="The Nostr relay that never goes down"
