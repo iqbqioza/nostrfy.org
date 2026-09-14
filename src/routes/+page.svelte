@@ -3,7 +3,7 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import Icon from '$lib/components/Icon.svelte';
-	import { site, installVariants } from '$lib/data/site';
+	import { site, installVariants, clients } from '$lib/data/site';
 
 	const features = [
 		{
@@ -362,6 +362,70 @@
 				</span>
 			{/each}
 		</div>
+	</div>
+</section>
+
+<!-- ===== Clients ===== -->
+<section class="border-y border-line/70 bg-surface/30">
+	<div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+		<div class="max-w-2xl">
+			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">An ecosystem of great clients</h2>
+			<p class="mt-3 leading-relaxed text-zinc-400">
+				nostrfy speaks the open NIP standards clients rely on — so the best Nostr apps plug in
+				and get the full experience. Any NIP-compliant client works with your relay.
+			</p>
+		</div>
+
+		<div class="mt-10 grid gap-4 md:grid-cols-2">
+			{#each clients as client (client.name)}
+				<a
+					href={client.url}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="group rounded-xl border border-line bg-bg/60 p-5 transition-colors hover:border-line-2"
+				>
+					<div class="flex items-center gap-3">
+						{#if client.icon}
+							<img
+								src={client.icon}
+								alt=""
+								width={40}
+								height={40}
+								class="rounded-lg"
+								loading="lazy"
+							/>
+						{:else}
+							<div
+								class="flex h-10 w-10 items-center justify-center rounded-lg border border-line bg-surface-2 text-sm font-semibold text-accent-300"
+							>
+								{client.name.charAt(0)}
+							</div>
+						{/if}
+						<div class="min-w-0">
+							<div class="flex items-center gap-1.5 text-sm font-semibold text-zinc-100 group-hover:text-white">
+								{client.name}
+								<Icon name="arrow-up-right" size={13} class="text-zinc-500 group-hover:text-accent-300" />
+							</div>
+							<div class="truncate text-xs text-zinc-500">{client.tagline}</div>
+						</div>
+					</div>
+					<p class="mt-3 text-sm leading-relaxed text-zinc-500">{client.quote}</p>
+					<div class="mt-3 flex flex-wrap gap-1.5">
+						{#each client.features as feature (feature)}
+							<span
+								class="rounded-md border border-line bg-surface/50 px-2 py-0.5 font-mono text-[11px] text-zinc-400">
+								{feature}
+							</span>
+						{/each}
+					</div>
+				</a>
+			{/each}
+		</div>
+
+		<p class="mt-6 text-center text-xs text-zinc-600">
+			Building on Nostr? Point any client at your relay — see the
+			<a href="/docs/nips/" class="text-zinc-400 hover:text-accent-300">full NIP reference</a>.
+		</p>
 	</div>
 </section>
 

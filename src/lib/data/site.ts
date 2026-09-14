@@ -45,3 +45,15 @@ export const installVariants = [
 		command: 'git clone https://github.com/iqbqioza/nostrfy.git && cd nostrfy && cargo build --release'
 	}
 ];
+
+export const clients = [
+	{
+		name: 'Ditto',
+		url: 'https://ditto.pub',
+		icon: '/clients/ditto.png',
+		tagline: 'Open-source Nostr social client',
+		quote:
+			'Ditto genuinely uses these NIPs — NIP-50 search, NIP-22 threaded comments, NIP-57 zaps, NIP-94 media and NIP-85 stats are part of its daily experience — and every one maps to a nostrfy relay feature.',
+		features: ['1', '9', '22', '32', '34', '50', '57', '62', '65', '78', '85', '94', 'Blossom']
+	}
+];
