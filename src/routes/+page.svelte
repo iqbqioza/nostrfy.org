@@ -71,13 +71,13 @@
 		url: 'https://nostrfy.org/',
 		applicationCategory: 'DeveloperApplication',
 		operatingSystem: 'Linux, FreeBSD',
-		license: 'https://opensource.org/licenses/MIT',
+		license: ['https://opensource.org/licenses/MIT', 'https://www.apache.org/licenses/LICENSE-2.0'],
 		offers: {
 			'@type': 'Offer',
 			price: '0',
 			priceCurrency: 'USD'
 		},
-		softwareVersion: '0.1.10',
+		softwareVersion: '0.1.14',
 		installUrl: 'https://nostrfy.org/docs/quick-start/',
 		screenshot: 'https://nostrfy.org/og-image.png'
 	});
@@ -113,7 +113,7 @@
 		>
 			<span class="h-1.5 w-1.5 rounded-full bg-accent-400" aria-hidden="true"></span>
 			<span>
-				Rust · MIT licensed · latest release
+				Rust · MIT or Apache-2.0 · latest release
 				<a href={`${site.github}/releases`} target="_blank" rel="noopener noreferrer" class="font-semibold text-accent-300 hover:text-accent-200">
 					{site.latestRelease}
 				</a>

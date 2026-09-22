@@ -29,7 +29,7 @@
 
 <PageMeta
 	title="About"
-	description="nostrfy is an open-source, MIT-licensed Nostr relay server engine written in Rust. Learn about the project and its design principles."
+	description="nostrfy is an open-source Nostr relay server engine in Rust, dual-licensed under MIT or Apache-2.0. Learn about the project and its design principles."
 />
 
 <div class="relative overflow-hidden">
@@ -56,7 +56,7 @@
 				<strong class="text-zinc-200">specified by a single config file</strong>, run on the smallest
 				server you can rent, and still implement every relay-side NIP — plus a file server, a REST
 				API and a management interface? nostrfy is the result, and it is free: released under the
-				MIT license.
+				MIT or Apache-2.0 license.
 			</p>
 			<p>
 				nostrfy runs the official relay of the project, and the same binary has been verified on

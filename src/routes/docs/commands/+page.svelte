@@ -75,6 +75,10 @@ nostrfy blossom list`;
 	</p>
 	<CodeBlock code={accessListCode} lang="sh" />
 	<p>A denied pubkey is always rejected when publishing and never served when reading.</p>
+	<p>
+		<code>nostrfy access unblockip &lt;ip&gt;</code> removes an IP from the persisted NIP-86 blocked-IP list
+		(self-lockout recovery); restart the daemon to apply.
+	</p>
 
 	<h2>Inbox/outbox subscription filters</h2>
 	<p>

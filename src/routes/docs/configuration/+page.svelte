@@ -317,6 +317,12 @@ nostrfy relay list`;
 				<td><code>"any"</code></td>
 				<td>Who may write to /outbox: "any" (the NIP-42-authenticated pubkey's own events) or "relay"</td>
 			</tr>
+			<tr>
+				<td><code>trusted_proxies</code></td>
+				<td>array of strings</td>
+				<td><code>[]</code></td>
+				<td>Reverse-proxy addresses/CIDRs whose X-Forwarded-For is trusted (empty = trust no proxy)</td>
+			</tr>
 		</tbody>
 	</table>
 	</div>
@@ -331,6 +337,13 @@ nostrfy relay list`;
 		<li>
 			<strong>ws_paths</strong> — <code>root</code> serves / only, <code>inbox-outbox</code> serves /inbox and
 			/outbox only, <code>all</code> serves both. Fixed at startup — requires a restart.
+		</li>
+		<li>
+			<strong>trusted_proxies</strong> — list only the proxy's own addresses (loopback for nginx/Caddy on the same
+			host, the balancer's source range in the cloud). With it set, the client IP is derived from the last untrusted
+			<code>X-Forwarded-For</code> entry for the per-IP caps, rate limit, <code>blockip</code> and the logs. Never
+			add an address clients can reach directly — they could spoof the header and bypass the per-IP limits.
+			Fixed at startup — requires a restart.
 		</li>
 	</ul>
 
@@ -571,6 +584,12 @@ nostrfy relay list`;
 				<td>Ceiling for the API offset parameter</td>
 			</tr>
 			<tr>
+				<td><code>max_api_fetch</code></td>
+				<td>integer</td>
+				<td><code>55001</code></td>
+				<td>Max over-fetch window for offset queries — must cover max_api_offset + max_api_limit + 1 (0 = no bound)</td>
+			</tr>
+			<tr>
 				<td><code>max_api_search_bytes</code></td>
 				<td>integer</td>
 				<td><code>2048</code></td>
@@ -714,6 +733,12 @@ nostrfy relay list`;
 				<td>integer</td>
 				<td><code>262144</code></td>
 				<td>Max events inside queued batches before failing fast</td>
+			</tr>
+			<tr>
+				<td><code>max_db_queue_bytes</code></td>
+				<td>integer</td>
+				<td><code>268435456</code> (256 MiB)</td>
+				<td>Max bytes of queued database requests before failing fast (0 = no byte cap)</td>
 			</tr>
 		</tbody>
 	</table>
@@ -948,7 +973,7 @@ nostrfy relay list`;
 			</tr>
 			<tr>
 				<td>most of [limits]</td>
-				<td>api_host, metrics_enabled, ws_paths, database.*, daemon sizes, limit caps, blossom.*</td>
+				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, database.*, daemon sizes, limit caps, blossom.*</td>
 			</tr>
 		</tbody>
 	</table>

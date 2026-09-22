@@ -33,7 +33,8 @@
 			<div>
 				<Logo size={30} />
 				<p class="mt-4 max-w-xs text-sm leading-relaxed text-zinc-500">
-					An all-in-one Nostr relay server engine written in Rust. Open source, MIT licensed.
+					An all-in-one Nostr relay server engine written in Rust. Open source, dual-licensed
+					under MIT or Apache-2.0.
 				</p>
 				<div class="mt-5 flex flex-col gap-2">
 					{#each site.relays as relay (relay.url)}
@@ -71,7 +72,7 @@
 		<div class="mt-12 flex flex-col gap-3 border-t border-line/70 pt-6 text-xs text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
 			<p>
 				&copy; {new Date().getFullYear()} iqbqioza · Released under the
-				<a href="/LICENSE" class="text-zinc-500 hover:text-zinc-300">MIT License</a>
+				<a href="/LICENSE" class="text-zinc-500 hover:text-zinc-300">MIT or Apache-2.0 license</a>
 			</p>
 			<a href={site.github} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:text-zinc-300">
 				<Icon name="github" size={13} />

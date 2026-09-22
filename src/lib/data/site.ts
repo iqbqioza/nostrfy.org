@@ -1,4 +1,4 @@
-const latestRelease = 'v0.1.10';
+const latestRelease = 'v0.1.14';
 
 export const site = {
 	name: 'nostrfy',
@@ -10,7 +10,7 @@ export const site = {
 	github: 'https://github.com/iqbqioza/nostrfy',
 	githubRaw: 'https://raw.githubusercontent.com/iqbqioza/nostrfy/main',
 	latestRelease,
-	license: 'MIT',
+	license: 'MIT OR Apache-2.0',
 	installScriptUrl: 'https://raw.githubusercontent.com/iqbqioza/nostrfy/main/install.sh',
 	installCommand: 'curl -fsSL https://raw.githubusercontent.com/iqbqioza/nostrfy/main/install.sh | sh',
 	relays: [{ name: 'relay.nostrfy.org', url: 'wss://relay.nostrfy.org' }],
@@ -55,5 +55,14 @@ export const clients = [
 		quote:
 			'Ditto genuinely uses these NIPs — NIP-50 search, NIP-22 threaded comments, NIP-57 zaps, NIP-94 media and NIP-85 stats are part of its daily experience — and every one maps to a nostrfy relay feature.',
 		features: ['1', '9', '22', '32', '34', '50', '57', '62', '65', '78', '85', '94', 'Blossom']
+	},
+	{
+		name: 'Nostrich',
+		url: 'https://nostrich.org',
+		icon: '/clients/nostrich.png',
+		tagline: 'Free Nostr client for web, iOS, Android & Mac',
+		quote:
+			'A full-featured client that genuinely uses these NIPs — NIP-50 search, NIP-17/59 private messages, NIP-57 zaps, NIP-88 polls and Blossom media all work against your relay.',
+		features: ['1', '9', '17', '22', '46', '47', '50', '57', '59', '65', '78', '84', '88', '98', 'Blossom']
 	}
 ];
