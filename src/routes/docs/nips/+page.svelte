@@ -37,7 +37,7 @@
 			</tr>
 			<tr>
 				<td>17</td>
-				<td>Private DMs (kind 14, wrapped in 15; ephemeral wraps 1059/21059 forwarded)</td>
+				<td>Private DMs (kind 14 wrapped in kind 15; kind 1059 and ephemeral kind 21059 gift wraps served recipient-only when NIP-42 auth is on)</td>
 			</tr>
 			<tr>
 				<td>22</td>
@@ -49,7 +49,7 @@
 			</tr>
 			<tr>
 				<td>28</td>
-				<td>Public chat</td>
+				<td>Public chat (client-side: stored and served as plain events, not advertised)</td>
 			</tr>
 			<tr>
 				<td>29</td>
@@ -66,7 +66,7 @@
 			<tr>
 				<td>34</td>
 				<td>
-					git stuff (kinds 1617-1633, 30617/30618 — opt-in via
+					git stuff (kinds 1617-1619, 1621, 1622, 1630-1633, 30617/30618 — opt-in via
 					<code>relay.enabled_git</code>, off by default)
 				</td>
 			</tr>
@@ -80,7 +80,12 @@
 			</tr>
 			<tr>
 				<td>43</td>
-				<td>Relay access metadata (roles)</td>
+				<td>
+					Relay access metadata (roles) — kinds 33534/13534/8000/8001 plus ephemeral 28934/28935/28936;
+					the relay-signed metadata is AUTH-gated. Invite codes are issued with NIP-86
+					<code>createclaim</code>/<code>deleteclaim</code>; a kind:28934 carrying a listed code admits
+					its author
+				</td>
 			</tr>
 			<tr>
 				<td>45</td>
@@ -116,7 +121,7 @@
 			</tr>
 			<tr>
 				<td>66</td>
-				<td>Relay discovery &amp; liveness (self-publishes kind 30166)</td>
+				<td>Relay discovery &amp; liveness (kinds 30166/10166 stored and served; self-publishes kind 30166)</td>
 			</tr>
 			<tr>
 				<td>67</td>
@@ -128,7 +133,7 @@
 			</tr>
 			<tr>
 				<td>77</td>
-				<td>Negentropy syncing</td>
+				<td>Negentropy syncing (a failed replacement closes the id with NEG-ERR per NIP-77)</td>
 			</tr>
 			<tr>
 				<td>78</td>
@@ -140,7 +145,7 @@
 			</tr>
 			<tr>
 				<td>85</td>
-				<td>Trusted assertions</td>
+				<td>Trusted assertions (kinds 30382/30383/30384/30385/10040, addressable)</td>
 			</tr>
 			<tr>
 				<td>86</td>
@@ -148,7 +153,7 @@
 			</tr>
 			<tr>
 				<td>87</td>
-				<td>Cashu and Fedimint announcements</td>
+				<td>Cashu and Fedimint announcements (kinds 38000/38172/38173)</td>
 			</tr>
 			<tr>
 				<td>88</td>
@@ -205,7 +210,7 @@
 			management call is refused).
 		</li>
 		<li>
-			NIPs without dedicated kinds (<code>11</code>, <code>13</code>, <code>26</code>, <code>33</code>,
+			NIPs without dedicated kinds (<code>1</code>, <code>11</code>, <code>13</code>, <code>26</code>, <code>33</code>,
 			<code>40</code>, <code>45</code>, <code>50</code>, <code>67</code>, <code>70</code>,
 			<code>77</code>) are always advertised when enabled.
 		</li>

@@ -195,4 +195,28 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 		reason text is identical to the sequential path — only the Schnorr work is spread across cores. A single-threaded
 		build stays sequential.
 	</p>
+
+	<h2>Fixed anti-abuse bounds</h2>
+	<p>
+		A few hard bounds are fixed (not configurable) to keep the relay responsive under abuse:
+	</p>
+	<ul>
+		<li>
+			One filter carries at most <strong>512</strong> <code>ids</code>, <code>authors</code> or
+			<code>kinds</code> entries; <code>#...</code> tag values share a separate <strong>512</strong>-value
+			budget per filter. Larger filters are rejected (<code>CLOSED invalid: ...</code>).
+		</li>
+		<li>
+			<code>max_connections_per_sec_per_ip</code> tracks at most 10,000 source IPs; while full, unseen IPs
+			are refused (fail closed).
+		</li>
+		<li>
+			Event ids in <code>ids</code> filters may be prefixes, but only full 32-byte ids and even-length
+			prefixes match (odd-length/empty entries are ignored for history and live delivery alike).
+		</li>
+		<li>
+			Over-long index keys (tag values, content words, <code>d</code> tags beyond LMDB's key-size limit) are
+			skipped at indexing time; the event is still stored.
+		</li>
+	</ul>
 </div>

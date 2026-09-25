@@ -380,6 +380,11 @@ nostrfy relay list`;
 		</tbody>
 	</table>
 	</div>
+	<p>
+		The NIP-86 RPC is mounted on the relay's public <code>POST /</code> routes — there is no separate management
+		port. <code>management_token</code> and <code>admin_pubkey</code> sometimes appear under <code>[server]</code>
+		in old guides; those spellings are legacy aliases of these <code>[rpc]</code> keys.
+	</p>
 
 	<h2>Section [limits] — limits and protections</h2>
 	<h3>Connections and messages</h3>
@@ -485,7 +490,7 @@ nostrfy relay list`;
 				<td><code>max_sub_id_len</code></td>
 				<td>integer</td>
 				<td><code>64</code></td>
-				<td>Max subscription id length</td>
+				<td>Max subscription id length (characters, not bytes)</td>
 			</tr>
 			<tr>
 				<td><code>max_sub_bytes</code></td>
@@ -553,6 +558,11 @@ nostrfy relay list`;
 		</tbody>
 	</table>
 	</div>
+	<p>
+		Legacy aliases: <code>limits.require_pow</code>, <code>limits.new_pubkey_min_age_secs</code> and
+		<code>limits.max_indexed_words</code> are still accepted as aliases of <code>relay.require_pow</code>,
+		<code>relay.new_pubkey_min_age_secs</code> and <code>database.max_indexed_words</code>.
+	</p>
 	<h3>REST API</h3>
 		<div class="overflow-x-auto">
 		<table>
@@ -851,6 +861,12 @@ nostrfy relay list`;
 				<td><code>[]</code></td>
 				<td>IP addresses refused at connection time</td>
 			</tr>
+			<tr>
+				<td><code>method_grants</code></td>
+				<td>table: pubkey → array of strings</td>
+				<td><code>&#123;&#125;</code></td>
+				<td>NIP-86 method grants for non-admin pubkeys (managed at runtime with <code>assignmethod</code>)</td>
+			</tr>
 		</tbody>
 	</table>
 	</div>
@@ -865,6 +881,15 @@ nostrfy relay list`;
 			reading stays open to everyone (any client can still subscribe and fetch).
 		</li>
 		<li>A denied pubkey is always rejected when publishing and never served when reading.</li>
+		<li>
+			<strong>method_grants</strong> — NIP-86 method grants for non-admin pubkeys (pubkey → method names, e.g. a
+			moderator allowed <code>banevent</code> and <code>listbannedevents</code>). Seeded from the config on the
+			first run, then managed at runtime with NIP-86 <code>assignmethod</code>/<code>unassignmethod</code>
+			(inspected with <code>listmethodassignees</code>). Only moderation and read methods are grantable —
+			permission, role, invite-claim and relay-identity management stay admin-only, and a banned pubkey is
+			refused even with grants. See the
+			<a href="/docs/management/">management API</a>.
+		</li>
 	</ul>
 
 	<h2>Section [blossom] — Blossom file server</h2>

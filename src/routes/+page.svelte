@@ -77,7 +77,7 @@
 			price: '0',
 			priceCurrency: 'USD'
 		},
-		softwareVersion: '0.1.14',
+		softwareVersion: '0.1.16',
 		installUrl: 'https://nostrfy.org/docs/quick-start/',
 		screenshot: 'https://nostrfy.org/og-image.png'
 	});
@@ -235,6 +235,26 @@
 					<CodeBlock code={variant.command} lang="bash" />
 				</div>
 			{/each}
+		</div>
+
+		<div class="mt-8 flex flex-col items-start justify-between gap-4 rounded-xl border border-line bg-surface/50 p-5 sm:flex-row sm:items-center">
+			<div class="flex items-start gap-3">
+				<div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line bg-bg">
+					<Icon name="database" size={17} class="text-accent-400" />
+				</div>
+				<div>
+					<h3 class="text-sm font-semibold text-zinc-100">Migrating from strfry?</h3>
+					<p class="mt-1 text-sm text-zinc-500">
+						Bring your existing events over with one command — offline, verified and safe to re-run.
+					</p>
+				</div>
+			</div>
+			<a
+				href="/docs/migrating-from-strfry/"
+				class="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-accent-300 hover:text-accent-200"
+			>
+				Migration guide <Icon name="arrow-right" size={15} />
+			</a>
 		</div>
 	</div>
 </section>

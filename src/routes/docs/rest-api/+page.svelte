@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DocsTitle from '$lib/components/docs/DocsTitle.svelte';
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
+	import Callout from '$lib/components/Callout.svelte';
 
 	const baseUrl = `http://<host>:<port>/api/v1/{identifier}
 http://<host>:<port>/api/v1/{identifier}/{kind}`;
@@ -77,11 +78,15 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 			</tr>
 			<tr>
 				<td><code>GET /api/v1/&lt;npub1...&gt;/&lt;kind&gt;</code></td>
-				<td>Events by pubkey, filtered by kind (only valid for npub1...; 400 otherwise)</td>
+				<td>Events by pubkey, filtered by kind (accepts npub1... or nprofile1...; 400 otherwise)</td>
 			</tr>
 		</tbody>
 	</table>
 	</div>
+	<p>
+		Author identifiers accept <code>npub1...</code>, <code>nprofile1...</code> or a 64-hex pubkey
+		(case-insensitive) on every endpoint.
+	</p>
 	<h3>Query and aggregate endpoints</h3>
 	<ul>
 		<li><code>GET /api/v1/query</code> — generic filter query without an identifier.</li>
@@ -92,30 +97,33 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		</li>
 		<li>
 			<code>GET /api/v1/&lt;npub1...&gt;/&lt;kind&gt;/daily</code> — per-day counts for one month;
-			month must be 1-12, and every day is reported zero-filled through the last day.
+			month must be 1-12, and every day is reported zero-filled through the last day (each entry and the
+			total carry an <code>approximate</code> flag).
 		</li>
 		<li>
 			<code>GET /api/v1/ids/&lt;hex&gt;</code> — a single event by its 64-hex id (prefixes rejected).
 		</li>
 		<li>
 			<code>GET /api/v1/&lt;npub1...&gt;/stats</code> — author summary (total, first/last activity, kind
-			breakdown).
+			breakdown); <code>first_seen</code>/<code>last_seen</code>/months are <code>null</code> when no
+			visible events exist.
 		</li>
 		<li>
 			<code>GET /api/v1/&lt;npub1...&gt;/&lt;kind&gt;/hourly</code> — per-hour counts for one day; all 24
-			hours are reported, zero-filled.
+			hours are reported, zero-filled (same <code>approximate</code> flags as daily).
 		</li>
 		<li>
 			<code>GET /api/v1/ids/&lt;hex&gt;/related</code> — replies (#e) and quotes (#q) referencing the
-			event.
+			event; the path id is lowercased before matching, and an <code>e</code> query parameter is OR-ed
+			into the #e side.
 		</li>
 		<li>
 			<code>GET /api/v1/&lt;npub1...&gt;/follows</code> — the author's latest kind-3 follow list.
 		</li>
-		<li><code>GET /api/v1/relay/kinds</code> — the most common kinds on the relay (bounded, visibility-filtered sample).</li>
+		<li><code>GET /api/v1/relay/kinds</code> — the most common kinds on the relay (bounded, visibility-filtered sample; <code>approximate</code> and <code>filtered</code> flags).</li>
 		<li>
 			<code>GET /api/v1/relay/top-authors</code> — the most active authors on the relay (bounded,
-			visibility-filtered sample; approximate flag).
+			visibility-filtered sample; <code>approximate</code> and <code>filtered</code> flags).
 		</li>
 		<li>
 			<code>GET /api/v1/&lt;npub1...&gt;/relays</code> — the author's latest NIP-65 relay list
@@ -210,6 +218,15 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		<strong>visible</strong> sequence — hidden events never skip or duplicate a page:
 	</p>
 	<CodeBlock code={page1} lang="bash" />
+
+	<Callout type="note" title="Endpoint quirks">
+		Singleton endpoints (profile, <code>/ids/&#123;hex&#125;</code>, follows, relays) still accept
+		<code>offset</code> — <code>?offset=1</code> skips the only event and returns <code>[]</code>.
+		The <code>authors</code>/<code>kinds</code> query parameters only filter the generic
+		<code>/query</code> endpoint: on kind endpoints they are silently ignored (both are pre-filled), while
+		on id endpoints they are AND-ed. The <code>stats</code> kind breakdown is ordered by kind, unlike
+		<code>/kinds</code> (count first).
+	</Callout>
 
 	<h2>Visibility rules</h2>
 	<p>The API is unauthenticated, so it withholds the same events as an anonymous WebSocket connection:</p>

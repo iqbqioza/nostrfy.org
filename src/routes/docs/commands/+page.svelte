@@ -13,6 +13,12 @@ nostrfy blossom list`;
 
 	const reqCode = `["REQ", "my-feed", {"outbox": "npub1..."}]
 ["REQ", "mentions", {"inbox": "npub1...", "kinds": [1, 7]}]`;
+
+	const migrateCode = `# dry run first — verifies every event, writes nothing
+nostrfy migrate-strfry --strfry-db /var/lib/strfry-db --dry-run
+
+# import (stop the nostrfy relay first)
+nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 </script>
 
 <DocsTitle
@@ -38,7 +44,7 @@ nostrfy blossom list`;
 			</tr>
 			<tr>
 				<td><code>nostrfy genkey</code></td>
-				<td>Generate a secret key for NIP-29 groups, write it into relay.private_key, set the config to 0600 and print the public key</td>
+				<td>Generate a secret key for NIP-29 groups, write it into relay.private_key, set the config to 0600 and print the public key; aborts instead of writing when the file changed since it was read</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
@@ -62,7 +68,11 @@ nostrfy blossom list`;
 			</tr>
 			<tr>
 				<td><code>nostrfy upgrade [version]</code></td>
-				<td>Update the binary to the latest GitHub release (or the given version); downloads the matching platform asset, verifies it with a <code>--version</code> probe and atomically replaces the binary; never downgrades unless a version is given; <code>--force</code> reinstalls</td>
+				<td>Update the binary to the latest GitHub release (or the given version); downloads the matching platform asset, verifies its sha256 checksum and a <code>--version</code> probe, then atomically replaces the binary; concurrent runs are serialized with a lock file; never downgrades unless a version is given; <code>--force</code> reinstalls</td>
+			</tr>
+			<tr>
+				<td><code>nostrfy migrate-strfry</code></td>
+				<td>Import events from a strfry relay — either run <code>strfry export</code> via <code>--strfry-db</code>, read a JSONL file with <code>--input</code>, or pipe it via stdin; re-runnable, with <code>--dry-run</code>, <code>--since</code> and optional settings merge</td>
 			</tr>
 		</tbody>
 	</table>
@@ -71,7 +81,7 @@ nostrfy blossom list`;
 	<h2>Managing the access lists</h2>
 	<p>
 		The relay pubkey allow/deny lists and the Blossom upload allowlist live in LMDB and apply immediately — the
-		running daemon reloads on SIGHUP:
+		running daemon is reloaded automatically:
 	</p>
 	<CodeBlock code={accessListCode} lang="sh" />
 	<p>A denied pubkey is always rejected when publishing and never served when reading.</p>
@@ -94,6 +104,20 @@ nostrfy blossom list`;
 		The endpoints are also write-restricted: <code>/outbox</code> accepts only events authored by the connection's
 		NIP-42-authenticated pubkey (<code>server.outbox_write_policy = "any"</code>) or only the relay's own events
 		(<code>"relay"</code>); <code>/inbox</code> accepts only events carrying a <code>p</code> tag.
+	</p>
+
+	<h2>Migrating from strfry</h2>
+	<p>
+		Bring an existing strfry relay's events over with one command. The migration is offline (stop the nostrfy
+		relay first — it refuses to run while the database is held), reads strfry's own export format, and is safe
+		to re-run: duplicates are skipped and deletion side effects are re-applied.
+	</p>
+	<CodeBlock code={migrateCode} lang="sh" />
+	<p>
+		It also offers to merge the equivalent strfry settings into <code>nostrfy.toml</code>, and can resume with
+		<code>--since</code> after an interrupted run. NIP-29 groups and NIP-43 roles are rebuilt from the imported
+		events on the first start. See the
+		<a href="/docs/migrating-from-strfry/">migration guide</a> for the full runbook.
 	</p>
 
 	<Callout type="tip" title="Step by step">

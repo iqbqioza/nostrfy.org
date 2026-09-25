@@ -11,7 +11,7 @@
 
 <DocsTitle
 	title="NIP-86 management"
-	description="The JSON-RPC management API: moderation, access lists, relay identity and roles, with Bearer or NIP-98 authentication."
+	description="The JSON-RPC management API: moderation, access lists, relay identity, roles, invite claims and delegated method grants, with Bearer or NIP-98 authentication."
 />
 
 <div class="doc-body">
@@ -71,7 +71,7 @@
 			<tr>
 				<td><code>banpubkey</code></td>
 				<td>["pubkey", "reason (optional)"]</td>
-				<td>Ban a pubkey from posting</td>
+				<td>Ban a pubkey from posting (also removes it from the allowlist)</td>
 			</tr>
 			<tr>
 				<td><code>unbanpubkey</code></td>
@@ -104,9 +104,9 @@
 				<td>Allow / disallow a kind</td>
 			</tr>
 			<tr>
-				<td><code>listallowedkinds</code></td>
+				<td><code>listallowedkinds</code> / <code>listdisallowedkinds</code></td>
 				<td>[]</td>
-				<td>List allowed kinds</td>
+				<td>List allowed / disallowed kinds</td>
 			</tr>
 			<tr>
 				<td>
@@ -114,17 +114,27 @@
 					<code>changerelayicon</code>
 				</td>
 				<td>["new value"]</td>
-				<td>Change the relay name / description / icon (persisted to the config file)</td>
+				<td>Change the relay name / description / icon (persisted to the config file; reports an error when the file cannot be written)</td>
 			</tr>
 			<tr>
 				<td><code>createrole</code> / <code>editrole</code> / <code>deleterole</code></td>
 				<td>[id, label, description, color, order]</td>
-				<td>NIP-43 role management</td>
+				<td>NIP-43 role management (wrong-typed fields are rejected; deleting a missing role succeeds)</td>
 			</tr>
 			<tr>
 				<td><code>assignrole</code> / <code>unassignrole</code></td>
 				<td>["pubkey", "role id"]</td>
-				<td>Assign / unassign a role</td>
+				<td>Assign / unassign a role (a duplicate grant or missing revocation succeeds)</td>
+			</tr>
+			<tr>
+				<td><code>assignmethod</code> / <code>unassignmethod</code></td>
+				<td>["pubkey", "method"]</td>
+				<td>Grant / revoke a NIP-86 method to a non-admin pubkey — only moderation and read methods are grantable</td>
+			</tr>
+			<tr>
+				<td><code>listmethodassignees</code></td>
+				<td>[]</td>
+				<td>List method grants (<code>[&#123;pubkey, methods&#125;]</code>)</td>
 			</tr>
 			<tr>
 				<td><code>blockip</code> / <code>unblockip</code></td>
@@ -137,23 +147,55 @@
 				<td>List blocked IPs</td>
 			</tr>
 			<tr>
-				<td><code>banevent</code> / <code>allowevent</code></td>
+				<td><code>banevent</code></td>
 				<td>["event id", "reason (optional)"]</td>
-				<td>Ban / unban an event</td>
+				<td>Ban an event (banning an unknown id pre-bans it; also removes it from the allow list)</td>
+			</tr>
+			<tr>
+				<td><code>allowevent</code></td>
+				<td>["event id", "reason (optional)"]</td>
+				<td>Add an event to the allow list (also lifts the ban; allowing an unknown id pre-allows it)</td>
+			</tr>
+			<tr>
+				<td><code>unallowevent</code> / <code>unbanevent</code></td>
+				<td>["event id"]</td>
+				<td>Remove an event from the allow / ban list (a missing entry succeeds)</td>
 			</tr>
 			<tr>
 				<td><code>listbannedevents</code></td>
 				<td>[]</td>
-				<td>List banned events</td>
+				<td>List banned events (a failed lookup surfaces an error, never an empty list)</td>
+			</tr>
+			<tr>
+				<td><code>listallowedevents</code></td>
+				<td>[]</td>
+				<td>List allowed events</td>
 			</tr>
 			<tr>
 				<td><code>listeventsneedingmoderation</code></td>
 				<td>[]</td>
 				<td>Events awaiting moderation (always empty on this relay)</td>
 			</tr>
+			<tr>
+				<td><code>listclaims</code></td>
+				<td>[]</td>
+				<td>List NIP-43 invite codes</td>
+			</tr>
+			<tr>
+				<td><code>createclaim</code> / <code>deleteclaim</code></td>
+				<td>["claim"]</td>
+				<td>Issue / revoke a NIP-43 invite code (a kind:28934 carrying a listed code admits its author)</td>
+			</tr>
 		</tbody>
 	</table>
 	</div>
+
+	<Callout type="note" title="Delegated administration">
+		<code>rpc.admin_pubkey</code> (and the management token) stay the root login with every method. Other
+		pubkeys authenticate with NIP-98 and may only run their <code>assignmethod</code>-granted methods
+		(<code>supportedmethods</code> shows their own subset). Permission, role, invite-claim and relay-identity
+		management stay admin-only, so a grantee can never escalate. A banned pubkey is refused even with grants.
+	</Callout>
 
 	<Callout type="note" title="Served on the public POST / routes">
 		The NIP-86 RPC is mounted on the relay's public POST / routes. Mutations are recorded in a

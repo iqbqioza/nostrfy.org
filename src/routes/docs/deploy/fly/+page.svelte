@@ -130,7 +130,7 @@ curl https://<your-app-name>.fly.dev/
 			release binary, so an update is a simple redeploy
 		</li>
 		<li>
-			<strong>Pin a version</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.14 ...</code>
+			<strong>Pin a version</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.16 ...</code>
 			or change the <code>ARG</code> in the Dockerfile
 		</li>
 		<li>

@@ -34,6 +34,12 @@
 			<strong>Easy to operate</strong> — daemon mode, log rotation, hot configuration reload
 			(SIGHUP), live statistics, a REST API and Prometheus metrics.
 		</li>
+		<li>
+			<strong>Easy to migrate</strong> — one command imports an existing
+			<a href="https://github.com/hoytech/strfry" target="_blank" rel="noopener noreferrer">strfry</a>
+			database, with a dry run, a settings merge and safe re-runs
+			(<a href="/docs/migrating-from-strfry/">migration guide</a>).
+		</li>
 	</ul>
 
 	<h2>What you get out of the box</h2>

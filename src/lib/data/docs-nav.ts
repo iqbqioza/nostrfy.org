@@ -22,7 +22,8 @@ export const docsNav: DocsGroup[] = [
 		items: [
 			{ title: 'Configuration', href: '/docs/configuration/' },
 			{ title: 'Commands', href: '/docs/commands/' },
-			{ title: 'Running the relay', href: '/docs/operation/' }
+			{ title: 'Running the relay', href: '/docs/operation/' },
+			{ title: 'Migrating from strfry', href: '/docs/migrating-from-strfry/' }
 		]
 	},
 	{
