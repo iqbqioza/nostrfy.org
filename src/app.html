@@ -1,7 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="%lang%">
 	<head>
 		<meta charset="utf-8" />
+		<script>
+			(function () {
+				try {
+					var path = location.pathname;
+					var match = path.match(/^\/(zh-Hans|zh-Hant)(?=\/|$)/);
+					var current = match ? match[1] : 'en';
+					var stored = localStorage.getItem('nostrfy-lang');
+					if (stored) return;
+					var primary = String(
+						(navigator.languages && navigator.languages[0]) || navigator.language || ''
+					).toLowerCase();
+					var want = 'en';
+					if (primary.indexOf('zh') === 0) {
+						want = /hant|tw|hk|mo/.test(primary) ? 'zh-Hant' : 'zh-Hans';
+					}
+					if (want === current) return;
+					var base = path.replace(/^\/(zh-Hans|zh-Hant)(?=\/|$)/, '') || '/';
+					var target = want === 'en' ? base : '/' + want + (base === '/' ? '/' : base);
+					location.replace(target + location.search + location.hash);
+				} catch (e) {}
+			})();
+		</script>
 		<link rel="icon" href="%sveltekit.assets%/favicon.ico?v=2" sizes="any" />
 		<link rel="icon" href="%sveltekit.assets%/favicon-32x32.png?v=2" sizes="32x32" type="image/png" />
 		<link rel="icon" href="%sveltekit.assets%/favicon-16x16.png?v=2" sizes="16x16" type="image/png" />

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { site } from '$lib/data/site';
+	import { localeForPathname, type Locale } from '$lib/i18n/locale';
+	import { ui } from '$lib/i18n/ui';
 
 	let {
 		title,
@@ -14,16 +16,17 @@
 		type?: string;
 	} = $props();
 
+	const locale = $derived<Locale>($page.data.locale ?? localeForPathname($page.url.pathname));
+	const t = $derived(ui[locale]);
+
 	const fullTitle = $derived(
 		title
 			? title.toLowerCase().includes('nostrfy')
 				? title
 				: `${title} · nostrfy`
-			: 'nostrfy — All-in-one Nostr relay server engine'
+			: t.meta.homeTitle
 	);
-	const desc = $derived(
-		description ?? site.description
-	);
+	const desc = $derived(description ?? t.meta.defaultDescription);
 	const url = $derived(`https://${site.domain}${$page.url.pathname}`);
 	const ogImage = $derived(`https://${site.domain}${image}`);
 </script>
@@ -45,7 +48,7 @@
 	<meta property="og:image:type" content="image/png" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
-	<meta property="og:image:alt" content="nostrfy — All-in-one Nostr relay server engine" />
+	<meta property="og:image:alt" content={t.meta.ogImageAlt} />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={fullTitle} />
 	<meta name="twitter:description" content={desc} />

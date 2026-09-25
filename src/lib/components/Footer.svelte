@@ -2,41 +2,48 @@
 	import Logo from './Logo.svelte';
 	import Icon from './Icon.svelte';
 	import { site } from '$lib/data/site';
+	import { page } from '$app/stores';
+	import { localePath, localeForPathname, type Locale } from '$lib/i18n/locale';
+	import { ui } from '$lib/i18n/ui';
+
+	const locale = $derived<Locale>($page.data.locale ?? localeForPathname($page.url.pathname));
+	const t = $derived(ui[locale]);
 
 	const cols = [
 		{
-			heading: 'Documentation',
+			heading: 'documentation' as const,
 			links: [
-				{ label: 'Introduction', href: '/docs/introduction/' },
-				{ label: 'Installation', href: '/docs/installation/' },
-				{ label: 'Configuration', href: '/docs/configuration/' },
-				{ label: 'Deployment', href: '/docs/deploy/' },
-				{ label: 'Troubleshooting', href: '/docs/troubleshooting/' }
+				{ key: '/docs/introduction/', href: '/docs/introduction/' },
+				{ key: '/docs/installation/', href: '/docs/installation/' },
+				{ key: '/docs/configuration/', href: '/docs/configuration/' },
+				{ key: '/docs/deploy/', href: '/docs/deploy/' },
+				{ key: '/docs/troubleshooting/', href: '/docs/troubleshooting/' }
 			]
 		},
 		{
-			heading: 'Project',
+			heading: 'project' as const,
 			links: [
-				{ label: 'About', href: '/about/' },
-				{ label: 'FAQ', href: '/faq/' },
-				{ label: 'nostrfy vs strfry', href: '/compare/strfry/' },
-				{ label: 'Donate', href: '/donate/' },
-				{ label: 'GitHub', href: site.github },
-				{ label: 'Releases', href: `${site.github}/releases` },
-				{ label: 'Security policy', href: `${site.github}/security/policy` }
+				{ key: '/about/', href: '/about/' },
+				{ key: '/faq/', href: '/faq/' },
+				{ key: '/compare/strfry/', href: '/compare/strfry/' },
+				{ key: '/donate/', href: '/donate/' },
+				{ key: 'github', href: site.github },
+				{ key: 'releases', href: `${site.github}/releases` },
+				{ key: 'security', href: `${site.github}/security/policy` }
 			]
 		}
 	];
+
+	const year = new Date().getFullYear();
 </script>
 
 <footer class="border-t border-line/70">
 	<div class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
 		<div class="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
 			<div>
-				<Logo size={30} />
+				<Logo size={30} label={t.logoAria} />
 				<p class="mt-4 max-w-xs text-sm leading-relaxed text-zinc-500">
-					An all-in-one Nostr relay server engine written in Rust. Open source, dual-licensed
-					under MIT or Apache-2.0.
+					{t.footer.tagline}
 				</p>
 				<div class="mt-5 flex flex-col gap-2">
 					{#each site.relays as relay (relay.url)}
@@ -52,17 +59,20 @@
 			</div>
 
 			{#each cols as col (col.heading)}
-				<nav aria-label={col.heading}>
-					<h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-500">{col.heading}</h3>
+				<nav aria-label={t.footer[col.heading]}>
+					<h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+						{t.footer[col.heading]}
+					</h3>
 					<ul class="mt-4 space-y-2.5">
-						{#each col.links as link (link.href)}
+						{#each col.links as link (link.key)}
+							{@const external = link.href.startsWith('http')}
 							<li>
 								<a
-									href={link.href}
-									{...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+									href={external ? link.href : localePath(locale, link.href)}
+									{...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
 									class="text-sm text-zinc-400 transition-colors hover:text-zinc-100"
 								>
-									{link.label}
+									{t.footer.labels[link.key]}
 								</a>
 							</li>
 						{/each}
@@ -73,12 +83,13 @@
 
 		<div class="mt-12 flex flex-col gap-3 border-t border-line/70 pt-6 text-xs text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
 			<p>
-				&copy; {new Date().getFullYear()} iqbqioza · Released under the
-				<a href="/LICENSE" class="text-zinc-500 hover:text-zinc-300">MIT or Apache-2.0 license</a>
+				{t.footer.copyrightPrefix(year)}<a href="/LICENSE" class="text-zinc-500 hover:text-zinc-300"
+					>{t.footer.licenseLabel}</a
+				>
 			</p>
 			<a href={site.github} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:text-zinc-300">
 				<Icon name="github" size={13} />
-				Source on GitHub
+				{t.footer.source}
 			</a>
 		</div>
 	</div>
