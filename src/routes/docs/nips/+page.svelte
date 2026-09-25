@@ -4,8 +4,8 @@
 </script>
 
 <DocsTitle
-	title="Supported NIPs"
-	description="Every relay-side NIP nostrfy implements, and how the NIP-11 supported_nips list is computed."
+	title="Supported NIPs reference"
+	description="Every relay-side NIP nostrfy implements — kinds, notes and caveats — and how the NIP-11 supported_nips list is computed dynamically."
 />
 
 <div class="doc-body">

@@ -43,7 +43,7 @@ nostrfy --config nostrfy.toml start`;
 
 <DocsTitle
 	title="Troubleshooting"
-	description="The errors you are most likely to meet, with step-by-step fixes."
+	description="The errors you are most likely to meet — ports, permissions, TLS, missing NIPs, publishing and timeouts — with step-by-step fixes."
 />
 
 <div class="doc-body">

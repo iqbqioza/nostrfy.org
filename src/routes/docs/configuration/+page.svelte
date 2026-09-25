@@ -18,8 +18,8 @@ nostrfy relay list`;
 </script>
 
 <DocsTitle
-	title="Configuration"
-	description="Complete reference for the nostrfy.toml configuration file: every key, its type, its default, and exactly what it does."
+	title="Configuration reference"
+	description="Complete reference for nostrfy.toml: every key, its type, its default and exactly what it does — limits, database, daemon, access control and Blossom."
 />
 
 <div class="doc-body">

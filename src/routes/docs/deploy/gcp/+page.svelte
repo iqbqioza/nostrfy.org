@@ -16,8 +16,8 @@ sudo systemctl enable --now nostrfy`;
 </script>
 
 <DocsTitle
-	title="Google Cloud"
-	description="Deploy nostrfy on Google Cloud Compute Engine or Cloud Run."
+	title="Deploying on Google Cloud"
+	description="Deploy nostrfy on Google Cloud Compute Engine or Cloud Run — step by step, with systemd, TLS and the scale-to-zero caveats."
 />
 
 <div class="doc-body">

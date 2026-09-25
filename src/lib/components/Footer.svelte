@@ -18,6 +18,8 @@
 			heading: 'Project',
 			links: [
 				{ label: 'About', href: '/about/' },
+				{ label: 'FAQ', href: '/faq/' },
+				{ label: 'nostrfy vs strfry', href: '/compare/strfry/' },
 				{ label: 'Donate', href: '/donate/' },
 				{ label: 'GitHub', href: site.github },
 				{ label: 'Releases', href: `${site.github}/releases` },

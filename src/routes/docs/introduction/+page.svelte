@@ -8,8 +8,8 @@
 </script>
 
 <DocsTitle
-	title="Introduction"
-	description="What nostrfy is, what it does out of the box, and the ideas that shape how it is built and run."
+	title="Introduction to nostrfy"
+	description="What nostrfy is, what it does out of the box, and the design ideas behind the all-in-one Nostr relay engine written in Rust."
 />
 
 <div class="doc-body">

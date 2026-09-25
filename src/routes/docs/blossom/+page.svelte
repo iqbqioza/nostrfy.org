@@ -40,7 +40,7 @@ nostrfy blossom list                    # show the list and restrict_uploads`;
 
 <DocsTitle
 	title="Blossom file server"
-	description="Media hosting on its own hostname: content-addressed uploads, local or S3 storage, signed by kind-24242 auth."
+	description="Media hosting on its own hostname: content-addressed uploads, local or S3-compatible storage, and kind-24242 auth for your Nostr relay."
 />
 
 <div class="doc-body">

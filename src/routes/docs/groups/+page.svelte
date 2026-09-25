@@ -4,8 +4,8 @@
 </script>
 
 <DocsTitle
-	title="NIP-29 Groups"
-	description="Closed chat spaces where only members can write — moderation events and relay-signed snapshots."
+	title="NIP-29 groups"
+	description="NIP-29 groups: closed chat spaces where only members can write, with moderation events and relay-signed snapshots of the group state."
 />
 
 <div class="doc-body">

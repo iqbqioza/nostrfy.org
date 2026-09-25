@@ -14,7 +14,13 @@
 		type?: string;
 	} = $props();
 
-	const fullTitle = $derived(title ? `${title} · nostrfy` : 'nostrfy — All-in-one Nostr relay server engine');
+	const fullTitle = $derived(
+		title
+			? title.toLowerCase().includes('nostrfy')
+				? title
+				: `${title} · nostrfy`
+			: 'nostrfy — All-in-one Nostr relay server engine'
+	);
 	const desc = $derived(
 		description ?? site.description
 	);
@@ -25,6 +31,10 @@
 <svelte:head>
 	<title>{fullTitle}</title>
 	<meta name="description" content={desc} />
+	<meta
+		name="robots"
+		content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+	/>
 	<link rel="canonical" href={url} />
 	<meta property="og:type" content={type} />
 	<meta property="og:site_name" content="nostrfy" />
@@ -32,6 +42,7 @@
 	<meta property="og:description" content={desc} />
 	<meta property="og:url" content={url} />
 	<meta property="og:image" content={ogImage} />
+	<meta property="og:image:type" content="image/png" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
 	<meta property="og:image:alt" content="nostrfy — All-in-one Nostr relay server engine" />

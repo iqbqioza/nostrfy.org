@@ -40,13 +40,39 @@
 			}))
 		})
 	);
+
+	const articleJsonLd = $derived(
+		JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'TechArticle',
+			headline: title,
+			description,
+			mainEntityOfPage: `https://${site.domain}${current}`,
+			inLanguage: 'en',
+			isPartOf: {
+				'@type': 'WebSite',
+				name: 'nostrfy',
+				url: `https://${site.domain}/`
+			},
+			publisher: {
+				'@type': 'Organization',
+				name: 'nostrfy',
+				url: `https://${site.domain}/`,
+				logo: {
+					'@type': 'ImageObject',
+					url: `https://${site.domain}/logo.png`
+				}
+			}
+		})
+	);
 </script>
 
 <svelte:head>
 	{@html `<script type="application/ld+json">${breadcrumbJsonLd}</script>`}
+	{@html `<script type="application/ld+json">${articleJsonLd}</script>`}
 </svelte:head>
 
-<PageMeta {title} {description} />
+<PageMeta {title} {description} type="article" />
 
 <div class="mb-8">
 	<nav class="flex items-center gap-1.5 text-xs text-zinc-500" aria-label="Breadcrumb">

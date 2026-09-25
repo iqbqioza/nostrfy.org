@@ -14,8 +14,8 @@
 </script>
 
 <PageMeta
-	title="Documentation"
-	description="The complete nostrfy manual: installation, configuration, commands, features, deployment and troubleshooting."
+	title="nostrfy documentation and manual"
+	description="The complete nostrfy manual: installation, configuration, NIP support, REST API, deployment guides and troubleshooting for the all-in-one Nostr relay engine."
 />
 
 <div class="mx-auto max-w-3xl pb-20 pt-12">

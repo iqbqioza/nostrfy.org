@@ -33,8 +33,8 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 </script>
 
 <DocsTitle
-	title="REST API"
-	description="Read-only HTTP API for querying stored events at GET /api/v1/... — served on the same port as the WebSocket relay."
+	title="REST API reference"
+	description="Read-only HTTP API for querying stored Nostr events at GET /api/v1/... — endpoints, parameters, pagination, visibility rules and errors."
 />
 
 <div class="doc-body">

@@ -480,5 +480,10 @@
 				<Icon name="heart" size={16} class="text-accent-400" /> Support development
 			</a>
 		</div>
+		<p class="mt-6 text-sm text-zinc-500">
+			Questions? Read the <a href="/faq/" class="text-zinc-300 hover:text-accent-300">FAQ</a> or see how
+			nostrfy <a href="/compare/strfry/" class="text-zinc-300 hover:text-accent-300">compares with strfry</a> —
+			and <a href="/docs/migrating-from-strfry/" class="text-zinc-300 hover:text-accent-300">migrate in one command</a>.
+		</p>
 	</div>
 </section>

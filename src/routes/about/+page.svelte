@@ -25,10 +25,36 @@
 			body: 'A 0.25 vCPU / 512 MB VPS runs it comfortably. The LMDB map is a sparse virtual reservation; memory stays flat as the database grows.'
 		}
 	];
+
+	const base = 'https://nostrfy.org';
+	const aboutJsonLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'AboutPage',
+		name: 'About nostrfy',
+		url: `${base}/about/`,
+		description:
+			'nostrfy is an open-source Nostr relay server engine in Rust, dual-licensed under MIT or Apache-2.0. Learn about the project and its design principles.',
+		inLanguage: 'en',
+		isPartOf: { '@type': 'WebSite', name: 'nostrfy', url: `${base}/` },
+		mainEntity: {
+			'@type': 'SoftwareApplication',
+			name: 'nostrfy',
+			applicationCategory: 'DeveloperApplication',
+			operatingSystem: 'Linux, FreeBSD',
+			license: [
+				'https://opensource.org/licenses/MIT',
+				'https://www.apache.org/licenses/LICENSE-2.0'
+			]
+		}
+	});
 </script>
 
+<svelte:head>
+	{@html `<script type="application/ld+json">${aboutJsonLd}</script>`}
+</svelte:head>
+
 <PageMeta
-	title="About"
+	title="About the nostrfy project"
 	description="nostrfy is an open-source Nostr relay server engine in Rust, dual-licensed under MIT or Apache-2.0. Learn about the project and its design principles."
 />
 

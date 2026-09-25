@@ -22,8 +22,8 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 </script>
 
 <DocsTitle
-	title="Commands"
-	description="Every nostrfy command, the CLI access list commands, and the inbox/outbox filter extensions."
+	title="Command reference"
+	description="Every nostrfy command: init, start, stop, stats, upgrade and migrate-strfry, plus the CLI access lists and inbox/outbox subscription filters."
 />
 
 <div class="doc-body">

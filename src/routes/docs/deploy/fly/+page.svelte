@@ -22,8 +22,8 @@ curl https://<your-app-name>.fly.dev/
 </script>
 
 <DocsTitle
-	title="Fly.io"
-	description="Deploy to Fly.io in a few minutes with the ready-made template."
+	title="Deploying on Fly.io"
+	description="Deploy nostrfy to Fly.io in a few minutes with the ready-made template — volumes, machines, TLS termination and simple updates."
 />
 
 <div class="doc-body">

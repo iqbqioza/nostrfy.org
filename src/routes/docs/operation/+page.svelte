@@ -40,7 +40,7 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 
 <DocsTitle
 	title="Running the relay"
-	description="Starting and stopping, logs, statistics, hot reloads, multiple instances and large-scale tuning."
+	description="Starting and stopping, logs and statistics, hot configuration reloads, multiple instances and large-scale tuning for your nostrfy relay."
 />
 
 <div class="doc-body">

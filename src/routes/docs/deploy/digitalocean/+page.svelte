@@ -17,8 +17,8 @@ sudo systemctl enable --now nostrfy`;
 </script>
 
 <DocsTitle
-	title="Digital Ocean"
-	description="Deploy nostrfy on a Digital Ocean Droplet or App Platform."
+	title="Deploying on DigitalOcean"
+	description="Deploy nostrfy on a DigitalOcean Droplet or App Platform — step by step, with systemd, TLS and a production-ready configuration."
 />
 
 <div class="doc-body">

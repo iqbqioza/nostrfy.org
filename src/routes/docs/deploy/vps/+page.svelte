@@ -72,8 +72,8 @@ sudo systemctl restart nostrfy`;
 </script>
 
 <DocsTitle
-	title="Any VPS"
-	description="The generic guide for a plain Ubuntu/Debian VPS — the base for the other platform guides."
+	title="Deploying on any VPS"
+	description="The generic guide for a plain Ubuntu or Debian VPS — the base for every other platform guide, with systemd, TLS and firewall notes."
 />
 
 <div class="doc-body">

@@ -27,8 +27,8 @@ private_key = ""                          # run 'nostrfy genkey' and paste the k
 </script>
 
 <DocsTitle
-	title="Deployment"
-	description="How nostrfy is distributed, and a comparison of all supported deployment platforms."
+	title="Deployment overview"
+	description="How nostrfy is distributed and how to deploy it — Fly.io, AWS, Google Cloud, Azure, DigitalOcean or any VPS, with TLS, systemd and container notes."
 />
 
 <div class="doc-body">

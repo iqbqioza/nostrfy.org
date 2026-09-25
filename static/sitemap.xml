@@ -8,12 +8,22 @@
 	</url>
 	<url>
 		<loc>https://nostrfy.org/about/</loc>
-		<lastmod>2026-09-22</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.6</priority>
 	</url>
 	<url>
+		<loc>https://nostrfy.org/faq/</loc>
+		<lastmod>2026-09-25</lastmod>
+		<priority>0.6</priority>
+	</url>
+	<url>
+		<loc>https://nostrfy.org/compare/strfry/</loc>
+		<lastmod>2026-09-25</lastmod>
+		<priority>0.7</priority>
+	</url>
+	<url>
 		<loc>https://nostrfy.org/donate/</loc>
-		<lastmod>2026-09-22</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.5</priority>
 	</url>
 	<url>
@@ -29,12 +39,12 @@
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/quick-start/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.8</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/installation/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.8</priority>
 	</url>
 	<url>
@@ -54,7 +64,7 @@
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/operation/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.7</priority>
 	</url>
 	<url>
@@ -74,52 +84,52 @@
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/blossom/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.7</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/livekit/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.6</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/groups/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.7</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/troubleshooting/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.7</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/deploy/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.7</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/deploy/vps/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.6</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/deploy/aws/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.6</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/deploy/azure/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.6</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/deploy/gcp/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.6</priority>
 	</url>
 	<url>
 		<loc>https://nostrfy.org/docs/deploy/digitalocean/</loc>
-		<lastmod>2026-09-13</lastmod>
+		<lastmod>2026-09-25</lastmod>
 		<priority>0.6</priority>
 	</url>
 	<url>

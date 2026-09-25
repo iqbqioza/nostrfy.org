@@ -15,8 +15,8 @@ kill -HUP $(cat nostrfy.pid)  # reload the config without a restart`;
 </script>
 
 <DocsTitle
-	title="Quick start"
-	description="From install to a live relay in minutes: config, validation, start, stop and a health check."
+	title="Quick start guide"
+	description="From install to a live Nostr relay in minutes: write the config, validate it, start the daemon and run the first health check."
 />
 
 <div class="doc-body">

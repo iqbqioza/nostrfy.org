@@ -11,8 +11,8 @@ livekit_api_secret = "..."`;
 </script>
 
 <DocsTitle
-	title="LiveKit rooms"
-	description="Audio and video rooms for groups via a LiveKit server, signed with livekit JWTs."
+	title="LiveKit audio &amp; video rooms"
+	description="Audio and video rooms for NIP-29 groups via a LiveKit server: token endpoints, JWT signing and the group metadata that advertises rooms."
 />
 
 <div class="doc-body">

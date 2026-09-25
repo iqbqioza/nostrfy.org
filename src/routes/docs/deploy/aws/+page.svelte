@@ -18,8 +18,8 @@ sudo systemctl enable --now nostrfy`;
 </script>
 
 <DocsTitle
-	title="AWS"
-	description="Deploy nostrfy on AWS EC2, Lightsail or ECS/Fargate."
+	title="Deploying on AWS"
+	description="Deploy nostrfy on AWS EC2, Lightsail or ECS/Fargate — step by step, with systemd, TLS behind a reverse proxy and a production checklist."
 />
 
 <div class="doc-body">

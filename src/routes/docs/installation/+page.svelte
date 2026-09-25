@@ -15,8 +15,8 @@ cargo build --release`;
 </script>
 
 <DocsTitle
-	title="Installation"
-	description="Requirements, building from source, installing a pre-built binary, and notes for FreeBSD."
+	title="Installation guide"
+	description="Requirements, building from source, installing a pre-built binary, verifying checksums, and notes for running nostrfy on FreeBSD."
 />
 
 <div class="doc-body">

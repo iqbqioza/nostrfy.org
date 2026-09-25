@@ -17,8 +17,8 @@ sudo systemctl enable --now nostrfy`;
 </script>
 
 <DocsTitle
-	title="Azure"
-	description="Deploy nostrfy on an Azure VM or Azure Container Apps."
+	title="Deploying on Azure"
+	description="Deploy nostrfy on an Azure VM or Azure Container Apps — step by step, with systemd, TLS and the caveats of dynamic public IPs."
 />
 
 <div class="doc-body">

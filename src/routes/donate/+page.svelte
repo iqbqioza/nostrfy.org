@@ -9,8 +9,8 @@
 </script>
 
 <PageMeta
-	title="Donate"
-	description="Support nostrfy development with an on-chain Bitcoin donation."
+	title="Support nostrfy"
+	description="Support nostrfy development with an on-chain Bitcoin donation. Free and open source, dual-licensed under MIT or Apache-2.0."
 />
 
 <div class="relative overflow-hidden">
