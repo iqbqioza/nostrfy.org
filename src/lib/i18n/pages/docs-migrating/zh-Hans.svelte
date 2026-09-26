@@ -108,7 +108,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 成员列�
 		<strong>已过期事件</strong>。
 	</p>
 
-	<h2>快速开始</h2>
+	<h2>快速入门</h2>
 	<CodeBlock code={quickCode} lang="sh" />
 
 	<Callout type="warning" title="迁移是离线的">
@@ -158,7 +158,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 成员列�
 	<CodeBlock code={'nostrfy migrate-strfry --strfry-db /var/lib/strfry-db --dry-run'} lang="sh" />
 	<p>
 		非零的 <code>bad signature</code> 计数意味着导出包含 strfry 未经
-		校验就接受的事件；它们会被跳过。如果信任它们，传 <code>--no-verify</code> 仍然导入。
+		验证就接受的事件；它们会被跳过。如果信任它们，传 <code>--no-verify</code> 仍然导入。
 	</p>
 
 	<h2>迁移</h2>

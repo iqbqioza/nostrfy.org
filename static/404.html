@@ -73,16 +73,36 @@
 					var primary = String(
 						(navigator.languages && navigator.languages[0]) || navigator.language || ''
 					).toLowerCase();
-					if (primary.indexOf('zh') !== 0) return;
-					var hant = /hant|tw|hk|mo/.test(primary);
-					document.documentElement.lang = hant ? 'zh-Hant' : 'zh-Hans';
-					document.getElementById('title').textContent = hant ? '找不到頁面' : '页面未找到';
-					document.getElementById('body').textContent = hant
-						? '你造訪的頁面不存在或已被移動。'
-						: '你访问的页面不存在或已被移动。';
+					var base = primary.split('-')[0];
+					if (base === 'zh') {
+						var hant = /hant|tw|hk|mo/.test(primary);
+						document.documentElement.lang = hant ? 'zh-Hant' : 'zh-Hans';
+						document.getElementById('title').textContent = hant ? '找不到頁面' : '页面未找到';
+						document.getElementById('body').textContent = hant
+							? '你造訪的頁面不存在或已被移動。'
+							: '你访问的页面不存在或已被移动。';
+						var zhHome = document.getElementById('home');
+						zhHome.textContent = hant ? '← 返回首頁' : '← 返回首页';
+						zhHome.setAttribute('href', hant ? '/zh-Hant/' : '/zh-Hans/');
+						return;
+					}
+					var map = {
+						ja: ['ページが見つかりません', 'お探しのページは存在しないか、移動されました。', '← ホームに戻る'],
+						ru: ['Страница не найдена', 'Запрошенная страница не существует или была перемещена.', '← Вернуться на главную'],
+						de: ['Seite nicht gefunden', 'Die gesuchte Seite existiert nicht oder wurde verschoben.', '← Zurück zur Startseite'],
+						fr: ['Page introuvable', "La page que vous cherchez n'existe pas ou a été déplacée.", "← Retour à l'accueil"],
+						es: ['Página no encontrada', 'La página que buscas no existe o se ha movido.', '← Volver al inicio'],
+						pt: ['Página não encontrada', 'A página que você procura não existe ou foi movida.', '← Voltar ao início'],
+						it: ['Pagina non trovata', 'La pagina che cerchi non esiste o è stata spostata.', '← Torna alla home']
+					};
+					var entry = map[base];
+					if (!entry) return;
+					document.documentElement.lang = base;
+					document.getElementById('title').textContent = entry[0];
+					document.getElementById('body').textContent = entry[1];
 					var home = document.getElementById('home');
-					home.textContent = hant ? '← 返回首頁' : '← 返回首页';
-					home.setAttribute('href', hant ? '/zh-Hant/' : '/zh-Hans/');
+					home.textContent = entry[2];
+					home.setAttribute('href', '/' + base + '/');
 				} catch (e) {}
 			})();
 		</script>

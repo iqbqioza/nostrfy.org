@@ -3,7 +3,8 @@
 	import Header from '$lib/components/Header.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { page } from '$app/stores';
-	import { locales, localePath, ogLocale, type Locale } from '$lib/i18n/locale';
+	import { basePath, locales, localePath, ogLocale, type Locale } from '$lib/i18n/locale';
+	import { isTranslated } from '$lib/i18n/translated';
 	import { ui } from '$lib/i18n/ui';
 	import type { Snippet } from 'svelte';
 
@@ -19,7 +20,9 @@
 	const t = $derived(ui[locale]);
 
 	const SITE = 'https://nostrfy.org';
-	const href = (target: Locale) => `${SITE}${localePath(target, $page.url.pathname)}`;
+	const base = $derived(basePath($page.url.pathname));
+	const href = (target: Locale) => `${SITE}${localePath(target, base)}`;
+	const alternates = $derived(locales.filter((l) => l === 'en' || isTranslated(l, base)));
 
 	const websiteJsonLd = $derived(
 		JSON.stringify({
@@ -44,10 +47,10 @@
 
 <svelte:head>
 	<meta property="og:locale" content={ogLocale[locale]} />
-	{#each locales.filter((l) => l !== locale) as alt (alt)}
+	{#each alternates.filter((l) => l !== locale) as alt (alt)}
 		<meta property="og:locale:alternate" content={ogLocale[alt]} />
 	{/each}
-	{#each locales as alt (alt)}
+	{#each alternates as alt (alt)}
 		<link rel="alternate" hreflang={alt} href={href(alt)} />
 	{/each}
 	<link rel="alternate" hreflang="x-default" href={href('en')} />

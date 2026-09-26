@@ -57,7 +57,7 @@ private_key = ""                          # run 'nostrfy genkey' and paste the k
 				<td><a href="/docs/deploy/fly/">fly.md</a></td>
 			</tr>
 			<tr>
-				<td><strong>Digital Ocean</strong></td>
+				<td><strong>DigitalOcean</strong></td>
 				<td>Droplet (VM) or App Platform</td>
 				<td><a href="/docs/deploy/digitalocean/">deploy/digitalocean.md</a></td>
 			</tr>
@@ -86,7 +86,7 @@ private_key = ""                          # run 'nostrfy genkey' and paste the k
 	</div>
 
 	<h2>The common pattern for VMs</h2>
-	<p>All the VM guides (Digital Ocean, AWS EC2, GCP, Azure, any VPS) follow the same pattern:</p>
+	<p>All the VM guides (DigitalOcean, AWS EC2, GCP, Azure, any VPS) follow the same pattern:</p>
 	<CodeBlock code={commonBlock} lang="sh" />
 
 	<h2>Before going live</h2>
@@ -103,7 +103,7 @@ private_key = ""                          # run 'nostrfy genkey' and paste the k
 		</li>
 		<li>
 			<strong>Container</strong>: use the repository <code>Dockerfile</code> (downloads the release
-			binary at build time) on Fly.io, Digital Ocean App Platform, AWS ECS, GCP Cloud Run or Azure
+			binary at build time) on Fly.io, DigitalOcean App Platform, AWS ECS, GCP Cloud Run or Azure
 			Container Apps. Persistent storage is required for the LMDB data (<code>/data</code>).
 		</li>
 	</ul>

@@ -6,20 +6,23 @@
 			(function () {
 				try {
 					var path = location.pathname;
-					var match = path.match(/^\/(zh-Hans|zh-Hant)(?=\/|$)/);
+					var match = path.match(/^\/(zh-Hans|zh-Hant|ja|ru|de|fr|es|pt|it)(?=\/|$)/);
 					var current = match ? match[1] : 'en';
 					var stored = localStorage.getItem('nostrfy-lang');
 					if (stored) return;
 					var primary = String(
 						(navigator.languages && navigator.languages[0]) || navigator.language || ''
 					).toLowerCase();
+					var base = primary.split('-')[0];
 					var want = 'en';
-					if (primary.indexOf('zh') === 0) {
+					if (base === 'zh') {
 						want = /hant|tw|hk|mo/.test(primary) ? 'zh-Hant' : 'zh-Hans';
+					} else if (['ja', 'ru', 'de', 'fr', 'es', 'pt', 'it'].indexOf(base) !== -1) {
+						want = base;
 					}
 					if (want === current) return;
-					var base = path.replace(/^\/(zh-Hans|zh-Hant)(?=\/|$)/, '') || '/';
-					var target = want === 'en' ? base : '/' + want + (base === '/' ? '/' : base);
+					var rest = path.replace(/^\/(zh-Hans|zh-Hant|ja|ru|de|fr|es|pt|it)(?=\/|$)/, '') || '/';
+					var target = want === 'en' ? rest : '/' + want + (rest === '/' ? '/' : rest);
 					location.replace(target + location.search + location.hash);
 				} catch (e) {}
 			})();

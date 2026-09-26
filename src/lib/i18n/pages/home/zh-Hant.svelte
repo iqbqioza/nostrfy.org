@@ -47,7 +47,7 @@
 		{
 			icon: 'server',
 			title: 'Blossom 媒體伺服器',
-			body: '以 SHA-256 定址的上傳執行於獨立主機名稱 — 本機磁碟或 S3 相容儲存桶（AWS S3、Cloudflare R2），支援上傳者簽章刪除。'
+			body: '以 SHA-256 定址的上傳使用獨立主機名稱 — 本機磁碟或 S3 相容儲存桶（AWS S3、Cloudflare R2），支援上傳者簽章刪除。'
 		},
 		{
 			icon: 'database',
@@ -57,7 +57,7 @@
 		{
 			icon: 'database',
 			title: 'LMDB 持久化',
-			body: '透過 heed 提供耐用且耐崩潰的儲存。記憶體映射以稀疏方式保留至上限 — 執行階段無需擴充，實體佔用極小。'
+			body: '透過 heed 提供耐用且抗崩潰的儲存。記憶體映射以稀疏保留方式一次開到上限 — 執行階段無需擴充，實體佔用極小。'
 		},
 		{
 			icon: 'wrench',
@@ -66,7 +66,7 @@
 		},
 		{
 			icon: 'network',
-			title: '適用於 TLS 反向代理',
+			title: '可在 TLS 反向代理後運作',
 			body: 'nginx、Caddy、Cloudflare Tunnel — 支援 WebSocket 升級與 X-Forwarded-Proto，wss:// 在任何代理前都能正常運作。'
 		},
 		{
@@ -230,7 +230,7 @@
 		<div class="max-w-2xl">
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">一行指令安裝</h2>
 			<p class="mt-3 text-zinc-400">
-				安裝腳本會偵測你的作業系統與架構，下載相符的預編譯二進位檔，驗證 sha256 校驗和並將其放入你的
+				安裝腳本會偵測你的作業系統與架構，下載相符的預編譯二進位檔，驗證 sha256 校驗和並將其加入你的
 				<code class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-[13px] text-accent-300">PATH</code>。
 				無需複製原始碼、無需編譯、無需 sudo。
 			</p>
@@ -244,7 +244,7 @@
 			{#each [
 				['terminal', '無需 sudo', '安裝到 ~/.local/bin、~/bin 或 ~/.cargo/bin — PATH 中第一個已存在的目錄。'],
 				['cpu', 'Linux + FreeBSD', '提供 x86_64 與 aarch64 Linux 預編譯二進位檔，以及 FreeBSD x86_64。'],
-				['wrench', '校驗和驗證', '在二進位檔寫入磁碟之前，取得並驗證發行校驗和。']
+				['wrench', '校驗和驗證', '在二進位檔寫入磁碟之前，取得並驗證發行版校驗和。']
 			] as [icon, title, body] (title)}
 				<div class="rounded-xl border border-line bg-surface/50 p-5">
 					<div class="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-bg">
@@ -296,7 +296,7 @@
 					一分鐘內跑起來
 				</h2>
 				<p class="mt-3 leading-relaxed text-zinc-400">
-					nostrfy 內建常駐程式、設定驗證器、即時統計、日誌輪替與熱重載 — 中繼營運所需的一切，都在一個二進位檔裡。
+					nostrfy 內建常駐程式、設定驗證器、即時統計、日誌輪替與熱重載 — 中繼維運所需的一切，都在一個二進位檔裡。
 				</p>
 				<ul class="mt-6 space-y-3">
 					{#each [
@@ -315,7 +315,7 @@
 					href={p('/docs/quick-start/')}
 					class="mt-8 inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-5 py-3 text-sm font-semibold text-zinc-100 transition-colors hover:border-line-2 hover:text-white"
 				>
-					開啟快速入門指南
+					開啟快速開始指南
 					<Icon name="arrow-right" size={16} />
 				</a>
 			</div>
@@ -363,7 +363,7 @@
 	<div class="mx-auto max-w-6xl px-4 py-20 sm:px-6">
 		<h2 class="text-center text-2xl font-bold tracking-tight sm:text-3xl">實測效能</h2>
 		<p class="mx-auto mt-3 max-w-2xl text-center text-zinc-400">
-			Release 建置、全新資料庫、8 執行緒筆電。寫入速度受單一 LMDB 寫入執行緒與批次、無 fsync 提交的限制；讀取執行緒永遠不會阻塞它。
+			Release 建置、全新資料庫、8 執行緒的筆電。寫入速度受限於單一 LMDB 寫入執行緒，以及批次、無 fsync 的提交；讀取執行緒永遠不會阻塞它。
 		</p>
 		<div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-5">
 			{#each benchmarks as b (b.label)}
@@ -415,7 +415,7 @@
 		<div class="max-w-2xl">
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">優秀用戶端生態系</h2>
 			<p class="mt-3 leading-relaxed text-zinc-400">
-				nostrfy 使用用戶端所依賴的開放 NIP 標準 — 最好的 Nostr 應用可以隨插即用，獲得完整體驗。任何符合 NIP 的用戶端都能與你的中繼搭配。
+				nostrfy 採用用戶端所依賴的開放 NIP 標準 — 最好的 Nostr 應用可以隨插即用，獲得完整體驗。任何符合 NIP 的用戶端都能與你的中繼搭配。
 			</p>
 		</div>
 
@@ -499,7 +499,7 @@
 				部署指南 <Icon name="arrow-right" size={16} />
 			</a>
 			<a href={p('/donate/')} class="inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold text-zinc-400 transition-colors hover:text-zinc-100">
-				<Icon name="heart" size={16} class="text-accent-400" /> 支持開發
+				<Icon name="heart" size={16} class="text-accent-400" /> 支援開發
 			</a>
 		</div>
 		<p class="mt-6 text-sm text-zinc-500">

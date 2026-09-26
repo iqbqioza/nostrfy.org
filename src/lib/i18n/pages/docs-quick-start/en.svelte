@@ -27,7 +27,7 @@ kill -HUP $(cat nostrfy.pid)  # reload the config without a restart`;
 	<CodeBlock code={initCmd} lang="bash" />
 	<p>Open it in a text editor and adjust it — every option is commented.</p>
 
-	<h2>2. Validate the config</h2>
+	<h2>2. Validate the configuration</h2>
 	<p>
 		<code>nostrfy check</code> is strongly recommended before starting; if anything is wrong, it reports
 		exactly what is wrong.

@@ -3,39 +3,39 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 
 	const config = `[blossom]
-host = "media.example.com"          # required — enables the feature
-storage = "local"                   # "local" or "s3"
-local_path = "./data/images"        # local storage root
-max_upload_bytes = 20971520         # 20 MiB
-min_free_bytes = 33554432           # refuse uploads when the disk has less free space
-restrict_uploads = false            # only allow-listed pubkeys may upload
+host = "media.example.com"          # 必需 — 启用该功能
+storage = "local"                   # "local" 或 "s3"
+local_path = "./data/images"        # 本地存储根目录
+max_upload_bytes = 20971520         # 即 20 MiB
+min_free_bytes = 33554432           # 磁盘剩余空间不足时拒绝上传
+restrict_uploads = false            # 仅白名单公钥可上传
 
-# For S3 / Cloudflare R2:
+# 适用于 S3 / Cloudflare R2：
 s3_endpoint = "https://<account>.r2.cloudflarestorage.com"
 s3_region = "auto"
 s3_bucket = "nostr-media"
 s3_access_key = "..."
 s3_secret_key = "..."`;
-	const example = `# Server info
+	const example = `# 服务器信息
 curl https://media.example.com/
 
-# Upload (auth event from your Blossom client, e.g. via nak or the nostr-tools blossom helper)
+# 上传（来自 Blossom 客户端的认证事件，例如通过 nak 或 nostr-tools 的 blossom 辅助工具）
 curl -X PUT -H "Authorization: Nostr <auth>" -H "Content-Type: image/png" --data-binary @photo.png https://media.example.com/upload
 
-# Fetch
+# 获取
 curl https://media.example.com/<sha256>
 
-# List your own uploads (auth event with t=list; the path pubkey must be yours)
+# 列出自己的上传（携带 t=list 的认证事件；路径中的公钥必须是你的）
 curl -H "Authorization: Nostr <auth>" https://media.example.com/list/<pubkey-hex>
 
-# Delete (auth event with t=delete and x=<sha256>)
+# 删除（携带 t=delete 和 x=<sha256> 的认证事件）
 curl -X DELETE -H "Authorization: Nostr <auth>" https://media.example.com/<sha256>`;
 	const restrict = `[blossom]
 host = "media.example.com"
 restrict_uploads = true`;
-	const allowlist = `nostrfy blossom allow npub1...          # allow a pubkey (npub1... or hex)
-nostrfy blossom deny npub1...           # revoke a pubkey
-nostrfy blossom list                    # show the list and restrict_uploads`;
+	const allowlist = `nostrfy blossom allow npub1...          # 允许某个公钥（npub1... 或 hex）
+nostrfy blossom deny npub1...           # 撤销某个公钥
+nostrfy blossom list                    # 显示列表和 restrict_uploads`;
 </script>
 
 <DocsTitle
@@ -149,7 +149,7 @@ nostrfy blossom list                    # show the list and restrict_uploads`;
 			（BUD-11）。
 		</li>
 		<li>
-			<code>X-SHA-256</code> 头会与实际字节校验 — 不匹配返回 409。
+			<code>X-SHA-256</code> 头会与实际字节验证 — 不匹配返回 409。
 		</li>
 		<li>文件以 ETag、Cache-Control: immutable 和存储的内容类型提供。</li>
 		<li>被 NIP-86 <code>banpubkey</code> 封禁的公钥在每个端点上都会被拒绝。</li>

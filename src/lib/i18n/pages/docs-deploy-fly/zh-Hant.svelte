@@ -172,7 +172,7 @@ curl https://<your-app-name>.fly.dev/
 			（<code>nostrfy start --foreground</code>）；日誌寫入 stdout/stderr 並由 Fly 收集
 		</li>
 		<li>
-			TLS 由 Fly 終止；中繼本身在 8080 連接埠提供一般 WebSocket
+			TLS 由 Fly 終止；中繼本身在 8080 連接埠提供明文 WebSocket
 		</li>
 		<li>
 			<strong>Blossom 媒體主機</strong>：要同時提供 Blossom 伺服器，請在設定中設定
@@ -185,6 +185,6 @@ curl https://<your-app-name>.fly.dev/
 	</ul>
 
 	<Callout type="note" title="TLS 由 Fly 終止">
-		中繼本身在 8080 連接埠提供一般 WebSocket。
+		中繼本身在 8080 連接埠提供明文 WebSocket。
 	</Callout>
 </div>

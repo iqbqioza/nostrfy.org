@@ -86,13 +86,13 @@
 			<tr><td><code>listallowedevents</code></td><td>[]</td><td>列出允許的事件</td></tr>
 			<tr><td><code>listeventsneedingmoderation</code></td><td>[]</td><td>等待審核的事件（此中繼上始終為空）</td></tr>
 			<tr><td><code>listclaims</code></td><td>[]</td><td>列出 NIP-43 邀請碼</td></tr>
-			<tr><td><code>createclaim</code> / <code>deleteclaim</code></td><td>["claim"]</td><td>簽發 / 撤銷 NIP-43 邀請碼（攜帶已列碼的 kind:28934 會接納其作者）</td></tr>
+			<tr><td><code>createclaim</code> / <code>deleteclaim</code></td><td>["claim"]</td><td>簽發 / 撤銷 NIP-43 邀請碼（攜帶已列出邀請碼的 kind:28934 會接納其作者）</td></tr>
 		</tbody>
 	</table>
 	</div>
 
 	<Callout type="note" title="委派管理">
-		<code>rpc.admin_pubkey</code>（與管理權杖）仍是擁有所有方法的根登入。其他
+		<code>rpc.admin_pubkey</code>（與管理權杖）仍是擁有所有方法的最高權限登入。其他
 		公鑰用 NIP-98 認證，並且只能執行透過 <code>assignmethod</code> 授予它們的方法
 		（<code>supportedmethods</code> 顯示它們自己的子集）。權限、角色、邀請碼與中繼身分
 		管理保持僅管理員，因此被授權者永遠無法提權。被封鎖的公鑰即使有授權也會被拒絕。

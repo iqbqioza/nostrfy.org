@@ -9,8 +9,8 @@
 </script>
 
 <PageMeta
-	title="支持 nostrfy"
-	description="透過鏈上比特幣捐贈支持 nostrfy 開發。自由開源，採用 MIT 或 Apache-2.0 雙授權。"
+	title="支援 nostrfy"
+	description="透過鏈上比特幣捐贈支援 nostrfy 開發。自由開源，採用 MIT 或 Apache-2.0 雙授權。"
 />
 
 <div class="relative overflow-hidden">
@@ -20,7 +20,7 @@
 			<div class="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-line bg-surface/60">
 				<Icon name="heart" size={22} class="text-accent-400" />
 			</div>
-			<h1 class="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">支持 nostrfy</h1>
+			<h1 class="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">支援 nostrfy</h1>
 			<p class="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-zinc-400">
 				nostrfy 是自由、開源（MIT 或 Apache-2.0）且無鎖定的 — 而且會一直如此。它由一位開發者在閒暇時間建置與維護，
 				正因為有像你這樣的人，它才不斷變得更好。如果 nostrfy 為你節省了時間、金錢或麻煩，一筆小小的捐贈意義重大，

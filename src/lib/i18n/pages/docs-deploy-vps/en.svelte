@@ -79,7 +79,7 @@ sudo systemctl restart nostrfy`;
 <div class="doc-body">
 	<p>
 		This is the generic guide for a plain Linux VPS (any provider — Hetzner, Vultr, Linode, Contabo,
-		your own server, ...). The other platform guides (Digital Ocean, AWS, GCP, Azure) are shortcuts of
+		your own server, ...). The other platform guides (DigitalOcean, AWS, GCP, Azure) are shortcuts of
 		this one with their provider-specific firewall steps.
 	</p>
 

@@ -50,7 +50,7 @@
 	</p>
 	<ul>
 		<li><strong>WebSocket 中繼</strong>與 NIP-11 資訊文件。</li>
-		<li>唯讀 <strong>REST API</strong>，位於 <code>/api/v1/...</code> — 獨立的讀取執行緒意味著 REST 流量永遠不會阻塞 WebSocket 訂閱者。</li>
+		<li>唯讀 <strong>REST API</strong>，位於 <code>/api/v1/...</code> — 在獨立的讀取執行緒上執行，因此 REST 流量永遠不會阻塞 WebSocket 訂閱者。</li>
 		<li><strong>Blossom 檔案伺服器</strong>（媒體託管），執行於獨立主機名稱。</li>
 		<li><strong>NIP-86 管理 RPC</strong>、健康檢查與 Prometheus <code>/metrics</code>。</li>
 	</ul>

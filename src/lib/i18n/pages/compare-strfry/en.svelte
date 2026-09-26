@@ -4,12 +4,12 @@
 
 	const rows: { label: string; nostrfy: string; strfry: string }[] = [
 		{ label: 'Language', nostrfy: 'Rust', strfry: 'C++' },
-		{ label: 'License', nostrfy: 'MIT OR Apache-2.0', strfry: 'GPL-3.0' },
+		{ label: 'License', nostrfy: 'MIT or Apache-2.0', strfry: 'GPL-3.0' },
 		{ label: 'Storage', nostrfy: 'LMDB (no external database)', strfry: 'LMDB (no external database)' },
 		{ label: 'Configuration', nostrfy: 'One nostrfy.toml, hot reload (SIGHUP)', strfry: 'strfry.conf, hot reload' },
 		{ label: 'Advertised NIPs', nostrfy: '34 (36 implemented, incl. opt-in)', strfry: '11 core NIPs' },
 		{ label: 'NIP-29 groups + LiveKit', nostrfy: 'Built in', strfry: '—' },
-		{ label: 'Blossom media server', nostrfy: 'Built in (local disk or S3/R2)', strfry: '—' },
+		{ label: 'Blossom file server', nostrfy: 'Built in (local disk or S3/R2)', strfry: '—' },
 		{ label: 'REST API', nostrfy: 'Built in at /api/v1', strfry: '—' },
 		{ label: 'Management API', nostrfy: 'NIP-86 JSON-RPC, delegated admins', strfry: '—' },
 		{ label: 'Negentropy (NIP-77)', nostrfy: 'Yes', strfry: 'Yes — strfry originated it' },
@@ -94,7 +94,7 @@
 					nostrfy is configured by a single, fully-commented <code
 						class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-[13px] text-accent-300">nostrfy.toml</code
 					>: identity, limits, storage, access control, Blossom and RPC in one place. Most settings
-					hot-reload on SIGHUP.
+					hot reload on SIGHUP.
 				</span>
 			</li>
 			<li class="flex gap-3">
@@ -122,7 +122,7 @@
 		<div class="mt-5 grid gap-4 sm:grid-cols-2">
 			{#each [
 				['network', 'NIP-29 groups + LiveKit', 'Relay-enforced groups, moderation events and relay-signed group metadata, plus audio/video rooms via LiveKit.'],
-				['database', 'Blossom media server', 'Content-addressed uploads on their own hostname, backed by local disk or an S3-compatible bucket (AWS S3, Cloudflare R2).'],
+				['database', 'Blossom file server', 'Content-addressed uploads on their own hostname, backed by local disk or an S3-compatible bucket (AWS S3, Cloudflare R2).'],
 				['server', 'REST API', 'A read-only /api/v1 on its own reader thread — query events by npub, nevent or naddr, with counts, stats and search.'],
 				['lock', 'NIP-86 management', 'A JSON-RPC management API with Bearer or NIP-98 auth, delegated method grants and invite codes.']
 			] as [icon, title, body] (title)}
@@ -139,7 +139,7 @@
 		<h2 class="mt-12 text-2xl font-bold tracking-tight">Where strfry shines</h2>
 		<p class="mt-3 text-[15px] leading-relaxed text-zinc-400">
 			strfry remains an excellent choice: it originated the negentropy protocol, supports zero-downtime
-			restarts and optional websocket compression, and its write-policy plugin interface lets you run
+			restarts and optional WebSocket compression, and its write-policy plugin interface lets you run
 			arbitrary logic on every publish. If you need a plugin sandbox and nothing else on this list,
 			strfry is a great fit. If you would rather have groups, media, REST and management in the box —
 			or need a permissive license — nostrfy is the shorter path.

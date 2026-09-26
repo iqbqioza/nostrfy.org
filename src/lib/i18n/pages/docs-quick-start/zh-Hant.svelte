@@ -14,7 +14,7 @@
 host = "0.0.0.0"`;
 	const stopRestart = `nostrfy --config nostrfy.toml stop
 nostrfy --config nostrfy.toml restart
-kill -HUP $(cat nostrfy.pid)  # reload the config without a restart`;
+kill -HUP $(cat nostrfy.pid)  # 無需重新啟動即可重載設定`;
 </script>
 
 <DocsTitle
@@ -64,7 +64,7 @@ kill -HUP $(cat nostrfy.pid)  # reload the config without a restart`;
 		caption="restart 會重新讀取設定；SIGHUP 無需重新啟動即可重載大部分設定。"
 	/>
 
-	<h2>有效維運</h2>
+	<h2>日常維運</h2>
 	<ul>
 		<li>
 			<code>nostrfy stats</code> 顯示即時統計 — 也可透過 HTTP 以

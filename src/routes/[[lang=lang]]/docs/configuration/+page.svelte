@@ -1,17 +1,28 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { localeForPathname, type Locale } from '$lib/i18n/locale';
+	import LocaleBody from '$lib/i18n/LocaleBody.svelte';
 	import En from '$lib/i18n/pages/docs-configuration/en.svelte';
 	import ZhHans from '$lib/i18n/pages/docs-configuration/zh-Hans.svelte';
 	import ZhHant from '$lib/i18n/pages/docs-configuration/zh-Hant.svelte';
-
-	const locale = $derived<Locale>($page.data.locale ?? localeForPathname($page.url.pathname));
+	import Ja from '$lib/i18n/pages/docs-configuration/ja.svelte';
+	import Ru from '$lib/i18n/pages/docs-configuration/ru.svelte';
+	import De from '$lib/i18n/pages/docs-configuration/de.svelte';
+	import Fr from '$lib/i18n/pages/docs-configuration/fr.svelte';
+	import Es from '$lib/i18n/pages/docs-configuration/es.svelte';
+	import Pt from '$lib/i18n/pages/docs-configuration/pt.svelte';
+	import It from '$lib/i18n/pages/docs-configuration/it.svelte';
 </script>
 
-{#if locale === 'zh-Hans'}
-	<ZhHans />
-{:else if locale === 'zh-Hant'}
-	<ZhHant />
-{:else}
-	<En />
-{/if}
+<LocaleBody
+	bodies={{
+		'en': En,
+		'zh-Hans': ZhHans,
+		'zh-Hant': ZhHant,
+		'ja': Ja,
+		'ru': Ru,
+		'de': De,
+		'fr': Fr,
+		'es': Es,
+		'pt': Pt,
+		'it': It,
+	}}
+/>

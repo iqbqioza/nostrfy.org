@@ -7,7 +7,7 @@
 
 	const rows: { label: string; nostrfy: string; strfry: string }[] = [
 		{ label: '語言', nostrfy: 'Rust', strfry: 'C++' },
-		{ label: '授權', nostrfy: 'MIT OR Apache-2.0', strfry: 'GPL-3.0' },
+		{ label: '授權', nostrfy: 'MIT or Apache-2.0', strfry: 'GPL-3.0' },
 		{ label: '儲存', nostrfy: 'LMDB（無需外部資料庫）', strfry: 'LMDB（無需外部資料庫）' },
 		{ label: '設定', nostrfy: '單一 nostrfy.toml，熱重載（SIGHUP）', strfry: 'strfry.conf，熱重載' },
 		{ label: '公佈的 NIP', nostrfy: '34 個（實作 36 個，含選用）', strfry: '11 個核心 NIP' },
@@ -53,7 +53,7 @@
 		<p class="mt-4 max-w-3xl text-[15px] leading-relaxed text-zinc-400">
 			兩者都是單一二進位檔的 Nostr 中繼，將事件儲存在 LMDB 中並使用相同協定。它們做出不同的取捨：
 			<strong class="text-zinc-200">strfry</strong> 是成熟的 C++ 中繼，擁有寫入原則外掛系統；而
-			<strong class="text-zinc-200">nostrfy</strong> 是以 Rust 撰寫的引擎，將營運者所需的功能 —
+			<strong class="text-zinc-200">nostrfy</strong> 是以 Rust 撰寫的引擎，將維運者所需的功能 —
 			群組、媒體、REST、管理 — 打包在一個二進位檔與一個設定檔中。
 		</p>
 
@@ -119,8 +119,8 @@
 		<div class="mt-5 grid gap-4 sm:grid-cols-2">
 			{#each [
 				['network', 'NIP-29 群組 + LiveKit', '中繼強制的群組、管理事件與中繼簽章的群組中繼資料，外加透過 LiveKit 的影音房間。'],
-				['database', 'Blossom 媒體伺服器', '內容定址的上傳執行於獨立主機名稱，支援本機磁碟或 S3 相容儲存桶（AWS S3、Cloudflare R2）。'],
-				['server', 'REST API', '唯讀 /api/v1 執行在自己的讀取執行緒上 — 可依 npub、nevent 或 naddr 查詢事件，支援計數、統計與搜尋。'],
+				['database', 'Blossom 媒體伺服器', '內容定址的上傳使用獨立主機名稱，支援本機磁碟或 S3 相容儲存桶（AWS S3、Cloudflare R2）。'],
+				['server', 'REST API', '唯讀 /api/v1 在自己的讀取執行緒上執行 — 可依 npub、nevent 或 naddr 查詢事件，支援計數、統計與搜尋。'],
 				['lock', 'NIP-86 管理', 'JSON-RPC 管理 API，支援 Bearer 或 NIP-98 認證、委派方法授權與邀請碼。']
 			] as [icon, title, body] (title)}
 				<div class="rounded-xl border border-line bg-surface/50 p-5">

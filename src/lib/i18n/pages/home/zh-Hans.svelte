@@ -171,7 +171,7 @@
 				href={p('/docs/quick-start/')}
 				class="inline-flex items-center gap-2 rounded-xl border border-line bg-surface/60 px-5 py-3 text-sm font-semibold text-zinc-100 transition-colors hover:border-line-2 hover:text-white"
 			>
-				快速开始
+				快速入门
 				<Icon name="arrow-right" size={16} />
 			</a>
 			<a
@@ -230,7 +230,7 @@
 		<div class="max-w-2xl">
 			<h2 class="text-2xl font-bold tracking-tight sm:text-3xl">一行命令安装</h2>
 			<p class="mt-3 text-zinc-400">
-				安装脚本会检测你的操作系统和架构，下载匹配的预编译二进制文件，校验 sha256 校验和并将其放入你的
+				安装脚本会检测你的操作系统和架构，下载匹配的预编译二进制文件，验证 sha256 校验和并将其放入你的
 				<code class="rounded bg-surface-2 px-1.5 py-0.5 font-mono text-[13px] text-accent-300">PATH</code>。
 				无需克隆、无需编译、无需 sudo。
 			</p>
@@ -315,7 +315,7 @@
 					href={p('/docs/quick-start/')}
 					class="mt-8 inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-5 py-3 text-sm font-semibold text-zinc-100 transition-colors hover:border-line-2 hover:text-white"
 				>
-					打开快速开始指南
+					打开快速入门指南
 					<Icon name="arrow-right" size={16} />
 				</a>
 			</div>

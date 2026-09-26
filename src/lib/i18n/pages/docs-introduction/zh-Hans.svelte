@@ -76,7 +76,7 @@ nostrfy --config nostrfy.toml start`}
 	<CodeBlock code={niip11} lang="bash" />
 
 	<Callout type="tip" title="下一步">
-		按照<a href={p('/docs/quick-start/')}>快速开始</a>完成首次运行，或直接跳到
+		按照<a href={p('/docs/quick-start/')}>快速入门</a>完成首次运行，或直接跳到
 		<a href={p('/docs/configuration/')}>配置参考</a>来调整中继。
 	</Callout>
 </div>

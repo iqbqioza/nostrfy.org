@@ -117,6 +117,6 @@ private_key = ""                          # 執行 'nostrfy genkey' 並貼上金
 	</p>
 
 	<Callout type="warning" title="TLS 由你的代理或供應商終止">
-		中繼本身在 8080 上提供一般 WebSocket 並遵循 X-Forwarded-Proto。
+		中繼本身在 8080 上提供明文 WebSocket 並遵循 X-Forwarded-Proto。
 	</Callout>
 </div>

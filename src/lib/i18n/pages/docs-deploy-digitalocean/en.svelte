@@ -31,7 +31,7 @@ sudo systemctl enable --now nostrfy`;
 	<ol>
 		<li>
 			<strong>Create a Droplet</strong>: Ubuntu 24.04 LTS, any size (1 GB RAM is enough to start). A
-			droplet in a region close to your users lowers latency.
+			Droplet in a region close to your users lowers latency.
 		</li>
 		<li>
 			<strong>SSH in</strong> and follow the generic
@@ -47,7 +47,7 @@ sudo systemctl enable --now nostrfy`;
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				Digital Ocean Cloud Firewall</a
+				DigitalOcean Cloud Firewall</a
 			> is recommended): allow inbound TCP <code>8080</code> (and <code>443</code> if you add TLS).
 		</li>
 		<li>
@@ -63,7 +63,7 @@ sudo systemctl enable --now nostrfy`;
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				Digital Ocean's managed load balancer</a
+				DigitalOcean's managed load balancer</a
 			> with a certificate — then set
 			<code>relay.public_url = "wss://relay.example.com"</code> and restart.
 		</li>

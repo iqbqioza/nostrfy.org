@@ -149,12 +149,12 @@
 			<tr>
 				<td><code>banevent</code></td>
 				<td>["event id", "reason (optional)"]</td>
-				<td>Ban an event (banning an unknown id pre-bans it; also removes it from the allow list)</td>
+				<td>Ban an event (banning an unknown id pre-bans it; also removes it from the allowlist)</td>
 			</tr>
 			<tr>
 				<td><code>allowevent</code></td>
 				<td>["event id", "reason (optional)"]</td>
-				<td>Add an event to the allow list (also lifts the ban; allowing an unknown id pre-allows it)</td>
+				<td>Add an event to the allowlist (also lifts the ban; allowing an unknown id pre-allows it)</td>
 			</tr>
 			<tr>
 				<td><code>unallowevent</code> / <code>unbanevent</code></td>

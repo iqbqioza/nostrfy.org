@@ -6,7 +6,7 @@
 	const faqs = [
 		{
 			q: 'What is nostrfy?',
-			a: 'nostrfy is an all-in-one Nostr relay server engine written in Rust. It stores events from Nostr clients and serves them in response to subscriptions, implementing every relay-side NIP plus an optional Blossom media server, a read-only REST API and a NIP-86 management API — all in one binary.'
+			a: 'nostrfy is an all-in-one Nostr relay server engine written in Rust. It stores events from Nostr clients and serves them in response to subscriptions, implementing every relay-side NIP plus an optional Blossom file server, a read-only REST API and a NIP-86 management API — all in one binary.'
 		},
 		{
 			q: 'Is nostrfy free and open source?',
@@ -30,7 +30,7 @@
 		},
 		{
 			q: 'Does nostrfy host media files?',
-			a: 'Yes. The built-in Blossom file server hosts content-addressed uploads on its own hostname, either on local disk or in an S3-compatible bucket such as AWS S3 or Cloudflare R2. Uploads are authorized with signed kind-24242 events and can be restricted to an allowlist.'
+			a: 'Yes. The built-in Blossom file server hosts content-addressed uploads on its own hostname, either on local disk or in an S3-compatible bucket such as AWS S3 or Cloudflare R2. Uploads are authorized with signed kind 24242 events and can be restricted to an allowlist.'
 		},
 		{
 			q: 'Can I migrate from strfry?',

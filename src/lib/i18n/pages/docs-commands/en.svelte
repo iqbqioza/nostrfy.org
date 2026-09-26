@@ -44,7 +44,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy genkey</code></td>
-				<td>Generate a secret key for NIP-29 groups, write it into relay.private_key, set the config to 0600 and print the public key; aborts instead of writing when the file changed since it was read</td>
+				<td>Generate a secret key for NIP-29 groups, write it into relay.private_key, set the config to 0600 and print the public key; aborts instead of writing if the file changed since it was read</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
@@ -68,7 +68,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy upgrade [version]</code></td>
-				<td>Update the binary to the latest GitHub release (or the given version); downloads the matching platform asset, verifies its sha256 checksum and a <code>--version</code> probe, then atomically replaces the binary; concurrent runs are serialized with a lock file; never downgrades unless a version is given; <code>--force</code> reinstalls</td>
+				<td>Update the binary to the latest GitHub release (or the given version); downloads the matching platform asset, verifies its sha256 checksum and runs a <code>--version</code> probe, then atomically replaces the binary; concurrent runs are serialized with a lock file; never downgrades unless a version is given; <code>--force</code> reinstalls</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy migrate-strfry</code></td>
@@ -121,6 +121,6 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 	</p>
 
 	<Callout type="tip" title="Step by step">
-		Most commands are also explained step by step in the <a href="/docs/quick-start/">quick-start guide</a>.
+		Most commands are also explained step by step in the <a href="/docs/quick-start/">quick start guide</a>.
 	</Callout>
 </div>

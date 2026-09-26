@@ -45,9 +45,9 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 
 <div class="doc-body">
 	<h2>啟動與停止</h2>
-	<p>以背景常駐程式方式啟動中繼：</p>
+	<p>以常駐程式方式啟動中繼：</p>
 	<CodeBlock code={startCode} lang="bash" caption="=> nostrfy started (pid 12345)" />
-	<p>或在終端機中前景執行：</p>
+	<p>或在終端機中以前景模式執行：</p>
 	<CodeBlock code={foregroundCode} lang="bash" />
 	<p>停止：</p>
 	<CodeBlock code={stopCode} lang="bash" />
@@ -116,7 +116,7 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 
 	<h2>大規模部署</h2>
 	<p>
-		該中繼設計為可在單一主機上擴展到數十萬連線 — 即時投遞只喚醒能符合事件的訂閱者，
+		中繼設計為可在單一主機上擴展到數十萬連線 — 即時投遞只喚醒能符合事件的訂閱者，
 		且每連線記憶體佔用很小。推向百萬級需要主機級調校：
 	</p>
 		<div class="overflow-x-auto">

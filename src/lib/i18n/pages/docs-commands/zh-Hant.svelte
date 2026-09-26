@@ -47,7 +47,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy genkey</code></td>
-				<td>為 NIP-29 群組產生金鑰，寫入 relay.private_key，將設定設為 0600 並列印公開金鑰；當檔案在讀取後發生變化時中止而不寫入</td>
+				<td>為 NIP-29 群組產生金鑰，寫入 relay.private_key，將設定檔權限設為 0600 並列印公開金鑰；當檔案在讀取後發生變化時中止而不寫入</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
@@ -90,7 +90,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 	<p>被拒絕的公鑰在發布時始終被拒絕，讀取時也永遠不會被提供。</p>
 	<p>
 		<code>nostrfy access unblockip &lt;ip&gt;</code> 從持久化的 NIP-86 被封鎖 IP 清單中移除一個 IP
-		（自我鎖定復原）；重新啟動常駐程式以生效。
+		（自我鎖定復原）；重新啟動常駐程式才會生效。
 	</p>
 
 	<h2>Inbox/outbox 訂閱過濾器</h2>

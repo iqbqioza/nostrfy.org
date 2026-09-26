@@ -563,7 +563,7 @@ nostrfy --config nostrfy.toml start`;
 		the NIP enable/disable lists.
 	</p>
 	<p>
-		<strong>Fix:</strong> Use <code>nostrfy restart</code>. The log contains a "a restart is required"
+		<strong>Fix:</strong> Use <code>nostrfy restart</code>. The log contains an "a restart is required"
 		warning in this case.
 	</p>
 

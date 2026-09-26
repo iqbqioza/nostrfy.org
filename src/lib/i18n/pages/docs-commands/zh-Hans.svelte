@@ -71,7 +71,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy upgrade [version]</code></td>
-				<td>将二进制更新到最新 GitHub 发布版（或指定版本）；下载匹配平台的资产，校验其 sha256 校验和并运行 <code>--version</code> 探测，然后原子替换二进制；并发运行通过锁文件串行化；除非指定版本，否则不会降级；<code>--force</code> 重新安装</td>
+				<td>将二进制更新到最新 GitHub 发布版（或指定版本）；下载匹配平台的资产，验证其 sha256 校验和并运行 <code>--version</code> 探测，然后原子替换二进制；并发运行通过锁文件串行化；除非指定版本，否则不会降级；<code>--force</code> 重新安装</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy migrate-strfry</code></td>
@@ -98,7 +98,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 		nostrfy 为 inbox/outbox 路由模型扩展了 REQ 过滤器语法，增加了两个便捷键 — 这是 nostrfy
 		扩展，不属于任何 NIP。<code>"outbox"</code> 展开为 <code>"authors"</code>：只包含<em>由</em>该公钥<em>创作</em>的事件。
 		<code>"inbox"</code> 展开为 <code>"#p"</code>：只包含<em>发给</em>该公钥的事件（提及、回复、Zap 和私信）。
-		值可以是 64 位十六进制或 <code>npub1</code> 编码，也可以是与现有 <code>authors</code>/<code>#p</code>
+		值可以是 64 字符十六进制或 <code>npub1</code> 编码，也可以是与现有 <code>authors</code>/<code>#p</code>
 		键合并的数组；无效的公钥会拒绝该订阅：
 	</p>
 	<CodeBlock code={reqCode} lang="jsonc" />
@@ -121,6 +121,6 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 	</p>
 
 	<Callout type="tip" title="分步说明">
-		大多数命令在<a href={p('/docs/quick-start/')}>快速开始指南</a>中也有分步说明。
+		大多数命令在<a href={p('/docs/quick-start/')}>快速入门指南</a>中也有分步说明。
 	</Callout>
 </div>

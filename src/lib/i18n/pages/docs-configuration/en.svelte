@@ -841,7 +841,7 @@ nostrfy relay list`;
 				<td><code>restrict_relay</code></td>
 				<td>boolean</td>
 				<td><code>false</code></td>
-				<td>Only allow-listed pubkeys may publish</td>
+				<td>Only allowlisted pubkeys may publish</td>
 			</tr>
 			<tr>
 				<td><code>blocked_kinds</code></td>
@@ -877,7 +877,7 @@ nostrfy relay list`;
 	<CodeBlock code={accessListCode} lang="sh" />
 	<ul>
 		<li>
-			<strong>restrict_relay = true</strong> — only the allow-listed pubkeys may <strong>publish</strong>, while
+			<strong>restrict_relay = true</strong> — only the allowlisted pubkeys may <strong>publish</strong>, while
 			reading stays open to everyone (any client can still subscribe and fetch).
 		</li>
 		<li>A denied pubkey is always rejected when publishing and never served when reading.</li>
@@ -968,7 +968,7 @@ nostrfy relay list`;
 				<td><code>restrict_uploads</code></td>
 				<td>boolean</td>
 				<td><code>false</code></td>
-				<td>Only allow-listed pubkeys may upload</td>
+				<td>Only allowlisted pubkeys may upload</td>
 			</tr>
 		</tbody>
 	</table>

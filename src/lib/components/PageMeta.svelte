@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { getContext } from 'svelte';
 	import { site } from '$lib/data/site';
-	import { localeForPathname, type Locale } from '$lib/i18n/locale';
+	import { localeForPathname, localePath, type Locale } from '$lib/i18n/locale';
 	import { ui } from '$lib/i18n/ui';
 
 	let {
@@ -19,6 +20,9 @@
 	const locale = $derived<Locale>($page.data.locale ?? localeForPathname($page.url.pathname));
 	const t = $derived(ui[locale]);
 
+	const translatedCtx = getContext<() => boolean>('nostrfy:page-translated');
+	const translated = $derived(translatedCtx ? translatedCtx() : true);
+
 	const fullTitle = $derived(
 		title
 			? title.toLowerCase().includes('nostrfy')
@@ -28,6 +32,9 @@
 	);
 	const desc = $derived(description ?? t.meta.defaultDescription);
 	const url = $derived(`https://${site.domain}${$page.url.pathname}`);
+	const canonical = $derived(
+		translated ? url : `https://${site.domain}${localePath('en', $page.url.pathname)}`
+	);
 	const ogImage = $derived(`https://${site.domain}${image}`);
 </script>
 
@@ -36,14 +43,16 @@
 	<meta name="description" content={desc} />
 	<meta
 		name="robots"
-		content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+		content={translated
+			? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+			: 'noindex, follow'}
 	/>
-	<link rel="canonical" href={url} />
+	<link rel="canonical" href={canonical} />
 	<meta property="og:type" content={type} />
 	<meta property="og:site_name" content="nostrfy" />
 	<meta property="og:title" content={fullTitle} />
 	<meta property="og:description" content={desc} />
-	<meta property="og:url" content={url} />
+	<meta property="og:url" content={canonical} />
 	<meta property="og:image" content={ogImage} />
 	<meta property="og:image:type" content="image/png" />
 	<meta property="og:image:width" content="1200" />

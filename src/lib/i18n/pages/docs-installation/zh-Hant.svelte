@@ -7,7 +7,7 @@
 	const p = (path: string) => localePath('zh-Hant', path);
 
 	const lowSpecConfig = `[database]
-search_index = false   # halves the database size and saves CPU/IO`;
+search_index = false   # 資料庫大小減半，並節省 CPU/IO`;
 	const buildSource = `git clone https://github.com/iqbqioza/nostrfy.git
 cd nostrfy
 cargo build --release`;
@@ -99,7 +99,7 @@ cargo build --release`;
 
 	<h3>在 80 連接埠上執行</h3>
 	<p>
-		一般使用者無法綁定 80 連接埠。要嘛用 <code>sudo</code> 執行，要嘛使用 8080 等較高的連接埠。
+		一般使用者無法綁定 80 連接埠。可以用 <code>sudo</code> 執行，或使用 8080 等較高的連接埠。
 	</p>
 	<CodeBlock
 		code={port80Run}

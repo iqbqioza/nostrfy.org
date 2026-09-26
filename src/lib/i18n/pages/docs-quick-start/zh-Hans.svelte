@@ -14,11 +14,11 @@
 host = "0.0.0.0"`;
 	const stopRestart = `nostrfy --config nostrfy.toml stop
 nostrfy --config nostrfy.toml restart
-kill -HUP $(cat nostrfy.pid)  # reload the config without a restart`;
+kill -HUP $(cat nostrfy.pid)  # 无需重启即可重载配置`;
 </script>
 
 <DocsTitle
-	title="快速开始指南"
+	title="快速入门指南"
 	description="从安装到运行中的 Nostr 中继只需几分钟：编写配置、校验、启动守护进程并运行首次健康检查。"
 />
 

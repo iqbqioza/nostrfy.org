@@ -145,7 +145,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 成員清�
 		（<code>--strfry-config</code>，然後 <code>$STRFRY_CONFIG</code>、<code>/etc/strfry.conf</code>、
 		<code>./strfry.conf</code>），列印有 nostrfy 等效項且與你的
 		<code>nostrfy.toml</code> 不同的設定，並詢問是否合併。只重寫列出的鍵 — 註解
-		和所有其他行都保留，會使設定無效的值會被跳過並說明原因，其餘仍然合併。
+		和所有其他行都保留，會導致設定無效的值會被跳過並說明原因，其餘仍然合併。
 	</p>
 	<ul>
 		<li><code>--merge-config</code> 不經詢問直接套用（用於腳本）；<code>--no-merge-config</code> 跳過該步驟。</li>

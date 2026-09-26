@@ -3,39 +3,39 @@
 	import CodeBlock from '$lib/components/CodeBlock.svelte';
 
 	const config = `[blossom]
-host = "media.example.com"          # required — enables the feature
-storage = "local"                   # "local" or "s3"
-local_path = "./data/images"        # local storage root
-max_upload_bytes = 20971520         # 20 MiB
-min_free_bytes = 33554432           # refuse uploads when the disk has less free space
-restrict_uploads = false            # only allow-listed pubkeys may upload
+host = "media.example.com"          # 必須 — 啟用該功能
+storage = "local"                   # "local" 或 "s3"
+local_path = "./data/images"        # 本機儲存根目錄
+max_upload_bytes = 20971520         # 即 20 MiB
+min_free_bytes = 33554432           # 磁碟剩餘空間不足時拒絕上傳
+restrict_uploads = false            # 僅允許清單中的公鑰可上傳
 
-# For S3 / Cloudflare R2:
+# 適用於 S3 / Cloudflare R2：
 s3_endpoint = "https://<account>.r2.cloudflarestorage.com"
 s3_region = "auto"
 s3_bucket = "nostr-media"
 s3_access_key = "..."
 s3_secret_key = "..."`;
-	const example = `# Server info
+	const example = `# 伺服器資訊
 curl https://media.example.com/
 
-# Upload (auth event from your Blossom client, e.g. via nak or the nostr-tools blossom helper)
+# 上傳（來自 Blossom 用戶端的認證事件，例如透過 nak 或 nostr-tools 的 blossom 輔助工具）
 curl -X PUT -H "Authorization: Nostr <auth>" -H "Content-Type: image/png" --data-binary @photo.png https://media.example.com/upload
 
-# Fetch
+# 取得
 curl https://media.example.com/<sha256>
 
-# List your own uploads (auth event with t=list; the path pubkey must be yours)
+# 列出自己的上傳（帶有 t=list 的認證事件；路徑中的公鑰必須是你的）
 curl -H "Authorization: Nostr <auth>" https://media.example.com/list/<pubkey-hex>
 
-# Delete (auth event with t=delete and x=<sha256>)
+# 刪除（帶有 t=delete 和 x=<sha256> 的認證事件）
 curl -X DELETE -H "Authorization: Nostr <auth>" https://media.example.com/<sha256>`;
 	const restrict = `[blossom]
 host = "media.example.com"
 restrict_uploads = true`;
-	const allowlist = `nostrfy blossom allow npub1...          # allow a pubkey (npub1... or hex)
-nostrfy blossom deny npub1...           # revoke a pubkey
-nostrfy blossom list                    # show the list and restrict_uploads`;
+	const allowlist = `nostrfy blossom allow npub1...          # 允許某個公鑰（npub1... 或 hex）
+nostrfy blossom deny npub1...           # 撤銷某個公鑰
+nostrfy blossom list                    # 顯示清單和 restrict_uploads`;
 </script>
 
 <DocsTitle
@@ -58,7 +58,7 @@ nostrfy blossom list                    # show the list and restrict_uploads`;
 		端點必須是 HTTPS，除非主機是回環位址（例如用於測試的本機 MinIO）。
 	</p>
 
-	<h2>儲存配置</h2>
+	<h2>儲存結構</h2>
 	<p>兩種後端都使用 <code>&lt;npub1...&gt;</code> 階層，以檔案的 SHA-256 為鍵：</p>
 	<ul>
 		<li>

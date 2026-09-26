@@ -7,7 +7,7 @@
 
 	const rows: { label: string; nostrfy: string; strfry: string }[] = [
 		{ label: '语言', nostrfy: 'Rust', strfry: 'C++' },
-		{ label: '许可', nostrfy: 'MIT OR Apache-2.0', strfry: 'GPL-3.0' },
+		{ label: '许可', nostrfy: 'MIT or Apache-2.0', strfry: 'GPL-3.0' },
 		{ label: '存储', nostrfy: 'LMDB（无需外部数据库）', strfry: 'LMDB（无需外部数据库）' },
 		{ label: '配置', nostrfy: '单个 nostrfy.toml，热重载（SIGHUP）', strfry: 'strfry.conf，热重载' },
 		{ label: '公布的 NIP', nostrfy: '34 个（实现 36 个，含可选）', strfry: '11 个核心 NIP' },
@@ -161,7 +161,7 @@
 				href={p('/docs/quick-start/')}
 				class="inline-flex items-center gap-2 rounded-xl border border-line px-5 py-3 text-sm font-semibold text-zinc-200 transition-colors hover:border-line-2 hover:text-white"
 			>
-				快速开始 <Icon name="arrow-right" size={16} />
+				快速入门 <Icon name="arrow-right" size={16} />
 			</a>
 			<a
 				href={p('/docs/nips/')}

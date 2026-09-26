@@ -116,7 +116,7 @@ sudo systemctl restart nostrfy`;
 
 	<h2>5. 在前端放置終止 TLS 的代理（用於 wss://）</h2>
 	<p>
-		中繼在 8080 上提供一般 WebSocket。要將其公開為 <code>wss://</code>，請在 443
+		中繼在 8080 上提供明文 WebSocket。要將其公開為 <code>wss://</code>，請在 443
 		連接埠執行終止 TLS 的反向代理。中繼遵循 <code>X-Forwarded-Proto</code>，因此無需
 		特殊設定。
 	</p>

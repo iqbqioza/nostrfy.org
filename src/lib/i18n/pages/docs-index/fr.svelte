@@ -1,0 +1,79 @@
+<script lang="ts">
+	import PageMeta from '$lib/components/PageMeta.svelte';
+	import Icon from '$lib/components/Icon.svelte';
+	import { docsNav } from '$lib/data/docs-nav';
+	import { site } from '$lib/data/site';
+	import { localePath } from '$lib/i18n/locale';
+	import { ui } from '$lib/i18n/ui';
+
+	const p = (path: string) => localePath('fr', path);
+	const t = ui['fr'];
+
+	const icons: Record<string, string> = {
+		'Getting started': 'rocket',
+		Operations: 'wrench',
+		Features: 'layers',
+		Deployment: 'server',
+		Help: 'activity'
+	};
+</script>
+
+<PageMeta
+	title="Documentation et manuel nostrfy"
+	description="Le manuel complet de nostrfy : installation, configuration, prise en charge des NIP, API REST, guides de déploiement et dépannage pour le moteur de relais Nostr tout-en-un."
+/>
+
+<div class="mx-auto max-w-3xl pb-20 pt-12">
+	<h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Documentation</h1>
+	<p class="mt-3 max-w-2xl text-base text-zinc-400">
+		Tout ce qu’il faut pour installer, configurer, exploiter et faire évoluer un relais nostrfy — avec la référence complète des fonctionnalités et un guide de dépannage maintenu selon le comportement réel du relais.
+	</p>
+
+	<div class="mt-12">
+		<div class="flex flex-wrap gap-2">
+			{#each docsNav as group (group.label)}
+				<a
+					href={p(group.items[0].href)}
+					class="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface/50 px-3 py-1.5 text-xs text-zinc-300 transition-colors hover:border-line-2 hover:text-white"
+				>
+					<Icon name={icons[group.label]} size={13} class="text-accent-400" />
+					{t.navGroups[group.label] ?? group.label}
+				</a>
+			{/each}
+		</div>
+	</div>
+
+	<div class="mt-8 space-y-8">
+		{#each docsNav as group (group.label)}
+			<section>
+				<h2 class="flex items-center gap-2 text-lg font-bold tracking-tight text-zinc-100">
+					<Icon name={icons[group.label]} size={18} class="text-accent-400" />
+					{t.navGroups[group.label] ?? group.label}
+				</h2>
+				<div class="mt-4 grid gap-3 sm:grid-cols-2">
+					{#each group.items as item (item.href)}
+						<a
+							href={p(item.href)}
+							class="group rounded-xl border border-line bg-surface/40 p-5 transition-colors hover:border-line-2 hover:bg-surface/70"
+						>
+							<span class="flex items-center justify-between">
+								<span class="text-sm font-semibold text-zinc-100 group-hover:text-white">
+									{t.navItems[item.href] ?? item.title}
+								</span>
+								<Icon name="arrow-right" size={15} class="shrink-0 text-zinc-600 group-hover:text-accent-400" />
+							</span>
+						</a>
+					{/each}
+				</div>
+			</section>
+		{/each}
+	</div>
+
+	<div class="mt-12 rounded-xl border border-line bg-surface/40 p-5 text-sm text-zinc-400">
+		Besoin d’aide ? Ouvrez une issue sur
+		<a href={site.github} target="_blank" rel="noopener noreferrer" class="text-accent-300 hover:underline">
+			GitHub</a
+		>
+		avec les étapes de reproduction et le journal — la documentation est maintenue selon le comportement réel du relais, et les correctifs sont bienvenus.
+	</div>
+</div>

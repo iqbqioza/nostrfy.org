@@ -7,7 +7,7 @@
 	const p = (path: string) => localePath('zh-Hans', path);
 
 	const lowSpecConfig = `[database]
-search_index = false   # halves the database size and saves CPU/IO`;
+search_index = false   # 数据库大小减半，并节省 CPU/IO`;
 	const buildSource = `git clone https://github.com/iqbqioza/nostrfy.git
 cd nostrfy
 cargo build --release`;
@@ -108,6 +108,6 @@ cargo build --release`;
 	/>
 
 	<Callout type="tip" title="下一步">
-		nostrfy 已安装完成，请按照<a href={p('/docs/quick-start/')}>快速开始</a>指南操作。
+		nostrfy 已安装完成，请按照<a href={p('/docs/quick-start/')}>快速入门</a>指南操作。
 	</Callout>
 </div>

@@ -124,7 +124,7 @@ nostrfy relay list`;
 	<h3>鍵的詳細說明</h3>
 	<ul>
 		<li><strong>host</strong> — <code>0.0.0.0</code> 綁定所有 IPv4 介面；<code>127.0.0.1</code> 僅本機。</li>
-		<li><strong>port</strong> — 1-65535；80 連接埠需要 root。這一個連接埠同時提供 WebSocket 中繼、NIP-11 文件、REST API 與 NIP-86 RPC。</li>
+		<li><strong>port</strong> — 1-65535；80 連接埠需要 root。這個連接埠同時提供 WebSocket 中繼、NIP-11 文件、REST API 與 NIP-86 RPC。</li>
 		<li>
 			<strong>api_host</strong> — 將 REST API 專用於單一主機名稱，使 API 與中繼可以在反向代理後共用一個連接埠。啟動時固定 — 需要重新啟動。
 		</li>
@@ -240,7 +240,7 @@ nostrfy relay list`;
 			<tr><td><code>reader_threads</code></td><td>integer</td><td><code>2</code></td><td>專用掃描執行緒</td></tr>
 			<tr><td><code>max_indexed_words</code></td><td>integer</td><td><code>32</code></td><td>每個事件內容被索引的單詞數</td></tr>
 			<tr><td><code>meta_index</code></td><td>boolean</td><td><code>true</code></td><td>寫入掃描預過濾使用的每事件中繼資料標頭</td></tr>
-			<tr><td><code>disabled_fsync</code></td><td>boolean</td><td><code>false</code></td><td>跳過每個寫入批次後的同步磁碟清除</td></tr>
+			<tr><td><code>disabled_fsync</code></td><td>boolean</td><td><code>false</code></td><td>跳過每個寫入批次後的同步磁碟寫入</td></tr>
 			<tr><td><code>db_buffer_size</code></td><td>integer</td><td><code>2048</code></td><td>每連線 WebSocket 初始緩衝區（位元組）</td></tr>
 			<tr><td><code>db_request_timeout_secs</code></td><td>integer</td><td><code>30</code></td><td>資料庫請求在失敗前可等待的時長</td></tr>
 			<tr><td><code>max_db_queue_msgs</code></td><td>integer</td><td><code>4096</code></td><td>快速失敗前排隊的待處理訊息上限</td></tr>
@@ -338,7 +338,7 @@ nostrfy relay list`;
 		<tbody>
 			<tr><td>relay.name、description、pubkey、contact、icon、post_policy、public_url</td><td>relay.private_key</td></tr>
 			<tr><td>reject_ephemeral、enabled_git、enabled_nip78_auth</td><td>relay.livekit_*、enabled_nips / disabled_nips</td></tr>
-			<tr><td>大部分 [limits]</td><td>api_host、trusted_proxies、metrics_enabled、ws_paths、database.*、daemon 大小、限制上限、blossom.*</td></tr>
+			<tr><td>大部分 [limits]</td><td>api_host、trusted_proxies、metrics_enabled、ws_paths、database.*、daemon 大小設定、限制上限、blossom.*</td></tr>
 		</tbody>
 	</table>
 	</div>

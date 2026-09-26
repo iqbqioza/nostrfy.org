@@ -1,6 +1,6 @@
-const LANGS = ['zh-Hans', 'zh-Hant'];
+import { locales, defaultLocale } from '$lib/i18n/locale';
 
-/** Restricts `[[lang=lang]]` to the two Chinese prefixes; English lives at the root. */
+/** Restricts `[[lang=lang]]` to the prefixed locales; English lives at the root. */
 export function match(param: string): boolean {
-	return LANGS.includes(param);
+	return (locales as readonly string[]).filter((l) => l !== defaultLocale).includes(param);
 }

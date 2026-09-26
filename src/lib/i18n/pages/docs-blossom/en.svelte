@@ -40,13 +40,13 @@ nostrfy blossom list                    # show the list and restrict_uploads`;
 
 <DocsTitle
 	title="Blossom file server"
-	description="Media hosting on its own hostname: content-addressed uploads, local or S3-compatible storage, and kind-24242 auth for your Nostr relay."
+	description="Media hosting on its own hostname: content-addressed uploads, local or S3-compatible storage, and kind 24242 auth for your Nostr relay."
 />
 
 <div class="doc-body">
 	<h2>Overview</h2>
 	<p>
-		nostrfy can act as a Blossom blob server: clients upload files addressed by their SHA-256 hash, and
+		nostrfy can act as a Blossom file server: clients upload files addressed by their SHA-256 hash, and
 		the relay serves them back. Like the REST API, it lives on a dedicated hostname on the same port.
 	</p>
 

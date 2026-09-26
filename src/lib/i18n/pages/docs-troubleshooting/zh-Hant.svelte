@@ -49,7 +49,7 @@ nostrfy --config nostrfy.toml start`;
 <div class="doc-body">
 	<p><strong>首先檢查三件事：</strong></p>
 	<ul>
-		<li><code>nostrfy check</code> 驗證你的設定（大多數錯誤是設定失誤）。</li>
+		<li><code>nostrfy check</code> 驗證你的設定（大多數錯誤是設定錯誤）。</li>
 		<li><code>tail -f nostrfy.log</code> 顯示日誌 — 原因幾乎總在那裡。</li>
 		<li><code>nostrfy restart</code> 乾淨地重新啟動常駐程式。</li>
 	</ul>
@@ -173,7 +173,7 @@ nostrfy --config nostrfy.toml start`;
 	<p>使用 Cloudflare Tunnel 時：</p>
 	<ul>
 		<li>
-			中繼執行一般 HTTP；Cloudflare 終止 TLS，因此用戶端使用 <code>wss://</code>。在中繼上設定
+			中繼執行明文 HTTP；Cloudflare 終止 TLS，因此用戶端使用 <code>wss://</code>。在中繼上設定
 			<code>public_url = "wss://..."</code>（這使 NIP-42 認證正常運作）。
 		</li>
 		<li>
@@ -207,7 +207,7 @@ nostrfy --config nostrfy.toml start`;
 		<strong>原因：</strong>達到了 <code>max_connections</code>（預設 10000）、觸發了按 IP 上限
 		（<code>max_connections_per_ip</code>，預設 64），或每秒連線速率限制
 		（<code>max_connections_per_sec_per_ip</code>）拒絕了突發。這些上限適用於每個連線 —
-		WebSocket 與一般 HTTP 一樣。
+		WebSocket 與明文 HTTP 一樣。
 	</p>
 	<p>
 		<strong>修正：</strong>檢查並調整設定。<code>max_connections_per_ip = 0</code> 停用
@@ -492,7 +492,7 @@ nostrfy --config nostrfy.toml start`;
 		nostrfy 從 <code>relay.public_url</code> 推導期望的 URL：其 authority 加上
 		從 WebSocket scheme 映射的 HTTP scheme（<code>wss://</code> → <code>https://</code>，
 		<code>ws://</code> → <code>http://</code>，去掉 <code>nostr+</code>）。沒有
-		<code>public_url</code> 時，中繼期望它提供的一般 <code>http://host:port</code>。帶有
+		<code>public_url</code> 時，中繼期望它提供的明文 <code>http://host:port</code>。帶有
 		其他 scheme、不同/省略連接埠，或不同路徑或查詢的標籤會被拒絕 — 將
 		<code>relay.public_url</code> 設定為用戶端簽章的公開位址。每個認證事件也是
 		<strong>一次性</strong>的：在其 60 秒

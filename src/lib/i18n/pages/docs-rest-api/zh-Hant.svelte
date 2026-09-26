@@ -78,7 +78,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 			</tr>
 			<tr>
 				<td><code>GET /api/v1/&lt;npub1...&gt;/&lt;kind&gt;</code></td>
-				<td>依公鑰、依類型過濾的事件（接受 npub1... 或 nprofile1...；否則 400）</td>
+				<td>依公鑰與類型過濾的事件（接受 npub1... 或 nprofile1...；否則 400）</td>
 			</tr>
 		</tbody>
 	</table>

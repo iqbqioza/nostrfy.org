@@ -75,7 +75,7 @@
 					<Icon name="chevron-down" size={13} class="transition-transform group-open:rotate-180" />
 				</summary>
 				<div
-					class="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-xl border border-line bg-bg/95 py-1 shadow-xl backdrop-blur-xl"
+					class="absolute right-0 z-50 mt-2 max-h-[70vh] w-44 overflow-y-auto rounded-xl border border-line bg-bg/95 py-1 shadow-xl backdrop-blur-xl"
 				>
 					{#each locales as target (target)}
 						<a

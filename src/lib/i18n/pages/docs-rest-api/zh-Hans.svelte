@@ -84,7 +84,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</table>
 	</div>
 	<p>
-		作者标识符在每个端点上接受 <code>npub1...</code>、<code>nprofile1...</code> 或 64 位十六进制公钥
+		作者标识符在每个端点上接受 <code>npub1...</code>、<code>nprofile1...</code> 或 64 字符十六进制公钥
 		（不区分大小写）。
 	</p>
 	<h3>查询和聚合端点</h3>
@@ -101,7 +101,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 			总计都带 <code>approximate</code> 标志）。
 		</li>
 		<li>
-			<code>GET /api/v1/ids/&lt;hex&gt;</code> — 按其 64 位十六进制 id 获取单个事件（拒绝前缀）。
+			<code>GET /api/v1/ids/&lt;hex&gt;</code> — 按其 64 字符十六进制 id 获取单个事件（拒绝前缀）。
 		</li>
 		<li>
 			<code>GET /api/v1/&lt;npub1...&gt;/stats</code> — 作者摘要（总计、首次/最后活动、类型

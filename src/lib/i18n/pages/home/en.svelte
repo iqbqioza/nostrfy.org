@@ -18,7 +18,7 @@
 		},
 		{
 			icon: 'server',
-			title: 'Blossom media server',
+			title: 'Blossom file server',
 			body: 'SHA-256-addressed uploads on their own hostname — local disk or S3-compatible buckets (AWS S3, Cloudflare R2), with owner-signed deletes.'
 		},
 		{

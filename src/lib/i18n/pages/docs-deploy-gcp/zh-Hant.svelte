@@ -76,7 +76,7 @@ sudo systemctl enable --now nostrfy`;
 			<strong>連接埠</strong>：將容器連接埠設為 <code>8080</code>。
 		</li>
 		<li>
-			<strong>配置記憶體</strong>：至少 512 MB（LMDB + 非同步執行環境）。
+			<strong>分配記憶體</strong>：至少 512 MB（LMDB + 非同步執行環境）。
 		</li>
 		<li>
 			<strong>持久儲存</strong>：在 <code>/data</code> 附加 <strong>Cloud Run 磁碟區（filestore/gcsfuse）</strong>

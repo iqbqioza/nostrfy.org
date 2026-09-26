@@ -22,7 +22,7 @@
 			</div>
 			<h1 class="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">Support nostrfy</h1>
 			<p class="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-zinc-400">
-				nostrfy is free, open source (MIT OR Apache-2.0), and free from lock-in — and it will stay that way.
+				nostrfy is free, open source (MIT or Apache-2.0), and free from lock-in — and it will stay that way.
 				It is built and maintained in spare time by one developer, and it only keeps getting
 				better because of people like you. If nostrfy has saved you time, money or a
 				headache, a small donation goes a long way and is deeply appreciated.

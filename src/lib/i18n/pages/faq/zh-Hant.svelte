@@ -9,7 +9,7 @@
 	const faqs = [
 		{
 			q: '什麼是 nostrfy？',
-			a: 'nostrfy 是以 Rust 撰寫的一體化 Nostr 中繼伺服器引擎。它儲存來自 Nostr 用戶端的事件，並依訂閱提供出去，實作了所有中繼端 NIP，外加選用的 Blossom 媒體伺服器、唯讀 REST API 與 NIP-86 管理 API — 全部在一個二進位檔裡。'
+			a: 'nostrfy 是以 Rust 撰寫的一體化 Nostr 中繼伺服器引擎。它儲存來自 Nostr 用戶端的事件，並依訂閱將它們提供出去，實作了所有中繼端 NIP，外加選用的 Blossom 媒體伺服器、唯讀 REST API 與 NIP-86 管理 API — 全部在一個二進位檔裡。'
 		},
 		{
 			q: 'nostrfy 免費且開源嗎？',
@@ -21,7 +21,7 @@
 		},
 		{
 			q: '如何安裝 nostrfy？',
-			a: '一行指令：curl -fsSL https://raw.githubusercontent.com/iqbqioza/nostrfy/main/install.sh | sh。腳本會偵測你的作業系統與架構，下載相符的預編譯二進位檔，驗證校驗和並將其放入 PATH。你也可以用 Cargo 從原始碼建置，或複製現成的設定範本。'
+			a: '一行指令：curl -fsSL https://raw.githubusercontent.com/iqbqioza/nostrfy/main/install.sh | sh。腳本會偵測你的作業系統與架構，下載相符的預編譯二進位檔，驗證校驗和並將其加入 PATH。你也可以用 Cargo 從原始碼建置，或複製現成的設定範本。'
 		},
 		{
 			q: 'nostrfy 如何設定？',
@@ -41,11 +41,11 @@
 		},
 		{
 			q: 'nostrfy 能執行在反向代理或 Cloudflare 後面嗎？',
-			a: '可以。用你的代理位址設定 server.trusted_proxies（同一主機上的 nginx 或 Caddy 用回環位址，雲端用負載平衡器網段），讓按 IP 的限制、blockip 與日誌能看到真實用戶端位址。TLS 由你的代理或通道終止；nostrfy 在其後提供一般 HTTP 與 WebSocket。'
+			a: '可以。用你的代理位址設定 server.trusted_proxies（同一主機上的 nginx 或 Caddy 用回環位址，雲端用負載平衡器網段），讓按 IP 的限制、blockip 與日誌能看到真實用戶端位址。TLS 由你的代理或通道終止；nostrfy 在其後提供明文 HTTP 與 WebSocket。'
 		},
 		{
 			q: 'nostrfy 有 REST API 嗎？',
-			a: '有 — 唯讀 /api/v1 與 WebSocket 中繼共用同一連接埠，執行於獨立的讀取執行緒上，因此 REST 流量永遠不會阻塞訂閱者。它可以依 npub、nevent 或 naddr 查詢事件，並提供計數、作者統計、按日/月分解與全文搜尋。'
+			a: '有 — 唯讀 /api/v1 與 WebSocket 中繼共用同一連接埠，在獨立的讀取執行緒上執行，因此 REST 流量永遠不會阻塞訂閱者。它可以依 npub、nevent 或 naddr 查詢事件，並提供計數、作者統計、按日/月分解與全文搜尋。'
 		},
 		{
 			q: 'nostrfy 如何在負載或濫用下保持上線？',

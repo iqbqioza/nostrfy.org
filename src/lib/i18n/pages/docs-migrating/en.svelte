@@ -133,7 +133,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 membership
 		<li>No running nostrfy instance on the target <code>database.path</code>.</li>
 	</ul>
 
-	<h2>Prepare the config</h2>
+	<h2>Prepare the configuration</h2>
 	<CodeBlock code={configCode} lang="toml" />
 	<p>
 		Generate the relay key with <code>nostrfy genkey</code> if you do not have one, then validate:

@@ -21,7 +21,7 @@
 		},
 		{
 			q: '如何安装 nostrfy？',
-			a: '一行命令：curl -fsSL https://raw.githubusercontent.com/iqbqioza/nostrfy/main/install.sh | sh。脚本会检测你的操作系统和架构，下载匹配的预编译二进制文件，校验校验和并将其放入 PATH。你也可以用 Cargo 从源码构建，或复制现成的配置模板。'
+			a: '一行命令：curl -fsSL https://raw.githubusercontent.com/iqbqioza/nostrfy/main/install.sh | sh。脚本会检测你的操作系统和架构，下载匹配的预编译二进制文件，验证校验和并将其放入 PATH。你也可以用 Cargo 从源码构建，或复制现成的配置模板。'
 		},
 		{
 			q: 'nostrfy 如何配置？',
