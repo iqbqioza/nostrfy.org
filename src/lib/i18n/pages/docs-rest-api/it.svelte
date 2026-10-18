@@ -204,6 +204,10 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</p>
 	<CodeBlock code={page1} lang="bash" />
 
+	<p>
+		Una pagina viene tagliata anche al raggiungimento del budget di byte della risposta (<code>limits.max_req_response_bytes</code>): la risposta indica comunque <code>more: true</code>, quindi continua dal <code>count</code> restituito.
+	</p>
+
 	<Callout type="note" title="Peculiarità degli endpoint">
 		Gli endpoint singleton (profilo, <code>/ids/&#123;hex&#125;</code>, follows, relays) accettano comunque <code>offset</code> — <code>?offset=1</code> salta l’unico evento e restituisce <code>[]</code>.
 		I parametri di query <code>authors</code>/<code>kinds</code> filtrano solo l’endpoint generico <code>/query</code>: sugli endpoint kind sono silenziosamente ignorati (entrambi precompilati), mentre sugli endpoint id sono combinati in AND. La suddivisione per kind di <code>stats</code> è ordinata per kind, a differenza di <code>/kinds</code> (prima per conteggio).
@@ -214,7 +218,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		L’API applica le stesse regole di visibilità per evento di una connessione WebSocket anonima, e <code>relay.require_auth</code> la filtra allo stesso modo: ogni richiesta deve quindi portare un <code>Authorization: Nostr &lt;base64 kind:27235 event&gt;</code> NIP-98 il cui tag <code>u</code> sia l’URL esatta della richiesta (percorso e query; con <code>server.api_host</code> impostato, l’URL di quell’host) e il cui tag <code>method</code> sia <code>GET</code>; l’evento deve essere fresco (60 secondi) e ogni autorizzazione è accettata una volta sola. Le richieste anonime vengono rifiutate con <code>401 &#123;"error":"auth-required: this relay requires NIP-98 authorization"&#125;</code>. Un chiamante autorizzato vede comunque solo l’insieme di eventi a visibilità anonima — l’API non ha letture legate all’identità. I seguenti eventi vengono trattenuti:
 	</p>
 	<ul>
-		<li>Eventi protetti NIP-70 (con tag <code>-</code>)</li>
+		<li>eventi protetti NIP-70 (con tag <code>-</code>) — tranne gli eventi firmati dal relay stesso, che restano leggibili</li>
 		<li>Gift wrap NIP-59 (kind 1059)</li>
 		<li>Contenuto di gruppo privato/nascosto NIP-29 (visibile solo ai membri)</li>
 		<li>Eventi specifici dell’applicazione NIP-78 (kind 78/30078, solo per il proprietario finché <code>relay.enabled_nip78_auth</code> è impostato)</li>

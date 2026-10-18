@@ -164,6 +164,12 @@ nostrfy relay list`;
 				<td>Secret API LiveKit (utilisé pour signer les JWT)</td>
 			</tr>
 			<tr>
+				<td><code>livekit_participants_interval_secs</code></td>
+				<td>integer</td>
+				<td><code>15</code></td>
+				<td>Intervalle en secondes entre les rafraîchissements de la liste des participants LiveKit (l’événement 39004 de NIP-29)</td>
+			</tr>
+			<tr>
 				<td><code>enabled_nips</code></td>
 				<td>array of integers</td>
 				<td><code>[]</code></td>
@@ -243,7 +249,10 @@ nostrfy relay list`;
 		<li>
 			<strong>private_key</strong> — clé secrète propre au relais, utilisée pour signer les événements générés par le relais : métadonnées
 			de groupes NIP-29 (39000–39005) et événements de rôles/membres NIP-43. Générez-la avec <code>nostrfy genkey</code> ; gardez-la
-			secrète. Elle est lue une fois au démarrage, donc toute modification exige un redémarrage. Un redémarrage répare aussi les métadonnées de groupes stockées — les événements signés par l’ancienne clé sont supprimés et l’état actuel est republié sous la nouvelle clé (l’état des groupes lui-même est restauré tel quel, pas reconstruit).
+			secrète. Elle est lue une fois au démarrage, donc toute modification exige un redémarrage. Un redémarrage répare aussi les métadonnées de groupes stockées — les événements signés par l’ancienne clé sont supprimés et l’état actuel est republié sous la nouvelle clé (l’état des groupes lui-même est restauré tel quel, pas reconstruit). L’état des rôles NIP-43 (adhésions, rôles et codes d’invitation) est réparé de la même façon.
+		</li>
+		<li>
+			<strong>livekit_participants_interval_secs</strong> — fréquence (en secondes) à laquelle le relais rafraîchit les listes de participants NIP-29 <code>kind:39004</code> en appelant l’API LiveKit Room Service (<code>ListParticipants</code>) avec les identifiants configurés. Les webhooks LiveKit envoyés à <code>/.well-known/nip29/livekit/webhook</code> rafraîchissent immédiatement la liste d’un groupe ; le sondage réconcilie les événements manqués. Doit être au moins 1. Figé au démarrage — exige un redémarrage.
 		</li>
 		<li>
 			<strong>public_url</strong> — utilisée pour valider les tags porteurs d’URL des clients : AUTH NIP-42, vanish NIP-62 et
@@ -522,7 +531,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 Mo)</td>
-				<td>Plafond du total d’octets qu’une réponse REQ peut envoyer ; les réponses qui tiennent dans la file sortante sont livrées en entier</td>
+				<td>Plafond du total d’octets qu’une réponse REQ peut envoyer ; les réponses qui tiennent dans la file sortante sont livrées en entier ; les pages de requête de l’API REST appliquent le même budget</td>
 			</tr>
 		</tbody>
 	</table>
@@ -814,13 +823,13 @@ nostrfy relay list`;
 				<td><code>log_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.log"</code></td>
-				<td>Chemin du fichier log</td>
+				<td>Chemin du fichier de log ; créé accessible au propriétaire uniquement (0600) — il contient les IP et pubkeys des clients</td>
 			</tr>
 			<tr>
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>Chemin du fichier de statistiques ; un sous-ensemble public est servi sur /relay/stats</td>
+				<td>Chemin du fichier de statistiques ; l’instantané est réservé au propriétaire (0600) et un sous-ensemble public est servi sur /relay/stats</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>

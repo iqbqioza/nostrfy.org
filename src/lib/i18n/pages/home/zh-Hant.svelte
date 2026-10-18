@@ -105,7 +105,7 @@
 			price: '0',
 			priceCurrency: 'USD'
 		},
-		softwareVersion: '0.1.22',
+		softwareVersion: '0.1.23',
 		installUrl: 'https://nostrfy.org/zh-Hant/docs/quick-start/',
 		screenshot: 'https://nostrfy.org/og-image.png',
 		inLanguage: 'zh-Hant'

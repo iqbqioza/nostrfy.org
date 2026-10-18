@@ -218,6 +218,10 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</p>
 	<CodeBlock code={page1} lang="bash" />
 
+	<p>
+		頁面達到回應位元組預算（<code>limits.max_req_response_bytes</code>）時也會被截斷：此時仍會傳回 <code>more: true</code>，請從傳回的 <code>count</code> 繼續。
+	</p>
+
 	<Callout type="note" title="端點的特殊行為">
 		單例端點（個人檔案、<code>/ids/&#123;hex&#125;</code>、關注、中繼清單）仍接受
 		<code>offset</code> — <code>?offset=1</code> 會略過唯一的事件並傳回 <code>[]</code>。
@@ -232,7 +236,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		API 套用與匿名 WebSocket 連線相同的逐事件可見性規則，且 <code>relay.require_auth</code> 會像對待匿名連線一樣門控 API：此時每個請求都必須攜帶 NIP-98 <code>Authorization: Nostr &lt;base64 kind:27235 event&gt;</code>，其 <code>u</code> 標籤必須是確切的請求 URL（路徑與查詢；設定了 <code>server.api_host</code> 時為該主機的 URL），<code>method</code> 標籤必須是 <code>GET</code>；事件必須是新鮮的（60 秒內），且每個授權只被接受一次。匿名請求會被拒絕並傳回 <code>401 &#123;"error":"auth-required: this relay requires NIP-98 authorization"&#125;</code>。獲得授權的呼叫者仍然只能看到匿名可見性的事件集 — API 沒有按身分限定的讀取。以下事件會被隱去：
 	</p>
 	<ul>
-		<li>NIP-70 受保護事件（攜帶 <code>-</code> 標籤）</li>
+		<li>NIP-70 受保護事件（攜帶 <code>-</code> 標籤）— 但中繼自身的中繼簽章事件仍可讀取</li>
 		<li>NIP-59 禮物包裝（kind 1059）</li>
 		<li>NIP-29 私密/隱藏群組內容（僅成員可見）</li>
 		<li>NIP-78 應用專用事件（kind 78/30078，<code>relay.enabled_nip78_auth</code> 啟用時僅擁有者可見）</li>

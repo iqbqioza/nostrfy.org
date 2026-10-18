@@ -75,6 +75,8 @@
 		<li><code>kind:39000</code> — Gruppenmetadaten (Name, Sichtbarkeitseinstellungen, ...)</li>
 		<li><code>kind:39001</code> — Admin-Liste</li>
 		<li><code>kind:39002</code> — Mitgliederliste</li>
+		<li><code>kind:39003</code> — Rollenliste (die den Mitgliedern tatsächlich zugewiesenen Rollen)</li>
+		<li><code>kind:39004</code> — LiveKit-Teilnehmerliste (für Gruppen mit dem <code>livekit</code>-Tag)</li>
 		<li><code>kind:39005</code> — angepinnte Events</li>
 	</ul>
 

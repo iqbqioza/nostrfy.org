@@ -132,7 +132,7 @@
 			</tr>
 			<tr>
 				<td>70</td>
-				<td>Eventos protegidos</td>
+				<td>Eventos protegidos (os eventos assinados pelo próprio relay permanecem legíveis)</td>
 			</tr>
 			<tr>
 				<td>77</td>

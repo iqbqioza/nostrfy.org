@@ -51,7 +51,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
-				<td>設定を検証します(起動前に実行)</td>
+				<td>副作用なしで設定を検証します(リレー稼働中でも実行可能。ポート使用中の警告が出るのは想定内です)</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy start</code></td>

@@ -51,7 +51,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
-				<td>Convalida la configurazione (da eseguire prima dell’avvio)</td>
+				<td>Convalida la configurazione senza effetti collaterali (funziona anche con il relay in esecuzione; un avviso di porta occupata è previsto)</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy start</code></td>

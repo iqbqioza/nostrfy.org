@@ -47,7 +47,7 @@
 			<tr><td>65</td><td>中繼清單中繼資料</td></tr>
 			<tr><td>66</td><td>中繼探索與存活（類型 30166/10166 儲存與提供；自動發布 kind 30166）</td></tr>
 			<tr><td>67</td><td>EOSE 完整性提示</td></tr>
-			<tr><td>70</td><td>受保護事件</td></tr>
+			<tr><td>70</td><td>受保護事件（中繼自身的中繼簽章事件仍可讀取）</td></tr>
 			<tr><td>77</td><td>Negentropy 同步（失敗的替換會依 NIP-77 用 NEG-ERR 關閉該 id）</td></tr>
 			<tr><td>78</td><td>應用特定資料（kind 30078，受 AUTH 門控）</td></tr>
 			<tr><td>84</td><td>精選</td></tr>

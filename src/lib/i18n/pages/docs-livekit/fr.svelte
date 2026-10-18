@@ -7,7 +7,8 @@
 	const config = `[relay]
 livekit_url = "wss://livekit.example.com"
 livekit_api_key = "..."
-livekit_api_secret = "..."`;
+livekit_api_secret = "..."
+livekit_participants_interval_secs = 15`;
 </script>
 
 <DocsTitle
@@ -29,6 +30,9 @@ livekit_api_secret = "..."`;
 		<li>
 			Les clients récupèrent un JWT depuis <code>/.well-known/nip29/livekit/&lt;group-id&gt;</code> avec
 			l’authentification NIP-98 (une clé publique bannie via <code>banpubkey</code> NIP-86 est refusée).
+		</li>
+		<li>
+			Le relais publie une liste de participants <code>kind:39004</code> par groupe livekit, rafraîchie toutes les <code>relay.livekit_participants_interval_secs</code> (15 par défaut) et immédiatement lorsque LiveKit envoie des webhooks à <code>/.well-known/nip29/livekit/webhook</code> — pointez <code>webhook.urls</code> du serveur LiveKit dessus et faites correspondre <code>webhook.api_key</code> à <code>relay.livekit_api_key</code> (le relais vérifie la charge signée ; les événements manqués sont réconciliés par le sondage). Désactiver le mode LiveKit d’un groupe efface la liste.
 		</li>
 	</ol>
 

@@ -74,6 +74,8 @@
 		<li><code>kind:39000</code> — 群組中繼資料（名稱、可見性設定……）</li>
 		<li><code>kind:39001</code> — 管理員清單</li>
 		<li><code>kind:39002</code> — 成員清單</li>
+		<li><code>kind:39003</code> — 角色清單（實際指派給成員的角色）</li>
+		<li><code>kind:39004</code> — LiveKit 參與者清單（帶有 <code>livekit</code> 標籤的群組）</li>
 		<li><code>kind:39005</code> — 置頂事件</li>
 	</ul>
 

@@ -71,6 +71,7 @@ nostrfy relay list`;
 			<tr><td><code>livekit_url</code></td><td>string</td><td><code>""</code></td><td>用于 NIP-29 音视频房间的 LiveKit 服务器 URL</td></tr>
 			<tr><td><code>livekit_api_key</code></td><td>string</td><td><code>""</code></td><td>LiveKit API key</td></tr>
 			<tr><td><code>livekit_api_secret</code></td><td>string</td><td><code>""</code></td><td>LiveKit API secret（用于签发 JWT）</td></tr>
+			<tr><td><code>livekit_participants_interval_secs</code></td><td>integer</td><td><code>15</code></td><td>LiveKit 参与者列表刷新间隔（秒）（NIP-29 的 39004 事件）</td></tr>
 			<tr><td><code>enabled_nips</code></td><td>array of integers</td><td><code>[]</code></td><td>显式 NIP 白名单</td></tr>
 			<tr><td><code>disabled_nips</code></td><td>array of integers</td><td><code>[]</code></td><td>要禁用的 NIP（enabled_nips 非空时忽略）</td></tr>
 			<tr><td><code>reject_ephemeral</code></td><td>boolean</td><td><code>false</code></td><td>拒绝 NIP-01 临时事件（类型 20000-29999）</td></tr>
@@ -89,8 +90,9 @@ nostrfy relay list`;
 	<h3>键详情</h3>
 	<ul>
 		<li>
-			<strong>private_key</strong> — 中继自身的密钥，用于签署中继生成的事件：NIP-29 群组元数据（39000-39005）和 NIP-43 角色/成员事件。用 <code>nostrfy genkey</code> 生成；请保密。它只在启动时读取一次，因此更改它需要重启。重启时还会修复已存储的群组元数据 — 旧密钥签署的中继事件会被移除，当前状态会用新密钥重新发布（群组状态本身按原样恢复，而非重建）。
+			<strong>private_key</strong> — 中继自身的密钥，用于签署中继生成的事件：NIP-29 群组元数据（39000-39005）和 NIP-43 角色/成员事件。用 <code>nostrfy genkey</code> 生成；请保密。它只在启动时读取一次，因此更改它需要重启。重启时还会修复已存储的群组元数据 — 旧密钥签署的中继事件会被移除，当前状态会用新密钥重新发布（群组状态本身按原样恢复，而非重建）。NIP-43 角色状态（成员资格、角色和邀请码）也会以同样方式修复。
 		</li>
+		<li><strong>livekit_participants_interval_secs</strong> — 中继用配置的凭据调用 LiveKit Room Service API（<code>ListParticipants</code>）刷新 NIP-29 <code>kind:39004</code> 参与者列表的间隔（秒）。发送到 <code>/.well-known/nip29/livekit/webhook</code> 的 LiveKit Webhook 会立即刷新群组列表；轮询用于核对遗漏的事件。必须至少为 1。启动时固定 — 需要重启。</li>
 		<li>
 			<strong>public_url</strong> — 用于校验客户端发来的带 URL 标签：NIP-42 AUTH、NIP-62 消除和 NIP-98 管理认证。为空时，中继回退到 <code>host:port</code>，而绑定 <code>0.0.0.0</code> 或 <code>127.0.0.1</code> 时它永远不会匹配真实客户端 URL（会记录警告）。<strong>务必设置它。</strong>
 		</li>
@@ -183,7 +185,7 @@ nostrfy relay list`;
 			<tr><td><code>max_count</code></td><td>integer</td><td><code>2000</code></td><td>COUNT 结果的上限</td></tr>
 			<tr><td><code>max_sub_id_len</code></td><td>integer</td><td><code>64</code></td><td>订阅 id 最大长度（字符，非字节）</td></tr>
 			<tr><td><code>max_sub_bytes</code></td><td>integer</td><td><code>1048576</code></td><td>每连接的订阅过滤器总字节数</td></tr>
-			<tr><td><code>max_req_response_bytes</code></td><td>integer</td><td><code>33554432</code> (32 MB)</td><td>单个 REQ 响应可发送的总字节数上限；能放入发送队列的响应会完整送达</td></tr>
+			<tr><td><code>max_req_response_bytes</code></td><td>integer</td><td><code>33554432</code> (32 MB)</td><td>单个 REQ 响应可发送的总字节数上限；能放入发送队列的响应会完整送达；REST API 查询页同样执行该预算</td></tr>
 		</tbody>
 	</table>
 	</div>
@@ -275,8 +277,8 @@ nostrfy relay list`;
 		<thead><tr><th>键</th><th>类型</th><th>默认值</th><th>描述</th></tr></thead>
 		<tbody>
 			<tr><td><code>pid_file</code></td><td>string</td><td><code>"./nostrfy.pid"</code></td><td>PID 文件路径</td></tr>
-			<tr><td><code>log_file</code></td><td>string</td><td><code>"./nostrfy.log"</code></td><td>日志文件路径</td></tr>
-			<tr><td><code>stats_file</code></td><td>string</td><td><code>"./nostrfy.stats.json"</code></td><td>统计文件路径；/relay/stats 提供公开子集</td></tr>
+			<tr><td><code>log_file</code></td><td>string</td><td><code>"./nostrfy.log"</code></td><td>日志文件路径；以仅所有者可读（0600）创建 — 其中包含客户端 IP 和公钥</td></tr>
+			<tr><td><code>stats_file</code></td><td>string</td><td><code>"./nostrfy.stats.json"</code></td><td>统计文件路径；快照仅所有者可读（0600），公开子集在 /relay/stats 提供</td></tr>
 			<tr><td><code>stats_interval_secs</code></td><td>integer</td><td><code>5</code></td><td>统计写入间隔（秒）</td></tr>
 			<tr><td><code>max_log_size_bytes</code></td><td>integer</td><td><code>52428800</code> (50 MB)</td><td>日志轮转大小（0 = 不轮转）</td></tr>
 			<tr><td><code>max_log_files</code></td><td>integer</td><td><code>5</code></td><td>保留的轮转日志代数</td></tr>

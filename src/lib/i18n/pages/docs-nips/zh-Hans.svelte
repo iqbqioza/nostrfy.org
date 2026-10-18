@@ -47,7 +47,7 @@
 			<tr><td>65</td><td>中继列表元数据</td></tr>
 			<tr><td>66</td><td>中继发现与存活（类型 30166/10166 存储和提供；自动发布 kind 30166）</td></tr>
 			<tr><td>67</td><td>EOSE 完整性提示</td></tr>
-			<tr><td>70</td><td>受保护事件</td></tr>
+			<tr><td>70</td><td>受保护事件（中继自身的中继签名事件仍可读取）</td></tr>
 			<tr><td>77</td><td>Negentropy 同步（失败的替换会按 NIP-77 用 NEG-ERR 关闭该 id）</td></tr>
 			<tr><td>78</td><td>应用特定数据（kind 30078，受 AUTH 门控）</td></tr>
 			<tr><td>84</td><td>高亮</td></tr>

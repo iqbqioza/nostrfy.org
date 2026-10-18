@@ -51,7 +51,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
-				<td>Validiert die Konfiguration (vor dem Start ausführen)</td>
+				<td>Validiert die Konfiguration ohne Nebenwirkungen (funktioniert auch bei laufendem Relay; eine Warnung über den belegten Port ist zu erwarten)</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy start</code></td>

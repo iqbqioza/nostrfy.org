@@ -74,6 +74,8 @@
 		<li><code>kind:39000</code> — グループメタデータ(名前、可視性設定など)</li>
 		<li><code>kind:39001</code> — 管理者リスト</li>
 		<li><code>kind:39002</code> — メンバーリスト</li>
+		<li><code>kind:39003</code> — ロールリスト(メンバーに実際に割り当てられているロール)</li>
+		<li><code>kind:39004</code> — LiveKit 参加者リスト(<code>livekit</code> タグを持つグループ向け)</li>
 		<li><code>kind:39005</code> — ピン留めされたイベント</li>
 	</ul>
 

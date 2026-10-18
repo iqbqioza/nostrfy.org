@@ -120,7 +120,7 @@ curl https://<your-app-name>.fly.dev/
 			<strong>リレーの更新</strong>: <code>deploy/nostrfy.container.toml</code> を編集して再度 <code>fly deploy</code> — イメージは常に<strong>最新</strong>の GitHub リリースバイナリをインストールするため、更新は再デプロイだけで済みます
 		</li>
 		<li>
-			<strong>バージョンを固定</strong>:<code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
+			<strong>バージョンを固定</strong>:<code>docker build --build-arg NOSTRFY_VERSION=v0.1.23 ...</code>
 		</li>
 		<li>
 			<strong>スケール</strong>:既定ではリレーは単一マシンです。<code>fly machines clone &lt;id&gt;</code> で 2 台目を作成できます。両方がボリュームを共有します(Fly ボリュームは同一リージョン内の複数マシンに対応)

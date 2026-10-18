@@ -204,6 +204,10 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</p>
 	<CodeBlock code={page1} lang="bash" />
 
+	<p>
+		ページは応答バイト上限(<code>limits.max_req_response_bytes</code>)に達しても打ち切られます。その場合も <code>more: true</code> が返るので、返された <code>count</code> から続けてください。
+	</p>
+
 	<Callout type="note" title="エンドポイントの注意点">
 		シングルトンエンドポイント(プロフィール、<code>/ids/&#123;hex&#125;</code>、follows、relays)でも <code>offset</code> を受け付けます — <code>?offset=1</code> は唯一のイベントをスキップして <code>[]</code> を返します。
 		<code>authors</code>/<code>kinds</code> クエリパラメータは汎用 <code>/query</code> エンドポイントのみをフィルタします: kind エンドポイントでは暗黙に無視され(両方とも事前入力済み)、ID エンドポイントでは AND 結合されます。<code>stats</code> の kind 内訳は kind 順であり、<code>/kinds</code>(件数順)とは異なります。
@@ -214,7 +218,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		API は匿名の WebSocket 接続と同じイベント単位の可視性ルールを適用し、<code>relay.require_auth</code> は同じように API をゲートします。その場合、すべてのリクエストに NIP-98 の <code>Authorization: Nostr &lt;base64 kind:27235 event&gt;</code> が必要で、<code>u</code> タグはリクエスト URL そのもの(パスとクエリ。<code>server.api_host</code> 設定時はそのホストの URL)、<code>method</code> タグは <code>GET</code> でなければなりません。イベントは新しくなければならず(60 秒)、各認可は一度だけ受け付けられます。匿名リクエストは <code>401 &#123;"error":"auth-required: this relay requires NIP-98 authorization"&#125;</code> で拒否されます。認可された呼び出し元も匿名可視性のイベント集合しか見えません — API に識別情報に紐づく読み取りはありません。以下のイベントは除外されます:
 	</p>
 	<ul>
-		<li>NIP-70 保護イベント(<code>-</code> タグ付き)</li>
+		<li>NIP-70 保護イベント(<code>-</code> タグ付き)— ただしリレー自身のリレー署名イベントは読み取り可能</li>
 		<li>NIP-59 ギフトラップ(kind 1059)</li>
 		<li>NIP-29 プライベート/非公開グループコンテンツ(メンバーのみ可視)</li>
 		<li>NIP-78 アプリケーション固有イベント(kind 78/30078、<code>relay.enabled_nip78_auth</code> が設定されている間は所有者のみ)</li>

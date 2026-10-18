@@ -164,6 +164,12 @@ nostrfy relay list`;
 				<td>LiveKit-API-Secret (zum Signieren von JWTs)</td>
 			</tr>
 			<tr>
+				<td><code>livekit_participants_interval_secs</code></td>
+				<td>integer</td>
+				<td><code>15</code></td>
+				<td>Sekunden zwischen den LiveKit-Teilnehmerlisten-Aktualisierungen (das NIP-29-39004-Event)</td>
+			</tr>
+			<tr>
 				<td><code>enabled_nips</code></td>
 				<td>array of integers</td>
 				<td><code>[]</code></td>
@@ -241,7 +247,10 @@ nostrfy relay list`;
 	<h3>Details zu Schlüsseln</h3>
 	<ul>
 		<li>
-			<strong>private_key</strong> — der eigene geheime Schlüssel des Relays, verwendet zum Signieren Relay-generierter Events: NIP-29-Gruppenmetadaten (39000–39005) und NIP-43-Rollen-/Mitgliedschafts-Events. Generieren Sie ihn mit <code>nostrfy genkey</code>; halten Sie ihn geheim. Er wird einmal beim Start gelesen, daher erfordert eine Änderung einen Neustart. Ein Neustart heilt zudem die gespeicherten Gruppen-Metadaten — die relay-signierten Events des vorherigen Schlüssels werden entfernt und der aktuelle Zustand unter dem neuen Schlüssel neu veröffentlicht (der Gruppenzustand selbst wird unverändert wiederhergestellt, nicht neu aufgebaut).
+			<strong>private_key</strong> — der eigene geheime Schlüssel des Relays, verwendet zum Signieren Relay-generierter Events: NIP-29-Gruppenmetadaten (39000–39005) und NIP-43-Rollen-/Mitgliedschafts-Events. Generieren Sie ihn mit <code>nostrfy genkey</code>; halten Sie ihn geheim. Er wird einmal beim Start gelesen, daher erfordert eine Änderung einen Neustart. Ein Neustart heilt zudem die gespeicherten Gruppen-Metadaten — die relay-signierten Events des vorherigen Schlüssels werden entfernt und der aktuelle Zustand unter dem neuen Schlüssel neu veröffentlicht (der Gruppenzustand selbst wird unverändert wiederhergestellt, nicht neu aufgebaut). Der NIP-43-Rollenzustand (Mitgliedschaft, Rollen und Invite-Codes) wird auf dieselbe Weise geheilt.
+		</li>
+		<li>
+			<strong>livekit_participants_interval_secs</strong> — wie oft (Sekunden) das Relay die NIP-29-<code>kind:39004</code>-Teilnehmerlisten aktualisiert, indem es die LiveKit Room Service API (<code>ListParticipants</code>) mit den konfigurierten Zugangsdaten aufruft. LiveKit-Webhooks an <code>/.well-known/nip29/livekit/webhook</code> aktualisieren die Liste einer Gruppe sofort; der Poll gleicht verpasste Events ab. Muss mindestens 1 sein. Beim Start fixiert — erfordert einen Neustart.
 		</li>
 		<li>
 			<strong>public_url</strong> — wird zur Validierung URL-tragender Tags von Clients verwendet: NIP-42-AUTH, NIP-62-Vanish und NIP-98-Admin-Auth. Wenn leer, fällt das Relay auf <code>host:port</code> zurück, was niemals mit einer echten Client-URL übereinstimmt, wenn <code>0.0.0.0</code> oder <code>127.0.0.1</code> gebunden ist (eine Warnung wird geloggt).
@@ -517,7 +526,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 MB)</td>
-				<td>Obergrenze für die Gesamtbytes, die eine einzelne REQ-Antwort senden darf; Antworten, die in die Sendewarteschlange passen, werden vollständig zugestellt</td>
+				<td>Obergrenze für die Gesamtbytes, die eine einzelne REQ-Antwort senden darf; Antworten, die in die Sendewarteschlange passen, werden vollständig zugestellt; die Abfrageseiten der REST-API erzwingen dasselbe Budget</td>
 			</tr>
 		</tbody>
 	</table>
@@ -809,13 +818,13 @@ nostrfy relay list`;
 				<td><code>log_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.log"</code></td>
-				<td>Log-Dateipfad</td>
+				<td>Logdateipfad; wird nur für den Eigentümer lesbar angelegt (0600) — er enthält Client-IPs und Pubkeys</td>
 			</tr>
 			<tr>
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>Statistikdateipfad; eine öffentliche Teilmenge wird unter /relay/stats ausgeliefert</td>
+				<td>Statistikdateipfad; der Snapshot ist nur für den Eigentümer lesbar (0600), eine öffentliche Teilmenge wird unter /relay/stats ausgeliefert</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>

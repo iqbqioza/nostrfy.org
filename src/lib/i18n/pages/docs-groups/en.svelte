@@ -72,6 +72,8 @@
 		<li><code>kind:39000</code> — group metadata (name, visibility settings, ...)</li>
 		<li><code>kind:39001</code> — admin list</li>
 		<li><code>kind:39002</code> — member list</li>
+		<li><code>kind:39003</code> — role list (the roles actually assigned to members)</li>
+		<li><code>kind:39004</code> — LiveKit participant list (for groups with the <code>livekit</code> tag)</li>
 		<li><code>kind:39005</code> — pinned events</li>
 	</ul>
 

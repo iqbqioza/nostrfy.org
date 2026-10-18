@@ -218,6 +218,11 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		<strong>visible</strong> sequence — hidden events never skip or duplicate a page:
 	</p>
 	<CodeBlock code={page1} lang="bash" />
+	<p>
+		A page is also cut when it reaches the response byte budget
+		(<code>limits.max_req_response_bytes</code>): the response then still reports <code>more: true</code>,
+		so continue from the returned <code>count</code>.
+	</p>
 
 	<Callout type="note" title="Endpoint quirks">
 		Singleton endpoints (profile, <code>/ids/&#123;hex&#125;</code>, follows, relays) still accept
@@ -241,7 +246,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		The following events are withheld:
 	</p>
 	<ul>
-		<li>NIP-70 protected events (carrying a <code>-</code> tag)</li>
+		<li>NIP-70 protected events (carrying a <code>-</code> tag) — except the relay's own relay-signed events, which stay readable</li>
 		<li>NIP-59 gift wraps (kind 1059)</li>
 		<li>NIP-78 application-specific events (kinds 78/30078, owner-only while <code>relay.enabled_nip78_auth</code> is set)</li>
 		<li>NIP-29 private/hidden group content (visible only to members)</li>

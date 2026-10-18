@@ -7,7 +7,8 @@
 	const config = `[relay]
 livekit_url = "wss://livekit.example.com"
 livekit_api_key = "..."
-livekit_api_secret = "..."`;
+livekit_api_secret = "..."
+livekit_participants_interval_secs = 15`;
 </script>
 
 <DocsTitle
@@ -29,6 +30,14 @@ livekit_api_secret = "..."`;
 		<li>
 			Clients fetch a JWT from <code>/.well-known/nip29/livekit/&lt;group-id&gt;</code> with NIP-98
 			auth (a pubkey banned with NIP-86 <code>banpubkey</code> is refused).
+		</li>
+		<li>
+			The relay publishes a <code>kind:39004</code> participant list per livekit group, refreshed every
+			<code>relay.livekit_participants_interval_secs</code> (default 15) and immediately when LiveKit sends
+			webhooks to <code>/.well-known/nip29/livekit/webhook</code> — point the LiveKit server's
+			<code>webhook.urls</code> at it and let <code>webhook.api_key</code> match
+			<code>relay.livekit_api_key</code> (the relay verifies the signed payload; missed events are
+			reconciled by the poll). Leaving the group's LiveKit mode clears the list.
 		</li>
 	</ol>
 

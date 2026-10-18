@@ -161,6 +161,12 @@ nostrfy relay list`;
 				<td>LiveKit API secret (used to sign JWTs)</td>
 			</tr>
 			<tr>
+				<td><code>livekit_participants_interval_secs</code></td>
+				<td>integer</td>
+				<td><code>15</code></td>
+				<td>Seconds between LiveKit participant-list refreshes (the NIP-29 39004 event)</td>
+			</tr>
+			<tr>
 				<td><code>enabled_nips</code></td>
 				<td>array of integers</td>
 				<td><code>[]</code></td>
@@ -242,7 +248,15 @@ nostrfy relay list`;
 			metadata (39000-39005) and NIP-43 role/membership events. Generate with <code>nostrfy genkey</code>; keep it
 			secret. It is read once at startup, so changing it requires a restart; that restart also heals the stored
 			group metadata — the previous key's relay-signed events are removed and the current state is republished
-			under the new key (the group state itself is restored as-is, not rebuilt).
+			under the new key (the group state itself is restored as-is, not rebuilt). The NIP-43 role state
+			(membership, roles and invite codes) is healed the same way.
+		</li>
+		<li>
+			<strong>livekit_participants_interval_secs</strong> — how often (seconds) the relay refreshes the
+			NIP-29 <code>kind:39004</code> participant lists by calling the LiveKit Room Service API
+			(<code>ListParticipants</code>) with the configured credentials. LiveKit webhooks sent to
+			<code>/.well-known/nip29/livekit/webhook</code> refresh a group's list immediately; the poll
+			reconciles missed events. Must be at least 1. Fixed at startup — requires a restart.
 		</li>
 		<li>
 			<strong>public_url</strong> — used to validate URL-bearing tags from clients: NIP-42 AUTH, NIP-62 vanish and
@@ -531,7 +545,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 MB)</td>
-				<td>Ceiling for the total bytes a single REQ response may send; responses that fit the outgoing queue are delivered in full</td>
+				<td>Ceiling for the total bytes a single REQ response may send; responses that fit the outgoing queue are delivered in full; the REST API query pages enforce the same budget</td>
 			</tr>
 		</tbody>
 	</table>
@@ -823,13 +837,13 @@ nostrfy relay list`;
 				<td><code>log_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.log"</code></td>
-				<td>Log file path</td>
+				<td>Log file path; created owner-only (0600) — it carries client IPs and pubkeys</td>
 			</tr>
 			<tr>
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>Statistics file path; a public subset is served at /relay/stats</td>
+				<td>Statistics file path; the snapshot is owner-only (0600) and a public subset is served at /relay/stats</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>

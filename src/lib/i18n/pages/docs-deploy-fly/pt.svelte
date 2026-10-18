@@ -120,7 +120,7 @@ curl https://<your-app-name>.fly.dev/
 			<strong>Atualizar o relay</strong>: edite <code>deploy/nostrfy.container.toml</code> e execute <code>fly deploy</code> de novo — a imagem sempre instala o binário da <strong>última</strong> release do GitHub, então atualizar é um simples redeploy
 		</li>
 		<li>
-			<strong>Fixar uma versão</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
+			<strong>Fixar uma versão</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.23 ...</code>
 		</li>
 		<li>
 			<strong>Escala</strong>: o relay é uma única máquina por padrão. <code>fly machines clone &lt;id&gt;</code> cria uma segunda máquina; ambas compartilham o volume (volumes Fly suportam várias máquinas na mesma região)

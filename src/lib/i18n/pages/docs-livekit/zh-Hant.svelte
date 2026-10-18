@@ -7,7 +7,8 @@
 	const config = `[relay]
 livekit_url = "wss://livekit.example.com"
 livekit_api_key = "..."
-livekit_api_secret = "..."`;
+livekit_api_secret = "..."
+livekit_participants_interval_secs = 15`;
 </script>
 
 <DocsTitle
@@ -28,6 +29,9 @@ livekit_api_secret = "..."`;
 		<li>
 			用戶端使用 NIP-98 認證從 <code>/.well-known/nip29/livekit/&lt;group-id&gt;</code> 取得
 			JWT（被 NIP-86 <code>banpubkey</code> 封鎖的公鑰會被拒絕）。
+		</li>
+		<li>
+			中繼為每個 livekit 群組發布 <code>kind:39004</code> 參與者清單，每 <code>relay.livekit_participants_interval_secs</code>（預設 15）重新整理一次，並在 LiveKit 向 <code>/.well-known/nip29/livekit/webhook</code> 傳送 Webhook 時立即重新整理 — 將 LiveKit 伺服器的 <code>webhook.urls</code> 指向該位址，並讓 <code>webhook.api_key</code> 與 <code>relay.livekit_api_key</code> 一致（中繼會驗證簽章負載；遺漏的事件由輪詢核對）。解除群組的 LiveKit 模式會清除該清單。
 		</li>
 	</ol>
 

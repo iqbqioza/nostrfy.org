@@ -51,7 +51,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
-				<td>驗證設定（啟動前執行）</td>
+				<td>無副作用地驗證設定（中繼運行時也可用；出現連接埠占用警告是預期情況）</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy start</code></td>

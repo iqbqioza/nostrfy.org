@@ -204,6 +204,10 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</p>
 	<CodeBlock code={page1} lang="bash" />
 
+	<p>
+		Eine Seite wird auch beim Erreichen des Antwort-Byte-Budgets (<code>limits.max_req_response_bytes</code>) abgeschnitten: die Antwort meldet dann weiterhin <code>more: true</code>, fahren Sie mit dem zurückgegebenen <code>count</code> fort.
+	</p>
+
 	<Callout type="note" title="Endpunkt-Eigenheiten">
 		Singleton-Endpunkte (Profil, <code>/ids/&#123;hex&#125;</code>, follows, relays) akzeptieren trotzdem <code>offset</code> — <code>?offset=1</code> überspringt das einzige Event und gibt <code>[]</code> zurück.
 		Die Abfrageparameter <code>authors</code>/<code>kinds</code> filtern nur den generischen <code>/query</code>-Endpunkt: Auf Kind-Endpunkten werden sie stillschweigend ignoriert (beide sind vorbefüllt), während sie auf ID-Endpunkten per AND verknüpft werden. Die Kind-Aufschlüsselung von <code>stats</code> ist nach Kind geordnet, im Gegensatz zu <code>/kinds</code> (zuerst nach Anzahl).
@@ -214,7 +218,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		Die API wendet dieselben Sichtbarkeitsregeln pro Event an wie eine anonyme WebSocket-Verbindung, und <code>relay.require_auth</code> riegelt sie genauso ab: jede Anfrage muss dann eine NIP-98-<code>Authorization: Nostr &lt;base64 kind:27235 event&gt;</code> tragen, deren <code>u</code>-Tag die exakte Anfrage-URL ist (Pfad und Query; mit gesetztem <code>server.api_host</code> die URL dieses Hosts) und deren <code>method</code>-Tag <code>GET</code> lautet; das Event muss frisch sein (60 Sekunden) und jede Autorisierung wird einmal akzeptiert. Anonyme Anfragen werden mit <code>401 &#123;"error":"auth-required: this relay requires NIP-98 authorization"&#125;</code> abgelehnt. Ein autorisierter Aufrufer sieht weiterhin nur die anonym sichtbare Event-Menge — die API hat keine identitätsbezogenen Lesezugriffe. Die folgenden Events werden zurückgehalten:
 	</p>
 	<ul>
-		<li>NIP-70-geschützte Events (mit <code>-</code>-Tag)</li>
+		<li>NIP-70-geschützte Events (mit <code>-</code>-Tag) — außer den relay-signierten Events des Relays selbst, die lesbar bleiben</li>
 		<li>NIP-59-Gift-Wraps (Kind 1059)</li>
 		<li>Private/verborgene NIP-29-Gruppeninhalte (nur für Mitglieder sichtbar)</li>
 		<li>NIP-78 anwendungsspezifische Events (kind 78/30078, nur für den Eigentümer, solange <code>relay.enabled_nip78_auth</code> gesetzt ist)</li>

@@ -51,7 +51,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
-				<td>Проверяет конфигурацию (запускать перед стартом)</td>
+				<td>Проверяет конфигурацию без побочных эффектов (работает и при запущенном релее; предупреждение о занятом порте ожидаемо)</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy start</code></td>

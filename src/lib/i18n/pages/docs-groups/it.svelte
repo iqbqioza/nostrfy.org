@@ -75,6 +75,8 @@
 		<li><code>kind:39000</code> — metadati del gruppo (nome, impostazioni di visibilità, ...)</li>
 		<li><code>kind:39001</code> — elenco admin</li>
 		<li><code>kind:39002</code> — elenco membri</li>
+		<li><code>kind:39003</code> — lista dei ruoli (i ruoli effettivamente assegnati ai membri)</li>
+		<li><code>kind:39004</code> — lista partecipanti LiveKit (per gruppi con il tag <code>livekit</code>)</li>
 		<li><code>kind:39005</code> — eventi fissati in alto</li>
 	</ul>
 

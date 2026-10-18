@@ -74,6 +74,8 @@
 		<li><code>kind:39000</code> — 群组元数据（名称、可见性设置……）</li>
 		<li><code>kind:39001</code> — 管理员列表</li>
 		<li><code>kind:39002</code> — 成员列表</li>
+		<li><code>kind:39003</code> — 角色列表（实际分配给成员的角色）</li>
+		<li><code>kind:39004</code> — LiveKit 参与者列表（带有 <code>livekit</code> 标签的群组）</li>
 		<li><code>kind:39005</code> — 置顶事件</li>
 	</ul>
 

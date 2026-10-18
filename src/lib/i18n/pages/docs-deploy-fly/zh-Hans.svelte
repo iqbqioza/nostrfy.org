@@ -124,7 +124,7 @@ curl https://<your-app-name>.fly.dev/
 			<strong>更新中继</strong>：编辑 <code>deploy/nostrfy.container.toml</code> 后再次 <code>fly deploy</code> — 镜像总是安装<strong>最新</strong>的 GitHub 发布二进制，因此更新就是一次简单的重新部署
 		</li>
 		<li>
-			<strong>固定版本</strong>：<code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
+			<strong>固定版本</strong>：<code>docker build --build-arg NOSTRFY_VERSION=v0.1.23 ...</code>
 		</li>
 		<li>
 			<strong>扩容</strong>：中继默认是单台机器。

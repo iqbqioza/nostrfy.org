@@ -120,7 +120,7 @@ curl https://<your-app-name>.fly.dev/
 			<strong>Обновление релея</strong>: отредактируйте <code>deploy/nostrfy.container.toml</code> и снова выполните <code>fly deploy</code> — образ всегда устанавливает <strong>последний</strong> релизный бинарник GitHub, так что обновление — это просто повторное развёртывание
 		</li>
 		<li>
-			<strong>Фиксация версии</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
+			<strong>Фиксация версии</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.23 ...</code>
 		</li>
 		<li>
 			<strong>Масштаб</strong>: по умолчанию релей — одна машина. <code>fly machines clone &lt;id&gt;</code> создаёт вторую машину; обе используют общий том (тома Fly поддерживают несколько машин в одном регионе)

@@ -132,7 +132,7 @@
 			</tr>
 			<tr>
 				<td>70</td>
-				<td>Geschützte Events</td>
+				<td>Geschützte Events (die relay-signierten Events des Relays selbst bleiben lesbar)</td>
 			</tr>
 			<tr>
 				<td>77</td>

@@ -132,7 +132,7 @@
 			</tr>
 			<tr>
 				<td>70</td>
-				<td>Événements protégés</td>
+				<td>Événements protégés (les événements signés par le relais lui-même restent lisibles)</td>
 			</tr>
 			<tr>
 				<td>77</td>

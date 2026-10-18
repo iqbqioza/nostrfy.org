@@ -71,6 +71,7 @@ nostrfy relay list`;
 			<tr><td><code>livekit_url</code></td><td>string</td><td><code>""</code></td><td>URL del server LiveKit per stanze audio/video NIP-29</td></tr>
 			<tr><td><code>livekit_api_key</code></td><td>string</td><td><code>""</code></td><td>Chiave API di LiveKit</td></tr>
 			<tr><td><code>livekit_api_secret</code></td><td>string</td><td><code>""</code></td><td>Segreto API di LiveKit (usato per firmare i JWT)</td></tr>
+			<tr><td><code>livekit_participants_interval_secs</code></td><td>integer</td><td><code>15</code></td><td>Secondi tra gli aggiornamenti della lista partecipanti LiveKit (l’evento 39004 di NIP-29)</td></tr>
 			<tr><td><code>enabled_nips</code></td><td>array of integers</td><td><code>[]</code></td><td>Allowlist esplicita di NIP</td></tr>
 			<tr><td><code>disabled_nips</code></td><td>array of integers</td><td><code>[]</code></td><td>NIP da disabilitare (ignorato quando enabled_nips non è vuoto)</td></tr>
 			<tr><td><code>reject_ephemeral</code></td><td>boolean</td><td><code>false</code></td><td>Rifiuta eventi effimeri NIP-01 (kind 20000-29999)</td></tr>
@@ -89,8 +90,9 @@ nostrfy relay list`;
 	<h3>Dettagli delle chiavi</h3>
 	<ul>
 		<li>
-			<strong>private_key</strong> — la chiave segreta propria del relay, usata per firmare eventi generati dal relay: metadati dei gruppi NIP-29 (39000-39005) ed eventi di ruolo/membri NIP-43. Generala con <code>nostrfy genkey</code>; tienila segreta. Viene letta una volta all’avvio, quindi modificarla richiede un riavvio. Un riavvio cura anche i metadati dei gruppi memorizzati — gli eventi firmati dalla chiave precedente vengono rimossi e lo stato attuale viene ripubblicato con la nuova chiave (lo stato dei gruppi viene ripristinato così com’è, non ricostruito).
+			<strong>private_key</strong> — la chiave segreta propria del relay, usata per firmare eventi generati dal relay: metadati dei gruppi NIP-29 (39000-39005) ed eventi di ruolo/membri NIP-43. Generala con <code>nostrfy genkey</code>; tienila segreta. Viene letta una volta all’avvio, quindi modificarla richiede un riavvio. Un riavvio cura anche i metadati dei gruppi memorizzati — gli eventi firmati dalla chiave precedente vengono rimossi e lo stato attuale viene ripubblicato con la nuova chiave (lo stato dei gruppi viene ripristinato così com’è, non ricostruito). Lo stato dei ruoli NIP-43 (appartenenze, ruoli e codici invito) viene curato allo stesso modo.
 		</li>
+		<li><strong>livekit_participants_interval_secs</strong> — ogni quanti secondi il relay aggiorna le liste partecipanti NIP-29 <code>kind:39004</code> chiamando la LiveKit Room Service API (<code>ListParticipants</code>) con le credenziali configurate. I webhook LiveKit inviati a <code>/.well-known/nip29/livekit/webhook</code> aggiornano subito la lista di un gruppo; il polling riconcilia gli eventi persi. Deve essere almeno 1. Fisso all’avvio — richiede un riavvio.</li>
 		<li>
 			<strong>public_url</strong> — usata per convalidare i tag con URL dai client: AUTH NIP-42, vanish NIP-62 e auth admin NIP-98. Quando è vuota, il relay ripiega su <code>host:port</code>, che non corrisponde mai a una URL reale del client quando si usa il binding <code>0.0.0.0</code> o <code>127.0.0.1</code> (viene registrato un avviso). <strong>Impostala sempre.</strong>
 		</li>
@@ -183,7 +185,7 @@ nostrfy relay list`;
 			<tr><td><code>max_count</code></td><td>integer</td><td><code>2000</code></td><td>Tetto per i risultati COUNT</td></tr>
 			<tr><td><code>max_sub_id_len</code></td><td>integer</td><td><code>64</code></td><td>Lunghezza massima dell’id di sottoscrizione (caratteri, non byte)</td></tr>
 			<tr><td><code>max_sub_bytes</code></td><td>integer</td><td><code>1048576</code></td><td>Byte totali dei filtri di sottoscrizione per connessione</td></tr>
-			<tr><td><code>max_req_response_bytes</code></td><td>integer</td><td><code>33554432</code> (32 MB)</td><td>Limite del totale di byte che una singola risposta REQ può inviare; le risposte che stanno nella coda in uscita vengono consegnate per intero</td></tr>
+			<tr><td><code>max_req_response_bytes</code></td><td>integer</td><td><code>33554432</code> (32 MB)</td><td>Limite del totale di byte che una singola risposta REQ può inviare; le risposte che stanno nella coda in uscita vengono consegnate per intero; le pagine di query dell’API REST applicano lo stesso budget</td></tr>
 		</tbody>
 	</table>
 	</div>
@@ -275,8 +277,8 @@ nostrfy relay list`;
 		<thead><tr><th>Chiave</th><th>Tipo</th><th>Predefinito</th><th>Descrizione</th></tr></thead>
 		<tbody>
 			<tr><td><code>pid_file</code></td><td>string</td><td><code>"./nostrfy.pid"</code></td><td>Percorso del file PID</td></tr>
-			<tr><td><code>log_file</code></td><td>string</td><td><code>"./nostrfy.log"</code></td><td>Percorso del file di log</td></tr>
-			<tr><td><code>stats_file</code></td><td>string</td><td><code>"./nostrfy.stats.json"</code></td><td>Percorso del file di statistiche; un sottoinsieme pubblico è servito su /relay/stats</td></tr>
+			<tr><td><code>log_file</code></td><td>string</td><td><code>"./nostrfy.log"</code></td><td>Percorso del file di log; creato accessibile solo al proprietario (0600) — contiene IP e pubkey dei client</td></tr>
+			<tr><td><code>stats_file</code></td><td>string</td><td><code>"./nostrfy.stats.json"</code></td><td>Percorso del file di statistiche; lo snapshot è solo per il proprietario (0600) e un sottoinsieme pubblico è servito su /relay/stats</td></tr>
 			<tr><td><code>stats_interval_secs</code></td><td>integer</td><td><code>5</code></td><td>Intervallo di scrittura delle statistiche (secondi)</td></tr>
 			<tr><td><code>max_log_size_bytes</code></td><td>integer</td><td><code>52428800</code> (50 MB)</td><td>Dimensione di rotazione del log (0 = nessuna rotazione)</td></tr>
 			<tr><td><code>max_log_files</code></td><td>integer</td><td><code>5</code></td><td>Generazioni di log ruotati da conservare</td></tr>

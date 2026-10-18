@@ -51,7 +51,7 @@ nostrfy migrate-strfry --strfry-db /var/lib/strfry-db`;
 			</tr>
 			<tr>
 				<td><code>nostrfy check</code></td>
-				<td>校验配置（启动前运行）</td>
+				<td>无副作用地校验配置（中继运行时也可用；出现端口占用警告是预期情况）</td>
 			</tr>
 			<tr>
 				<td><code>nostrfy start</code></td>

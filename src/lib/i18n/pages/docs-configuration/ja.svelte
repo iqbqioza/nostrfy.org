@@ -164,6 +164,12 @@ nostrfy relay list`;
 				<td>LiveKit API シークレット(JWT の署名に使用)</td>
 			</tr>
 			<tr>
+				<td><code>livekit_participants_interval_secs</code></td>
+				<td>integer</td>
+				<td><code>15</code></td>
+				<td>LiveKit 参加者リスト更新の間隔(秒)(NIP-29 の 39004 イベント)</td>
+			</tr>
+			<tr>
 				<td><code>enabled_nips</code></td>
 				<td>array of integers</td>
 				<td><code>[]</code></td>
@@ -243,7 +249,10 @@ nostrfy relay list`;
 		<li>
 			<strong>private_key</strong> — リレー自身の秘密鍵で、リレー生成イベントの署名に使用します:NIP-29 グループ
 			メタデータ(39000-39005)と NIP-43 のロール／メンバーシップイベント。<code>nostrfy genkey</code> で生成し、厳重に
-			保管してください。起動時に一度だけ読み込まれるため、変更には再起動が必要です。再起動すると、保存済みのグループメタデータも修復されます — 以前の鍵による中継署名イベントは削除され、現在の状態が新しい鍵で再公開されます(グループ状態自体は再構築ではなくそのまま復元されます)。
+			保管してください。起動時に一度だけ読み込まれるため、変更には再起動が必要です。再起動すると、保存済みのグループメタデータも修復されます — 以前の鍵による中継署名イベントは削除され、現在の状態が新しい鍵で再公開されます(グループ状態自体は再構築ではなくそのまま復元されます)。NIP-43 のロール状態(メンバーシップ、ロール、招待コード)も同様に修復されます。
+		</li>
+		<li>
+			<strong>livekit_participants_interval_secs</strong> — 設定した認証情報で LiveKit Room Service API(<code>ListParticipants</code>)を呼び、NIP-29 の <code>kind:39004</code> 参加者リストを更新する間隔(秒)。<code>/.well-known/nip29/livekit/webhook</code> に送られた LiveKit Webhook はグループのリストを即座に更新し、ポーリングが取りこぼしたイベントを照合します。1 以上である必要があります。起動時に固定 — 再起動が必要です。
 		</li>
 		<li>
 			<strong>public_url</strong> — クライアント由来の URL 付きタグの検証に使用します:NIP-42 AUTH、NIP-62 vanish、
@@ -520,7 +529,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 MB)</td>
-				<td>1 つの REQ レスポンスが送信できる総バイト数の上限。送信キューに収まるレスポンスは最後まで配信されます</td>
+				<td>1 つの REQ レスポンスが送信できる総バイト数の上限。送信キューに収まるレスポンスは最後まで配信されます。REST API のクエリページも同じ上限を適用します</td>
 			</tr>
 		</tbody>
 	</table>
@@ -812,13 +821,13 @@ nostrfy relay list`;
 				<td><code>log_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.log"</code></td>
-				<td>ログファイルのパス</td>
+				<td>ログファイルのパス。所有者のみ(0600)で作成されます — クライアント IP と公開鍵を含むため</td>
 			</tr>
 			<tr>
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>統計ファイルのパス。/relay/stats では公開サブセットが提供されます</td>
+				<td>統計ファイルのパス。スナップショットは所有者のみ(0600)で、公開サブセットが /relay/stats で提供されます</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>

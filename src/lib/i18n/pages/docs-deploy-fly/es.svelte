@@ -120,7 +120,7 @@ curl https://<your-app-name>.fly.dev/
 			<strong>Actualizar el relé</strong>: edita <code>deploy/nostrfy.container.toml</code> y vuelve a ejecutar <code>fly deploy</code> — la imagen siempre instala el binario de la <strong>última</strong> release de GitHub, así que actualizar es un simple redeploy
 		</li>
 		<li>
-			<strong>Fijar una versión</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
+			<strong>Fijar una versión</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.23 ...</code>
 		</li>
 		<li>
 			<strong>Escalar</strong>: el relé es una sola máquina por defecto. <code>fly machines clone &lt;id&gt;</code> crea una segunda máquina; ambas comparten el volumen (los volúmenes Fly admiten varias máquinas en la misma región)

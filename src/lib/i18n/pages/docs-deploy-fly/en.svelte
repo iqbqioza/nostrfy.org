@@ -131,7 +131,7 @@ curl https://<your-app-name>.fly.dev/
 			release binary, so an update is a simple redeploy
 		</li>
 		<li>
-			<strong>Pin a version</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
+			<strong>Pin a version</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.23 ...</code>
 		</li>
 		<li>
 			<strong>Scale</strong>: the relay is a single machine by default.

@@ -204,6 +204,10 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</p>
 	<CodeBlock code={page1} lang="bash" />
 
+	<p>
+		Una página también se corta al alcanzar el presupuesto de bytes de respuesta (<code>limits.max_req_response_bytes</code>): la respuesta sigue indicando <code>more: true</code>, así que continúa desde el <code>count</code> devuelto.
+	</p>
+
 	<Callout type="note" title="Peculiaridades de los endpoints">
 		Los endpoints singleton (perfil, <code>/ids/&#123;hex&#125;</code>, follows, relays) siguen aceptando <code>offset</code> — <code>?offset=1</code> omite el único evento y devuelve <code>[]</code>.
 		Los parámetros de consulta <code>authors</code>/<code>kinds</code> solo filtran el endpoint genérico <code>/query</code>: en endpoints kind se ignoran silenciosamente (ambos están prerrellenados), mientras que en endpoints id se combinan con AND. El desglose por kind de <code>stats</code> está ordenado por kind, a diferencia de <code>/kinds</code> (primero por recuento).
@@ -214,7 +218,7 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 		La API aplica las mismas reglas de visibilidad por evento que una conexión WebSocket anónima, y <code>relay.require_auth</code> la controla igual: cada petición debe entonces llevar un <code>Authorization: Nostr &lt;base64 kind:27235 event&gt;</code> de NIP-98 cuyo tag <code>u</code> sea la URL exacta de la petición (ruta y query; con <code>server.api_host</code> configurado, la URL de ese host) y cuyo tag <code>method</code> sea <code>GET</code>; el evento debe ser reciente (60 segundos) y cada autorización se acepta una sola vez. Las peticiones anónimas se rechazan con <code>401 &#123;"error":"auth-required: this relay requires NIP-98 authorization"&#125;</code>. Un llamador autorizado sigue viendo solo el conjunto de eventos de visibilidad anónima — la API no tiene lecturas ligadas a la identidad. Se retienen los siguientes eventos:
 	</p>
 	<ul>
-		<li>Eventos protegidos NIP-70 (con etiqueta <code>-</code>)</li>
+		<li>eventos protegidos NIP-70 (con tag <code>-</code>) — excepto los eventos firmados por el propio relé, que siguen siendo legibles</li>
 		<li>Gift wraps NIP-59 (kind 1059)</li>
 		<li>Contenido de grupo privado/oculto NIP-29 (visible solo para miembros)</li>
 		<li>Eventos específicos de la aplicación NIP-78 (kind 78/30078, solo para el propietario mientras <code>relay.enabled_nip78_auth</code> esté activo)</li>

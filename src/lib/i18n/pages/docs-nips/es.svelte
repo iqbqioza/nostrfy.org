@@ -132,7 +132,7 @@
 			</tr>
 			<tr>
 				<td>70</td>
-				<td>Eventos protegidos</td>
+				<td>Eventos protegidos (los eventos firmados por el propio relé siguen siendo legibles)</td>
 			</tr>
 			<tr>
 				<td>77</td>
