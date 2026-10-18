@@ -455,10 +455,10 @@ nostrfy --config nostrfy.toml start`;
 
 	<h3><code>disk is full: refusing to commit N events</code></h3>
 	<p>
-		<strong>原因:</strong> 空きディスク容量が 32 MB 未満です。書き込みは停止します(データを保護するため)。読み取りは継続します。
+		<strong>原因:</strong> 空きディスク容量が 32 MB 未満です。書き込みは停止します(データを保護するため)。読み取りは継続し、この間 <code>GET /health</code> は "database is refusing writes" を理由に <code>503</code> を返します。容量の数値(<code>nostrfy_db_disk_full</code> / <code>nostrfy_db_free_bytes</code>)は <code>/metrics</code> と <code>nostrfy stats</code> のスナップショットにあります — <code>/relay/stats</code> は認証不要でクロスオリジンから読めるため、これらを省略します。(<code>/metrics</code> も認証不要です:ホストの空き容量を非公開にしたい場合は <code>api_host</code> かリバースプロキシで隔離してください。)
 	</p>
 	<p>
-		<strong>修正:</strong> ディスク容量を空けてください。空きができれば書き込みは自動的に再開します。(<code>df -h /path/to/data</code>)
+		<strong>修正:</strong> ディスク容量を空けてください。空きができれば書き込みは自動的に再開し、<code>/health</code> も <code>200</code> に戻ります — 再起動は不要です。(<code>df -h /path/to/data</code>)
 	</p>
 
 	<h3><code>nostrfy check</code> が <code>map_size must not exceed max_map_size</code> を報告する</h3>

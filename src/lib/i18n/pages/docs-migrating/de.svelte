@@ -161,6 +161,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43-Mitgliedsc
 		Eine <code>bad signature</code>-Zahl ungleich null bedeutet, dass der Export Events enthält, die strfry ohne
 		Verifizierung akzeptiert hat; sie werden übersprungen. Wenn Sie ihnen vertrauen, mit <code>--no-verify</code> trotzdem importieren.
 	</p>
+	<p>Ein <code>bad delegation</code>-Zähler ungleich null bedeutet, dass der Export NIP-26-Events enthält, deren Delegationstoken nicht verifiziert. Das Relay indexiert ein delegiertes Event auch unter dem Pubkey des Delegierenden, daher würde ein gefälschtes Token es im Autoren-Feed eines anderen veröffentlichen — solche Events werden immer übersprungen (auch mit <code>--no-verify</code>, das nur die <em>Event</em>-Signaturprüfung lockert).</p>
 
 	<h2>Migrieren</h2>
 	<p>Einen von drei Eingabemodi wählen — alle liefern dasselbe Ergebnis:</p>
@@ -260,6 +261,10 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43-Mitgliedsc
 					<td>Die strfry-DB enthält unverifizierte Events: prüfen; nur bei vertrauenswürdiger Quelle mit <code>--no-verify</code> importieren</td>
 				</tr>
 				<tr>
+					<td>Hoher <code>bad delegation</code>-Zähler</td>
+					<td>Die NIP-26-Delegationstoken des Exports verifizieren nicht (strfry prüft sie nicht): die betroffenen Events werden übersprungen und nie im Feed des Delegierenden veröffentlicht; es gibt keine Umgehung, denn das Token ist die Autorisierung des Delegierenden selbst</td>
+				</tr>
+				<tr>
 					<td>NIP-29-Metadaten fehlen nach dem Start</td>
 					<td>Kein <code>relay.private_key</code>: <code>nostrfy genkey</code> ausführen und neu starten</td>
 				</tr>
@@ -277,7 +282,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43-Mitgliedsc
 		<li>strfry-Datenbank und nostrfy-Konfiguration gesichert</li>
 		<li><code>nostrfy check</code> besteht</li>
 		<li>strfry-Einstellungen zusammengeführt (oder Bericht geprüft)</li>
-		<li>Dry-Run geprüft (keine unerwarteten Bad Signatures)</li>
+		<li>Dry-Run geprüft (keine unerwarteten Bad Signatures oder Delegationen)</li>
 		<li>Migration fehlerfrei abgeschlossen</li>
 		<li>Relay startet; Gruppen-/Rollen-Rebuild geloggt</li>
 		<li>Event-Zahlen stimmen (minus ephemer/abgelaufen)</li>

@@ -40,9 +40,10 @@ curl https://<your-app-name>.fly.dev/
 			<tr>
 				<td><code>Dockerfile</code></td>
 				<td>
-					Container image — <strong>downloads the pre-built release binary</strong> from the GitHub
-					release assets (x86_64 / aarch64, chosen by the build architecture) and verifies its
-					sha256 checksum. No compilation happens on Fly
+					Container image — <strong>installs the pre-built release binary with
+					<code>install.sh</code></strong> (auto-detects x86_64 / aarch64, verifies the sha256
+					checksum); the <code>NOSTRFY_VERSION</code> build-arg pins a release. No compilation
+					happens on Fly
 				</td>
 			</tr>
 			<tr>
@@ -126,12 +127,11 @@ curl https://<your-app-name>.fly.dev/
 	<ul>
 		<li>
 			<strong>Update the relay</strong>: edit <code>deploy/nostrfy.container.toml</code> and
-			<code>fly deploy</code> again — the image always downloads the <strong>latest</strong> GitHub
+			<code>fly deploy</code> again — the image always installs the <strong>latest</strong> GitHub
 			release binary, so an update is a simple redeploy
 		</li>
 		<li>
-			<strong>Pin a version</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.16 ...</code>
-			or change the <code>ARG</code> in the Dockerfile
+			<strong>Pin a version</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
 		</li>
 		<li>
 			<strong>Scale</strong>: the relay is a single machine by default.

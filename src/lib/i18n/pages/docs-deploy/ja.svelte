@@ -37,9 +37,7 @@ private_key = ""                          # 'nostrfy genkey' を実行してキ�
 <div class="doc-body">
 	<h2>1つのバイナリ、複数のプラットフォーム</h2>
 	<p>
-		nostrfy は <strong>x86_64</strong> と <strong>aarch64</strong> 向けのビルド済みバイナリ(GitHub
-		リリースアセット、<code>install.sh</code> によるチェックサム検証付き)、それらのバイナリを
-		<strong>ダウンロードする</strong>コンテナイメージ(コンパイル不要)、および主要プラットフォーム向けのデプロイガイドを提供します。
+		nostrfy は <strong>x86_64</strong> と <strong>aarch64</strong> 向けのビルド済みバイナリ(GitHub リリースアセット、<code>install.sh</code> がチェックサム検証)、それらを <code>install.sh</code> で<strong>インストールする汎用コンテナイメージ</strong>(コンパイル不要)、主要プラットフォーム向けのデプロイガイドを提供します。
 	</p>
 
 	<h2>プラットフォーム</h2>
@@ -103,8 +101,7 @@ private_key = ""                          # 'nostrfy genkey' を実行してキ�
 			<strong>VM(systemd)</strong>:最もシンプルで安価、完全に制御できます。ほとんどのリレーデプロイにおすすめです。
 		</li>
 		<li>
-			<strong>コンテナ</strong>:リポジトリの <code>Dockerfile</code>(ビルド時にリリースバイナリをダウンロード)を使用して、Fly.io、Digital
-			Ocean App Platform、AWS ECS、GCP Cloud Run、Azure Container Apps 上で実行します。LMDB データ用に永続ストレージ(<code>/data</code>)が必要です。
+			<strong>コンテナ</strong>:リポジトリの <code>Dockerfile</code> がリリースバイナリを <code>install.sh</code> でインストールします(sha256 検証付き。<code>NOSTRFY_VERSION</code> ビルド引数でバージョンを固定)。ローカルでは <code>docker compose up -d --build</code>、または Fly.io、DigitalOcean App Platform、AWS ECS、GCP Cloud Run、Azure Container Apps で実行できます。LMDB データには永続ストレージが必要です(<code>/data</code>)。
 		</li>
 	</ul>
 

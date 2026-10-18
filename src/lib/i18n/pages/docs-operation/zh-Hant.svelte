@@ -66,7 +66,9 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 	<CodeBlock code={statsCode} lang="bash" />
 	<p>或透過 HTTP：</p>
 	<CodeBlock code={statsHttpCode} lang="bash" />
-	<p>顯示連線數、接受/拒絕的事件、資料庫大小等。</p>
+	<p>
+		顯示連線數、接收／接受／拒絕的事件、資料庫大小等。<code>/relay/stats</code> 無需權杖且可跨來源讀取，因此傳回更窄的公開子集：主機的可用磁碟空間、磁碟已滿旗標、失敗計數器以及按原因分類的連線拒絕明細都會被省略（對匿名探測者而言是儲存容量預言機）。它們保留在 <code>nostrfy stats</code> 的檔案快照與 <code>/metrics</code> 中 — <code>/metrics</code> 同樣無需認證，如需對容量數字保密，請以 <code>api_host</code> 或反向代理隔離它。
+	</p>
 	<h3>Prometheus 指標</h3>
 	<CodeBlock code={metricsCode} lang="bash" />
 
@@ -87,12 +89,12 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 				<td>private_key</td>
 			</tr>
 			<tr>
-				<td>大部分 [limits]、reject_ephemeral、enabled_git、enabled_nip78_auth</td>
+				<td>大部分 [limits]、reject_ephemeral、enabled_git、enabled_nip78_auth、landing_page_file</td>
 				<td>api_host、metrics_enabled、LiveKit 設定</td>
 			</tr>
 			<tr>
 				<td>—</td>
-				<td>enabled_nips / disabled_nips、server.host / port / ws_paths</td>
+				<td>enabled_nips / disabled_nips、server.host / port / ws_paths / assets_dir</td>
 			</tr>
 			<tr>
 				<td>—</td>

@@ -512,10 +512,16 @@ nostrfy --config nostrfy.toml start`;
 	<h3><code>disk is full: refusing to commit N events</code></h3>
 	<p>
 		<strong>Cause:</strong> Less than 32 MB of free disk space. Writes stop (to protect the data); reads
-		continue.
+		continue, and <code>GET /health</code> answers <code>503</code> with a "database is refusing writes"
+		reason while this lasts. The capacity figures (<code>nostrfy_db_disk_full</code> /
+		<code>nostrfy_db_free_bytes</code>) are in <code>/metrics</code> and the <code>nostrfy stats</code>
+		snapshot — <code>/relay/stats</code> is unauthenticated and cross-origin readable, so it leaves them
+		out. (<code>/metrics</code> is unauthenticated too: isolate it with <code>api_host</code> or the
+		reverse proxy if the host's free space must stay private.)
 	</p>
 	<p>
-		<strong>Fix:</strong> Free up disk space. Writes resume automatically once space is available.
+		<strong>Fix:</strong> Free up disk space. Writes resume and <code>/health</code> returns
+		<code>200</code> automatically once space is available — no restart is needed.
 		(<code>df -h /path/to/data</code>)
 	</p>
 

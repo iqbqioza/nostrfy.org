@@ -156,6 +156,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 メンバ�
 		<code>bad signature</code> 件数が 0 でない場合、エクスポートには strfry が検証なしで受け入れたイベントが含まれており、スキップされます。信頼できる場合は
 		<code>--no-verify</code> を付けてインポートしてください。
 	</p>
+	<p>0 以外の <code>bad delegation</code> 件数は、エクスポートに委任トークンが検証できない NIP-26 イベントが含まれることを意味します。リレーは委任イベントを委任者の pubkey でもインデックスするため、偽造トークンを保存すると他人の著者フィードに公開されてしまいます — そのようなイベントは常にスキップされます(<code>--no-verify</code> でも同様。これは<em>イベント</em>署名の検証だけを緩めます)。</p>
 
 	<h2>移行</h2>
 	<p>3つの入力モードから1つを選択 — 結果はすべて同じです:</p>
@@ -251,6 +252,10 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 メンバ�
 					<td>strfry DB に未検証イベントが含まれています:確認し、送信元を信頼できる場合のみ <code>--no-verify</code> でインポートしてください</td>
 				</tr>
 				<tr>
+					<td><code>bad delegation</code> が多い</td>
+					<td>エクスポートの NIP-26 委任トークンが検証できません(strfry は検証しません):対象イベントはスキップされ、委任者のフィードには決して公開されません。上書きはできません — トークンは委任者自身の認可だからです</td>
+				</tr>
+				<tr>
 					<td>起動後に NIP-29 メタデータがありません</td>
 					<td><code>relay.private_key</code> がありません:<code>nostrfy genkey</code> を実行して再起動してください</td>
 				</tr>
@@ -268,7 +273,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 メンバ�
 		<li>strfry データベースと nostrfy 設定をバックアップ済み</li>
 		<li><code>nostrfy check</code> が成功</li>
 		<li>strfry 設定をマージ済み(または報告を確認済み)</li>
-		<li>ドライランを確認済み(予期しない不正署名なし)</li>
+		<li>ドライランを確認済み(予期しない不正署名や委任なし)</li>
 		<li>移行がエラーなく完了</li>
 		<li>リレーが起動し、グループ／ロール再構築がログに記録</li>
 		<li>イベント件数が一致(エフェメラル／期限切れを除く)</li>

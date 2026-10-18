@@ -210,11 +210,14 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</Callout>
 
 	<h2>可視性ルール</h2>
-	<p>API は認証なしのため、匿名 WebSocket 接続と同じイベントを秘匿します:</p>
+	<p>
+		API は匿名の WebSocket 接続と同じイベント単位の可視性ルールを適用し、<code>relay.require_auth</code> は同じように API をゲートします。その場合、すべてのリクエストに NIP-98 の <code>Authorization: Nostr &lt;base64 kind:27235 event&gt;</code> が必要で、<code>u</code> タグはリクエスト URL そのもの(パスとクエリ。<code>server.api_host</code> 設定時はそのホストの URL)、<code>method</code> タグは <code>GET</code> でなければなりません。イベントは新しくなければならず(60 秒)、各認可は一度だけ受け付けられます。匿名リクエストは <code>401 &#123;"error":"auth-required: this relay requires NIP-98 authorization"&#125;</code> で拒否されます。認可された呼び出し元も匿名可視性のイベント集合しか見えません — API に識別情報に紐づく読み取りはありません。以下のイベントは除外されます:
+	</p>
 	<ul>
 		<li>NIP-70 保護イベント(<code>-</code> タグ付き)</li>
 		<li>NIP-59 ギフトラップ(kind 1059)</li>
 		<li>NIP-29 プライベート/非公開グループコンテンツ(メンバーのみ可視)</li>
+		<li>NIP-78 アプリケーション固有イベント(kind 78/30078、<code>relay.enabled_nip78_auth</code> が設定されている間は所有者のみ)</li>
 	</ul>
 
 	<h2>エラーとステータスコード</h2>
@@ -234,6 +237,10 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 			<tr>
 				<td>400</td>
 				<td>無効な識別子またはクエリパラメータ</td>
+			</tr>
+			<tr>
+				<td>401</td>
+				<td>NIP-98 認可が必要(<code>relay.require_auth</code> 設定時)— 認可が無い、無効、期限切れ、または使用済み</td>
 			</tr>
 			<tr>
 				<td>403</td>

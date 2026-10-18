@@ -215,7 +215,7 @@ nostrfy relay list`;
 				<td><code>require_auth</code></td>
 				<td>boolean</td>
 				<td><code>false</code></td>
-				<td>NIP-42-Authentifizierung für REQ/EVENT/COUNT/NEG erfordern</td>
+				<td>NIP-42-Authentifizierung für REQ/EVENT/COUNT/NEG erfordern (REST-API-Lesezugriffe erfordern NIP-98)</td>
 			</tr>
 			<tr>
 				<td><code>send_auth_challenge</code></td>
@@ -241,7 +241,7 @@ nostrfy relay list`;
 	<h3>Details zu Schlüsseln</h3>
 	<ul>
 		<li>
-			<strong>private_key</strong> — der eigene geheime Schlüssel des Relays, verwendet zum Signieren Relay-generierter Events: NIP-29-Gruppenmetadaten (39000–39005) und NIP-43-Rollen-/Mitgliedschafts-Events. Generieren Sie ihn mit <code>nostrfy genkey</code>; halten Sie ihn geheim. Er wird einmal beim Start gelesen, daher erfordert eine Änderung einen Neustart.
+			<strong>private_key</strong> — der eigene geheime Schlüssel des Relays, verwendet zum Signieren Relay-generierter Events: NIP-29-Gruppenmetadaten (39000–39005) und NIP-43-Rollen-/Mitgliedschafts-Events. Generieren Sie ihn mit <code>nostrfy genkey</code>; halten Sie ihn geheim. Er wird einmal beim Start gelesen, daher erfordert eine Änderung einen Neustart. Ein Neustart heilt zudem die gespeicherten Gruppen-Metadaten — die relay-signierten Events des vorherigen Schlüssels werden entfernt und der aktuelle Zustand unter dem neuen Schlüssel neu veröffentlicht (der Gruppenzustand selbst wird unverändert wiederhergestellt, nicht neu aufgebaut).
 		</li>
 		<li>
 			<strong>public_url</strong> — wird zur Validierung URL-tragender Tags von Clients verwendet: NIP-42-AUTH, NIP-62-Vanish und NIP-98-Admin-Auth. Wenn leer, fällt das Relay auf <code>host:port</code> zurück, was niemals mit einer echten Client-URL übereinstimmt, wenn <code>0.0.0.0</code> oder <code>127.0.0.1</code> gebunden ist (eine Warnung wird geloggt).
@@ -320,6 +320,18 @@ nostrfy relay list`;
 				<td><code>[]</code></td>
 				<td>Reverse-Proxy-Adressen/CIDRs, deren X-Forwarded-For vertraut wird (leer = keinem Proxy vertrauen)</td>
 			</tr>
+			<tr>
+				<td><code>landing_page_file</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>HTML-Datei, die einem Browser beim Aufruf der Relay-URL statt der eingebauten Täuschseite angezeigt wird (leer = Täuschseite)</td>
+			</tr>
+			<tr>
+				<td><code>assets_dir</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>Verzeichnis, das unter /assets/&lt;name&gt; für die Landingpage ausgeliefert wird (leer = keine /assets/-Route)</td>
+			</tr>
 		</tbody>
 	</table>
 	</div>
@@ -341,6 +353,12 @@ nostrfy relay list`;
 			<code>X-Forwarded-For</code>-Eintrag abgeleitet für die Pro-IP-Begrenzungen, das Ratenlimit, <code>blockip</code> und die Logs. Fügen Sie niemals
 			eine Adresse hinzu, die Clients direkt erreichen können — sie könnten den Header fälschen und die Pro-IP-Limits umgehen.
 			Beim Start fixiert — erfordert einen Neustart.
+		</li>
+		<li>
+			<strong>landing_page_file</strong> — standardmäßig liefert ein Browser-Aufruf der Relay-URL eine eingebaute Täuschseite, die nichts über das Relay verrät. Verweisen Sie hier auf eine HTML-Datei, um stattdessen Ihre eigene Seite auszuliefern (Relay-Regeln, Kontakt, Statistiken); NIP-11-Dokument und WebSocket-Verbindungen sind unberührt. Die Datei wird bei Bedarf gelesen und bei Änderungen erneut gelesen, sodass ein externer Job sie ohne Neustart neu erzeugen kann. Muss eine reguläre Datei von höchstens 8 MiB sein (Symlinks werden nicht verfolgt); fehlt sie, wird die Täuschseite ausgeliefert. Gilt bei SIGHUP.
+		</li>
+		<li>
+			<strong>assets_dir</strong> — Verzeichnis, dessen Dateien unter <code>/assets/&lt;name&gt;</code> ausgeliefert werden (Bilder, CSS, JS für die Landingpage). Nur flache ASCII-Namen aus Buchstaben, Ziffern, <code>.</code>, <code>_</code> und <code>-</code> (keine Punktdateien, Unterverzeichnisse oder Symlinks); unbekannte Endungen werden als <code>application/octet-stream</code> gesendet. Dateien werden pro Anfrage gelesen, können also an Ort und Stelle ersetzt werden. Beim Start fixiert — erfordert einen Neustart.
 		</li>
 	</ul>
 
@@ -499,7 +517,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 MB)</td>
-				<td>Obergrenze für die Gesamtbytes, die eine einzelne REQ-Antwort senden darf</td>
+				<td>Obergrenze für die Gesamtbytes, die eine einzelne REQ-Antwort senden darf; Antworten, die in die Sendewarteschlange passen, werden vollständig zugestellt</td>
 			</tr>
 		</tbody>
 	</table>
@@ -633,7 +651,7 @@ nostrfy relay list`;
 				<td><code>live_buffer</code></td>
 				<td>integer</td>
 				<td><code>65536</code></td>
-				<td>Live-Fan-out-Queue-Größe</td>
+				<td>Live-Fan-out-Queue-Größe; über 10.000.000 wird bei check/Start abgelehnt, über 1.000.000 wird gewarnt</td>
 			</tr>
 		</tbody>
 	</table>
@@ -721,7 +739,7 @@ nostrfy relay list`;
 				<td><code>db_buffer_size</code></td>
 				<td>integer</td>
 				<td><code>2048</code></td>
-				<td>Initialer WebSocket-Puffer pro Verbindung (Bytes)</td>
+				<td>Anfänglicher WebSocket-Puffer pro Verbindung (Bytes); muss unter der aus max_ws_message_bytes / max_neg_items abgeleiteten Schreibpuffergrenze bleiben (sonst Ablehnung bei check/Start)</td>
 			</tr>
 			<tr>
 				<td><code>db_request_timeout_secs</code></td>
@@ -797,7 +815,7 @@ nostrfy relay list`;
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>Statistikdateipfad</td>
+				<td>Statistikdateipfad; eine öffentliche Teilmenge wird unter /relay/stats ausgeliefert</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>
@@ -821,6 +839,10 @@ nostrfy relay list`;
 	</table>
 	</div>
 	<p>Pfade werden relativ zum Verzeichnis der Konfigurationsdatei aufgelöst, sodass sie gültig bleiben, nachdem der Daemon sein Arbeitsverzeichnis wechselt.</p>
+
+	<p>
+		<code>/relay/stats</code> braucht kein Token und ist cross-origin lesbar, daher liefert es eine engere Sicht als die Statistikdatei: der freie Speicherplatz des Hosts und das Disk-full-Flag, die Fehlerzähler (<code>db_errors</code>, <code>accept_errors</code>, <code>rebuild_failures</code>, <code>log_errors</code>) und die Aufschlüsselung der Verbindungsablehnungen nach Grund entfallen — zusammen wären sie ein Speicherkapazitäts-Orakel für anonyme Sondierungen. Diese Schlüssel bleiben in der Statistikdatei (<code>nostrfy stats</code> zeigt sie) und in <code>/metrics</code>. Beachten Sie: <code>/metrics</code> ist ebenfalls unauthentifiziert — isolieren Sie es (<code>api_host</code> oder Reverse-Proxy), wenn die Kapazitätszahlen privat bleiben sollen.
+	</p>
 
 	<h2>Abschnitt [access] — Zugriffskontrolle</h2>
 		<div class="overflow-x-auto">
@@ -994,8 +1016,8 @@ nostrfy relay list`;
 				<td>relay.livekit_*, enabled_nips / disabled_nips</td>
 			</tr>
 			<tr>
-				<td>der Großteil von [limits]</td>
-				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, database.*, Daemon-Größen, Limit-Obergrenzen, blossom.*</td>
+				<td>der Großteil von [limits], landing_page_file</td>
+				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, assets_dir, database.*, Daemon-Größen, Limit-Obergrenzen, blossom.*</td>
 			</tr>
 		</tbody>
 	</table>

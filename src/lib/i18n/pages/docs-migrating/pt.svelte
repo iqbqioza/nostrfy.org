@@ -160,6 +160,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # participação NI
 		Uma contagem <code>bad signature</code> diferente de zero significa que o export contém eventos que o strfry aceitou sem
 		verificação; eles serão ignorados. Se você confia neles, passe <code>--no-verify</code> para importar mesmo assim.
 	</p>
+	<p>Uma contagem <code>bad delegation</code> diferente de zero significa que a exportação contém eventos NIP-26 cujo token de delegação não verifica. O relay também indexa um evento delegado sob a pubkey do delegador, então armazenar um token forjado o publicaria no feed de outro autor — esses eventos são sempre ignorados (mesmo com <code>--no-verify</code>, que apenas relaxa a verificação de assinatura do <em>evento</em>).</p>
 
 	<h2>Migrar</h2>
 	<p>Escolha um dos três modos de entrada — todos produzem o mesmo resultado:</p>
@@ -259,6 +260,10 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # participação NI
 					<td>O BD strfry contém eventos não verificados: inspecione-os; importe com <code>--no-verify</code> só se confiar na fonte</td>
 				</tr>
 				<tr>
+					<td>Contagem <code>bad delegation</code> alta</td>
+					<td>Os tokens de delegação NIP-26 da exportação não verificam (o strfry não os verifica): os eventos afetados são ignorados e nunca publicados no feed do delegador; não há como contornar, porque o token é a autorização do próprio delegador</td>
+				</tr>
+				<tr>
 					<td>Metadados NIP-29 ausentes após iniciar</td>
 					<td>Sem <code>relay.private_key</code>: rode <code>nostrfy genkey</code> e reinicie</td>
 				</tr>
@@ -276,7 +281,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # participação NI
 		<li>Banco strfry e config nostrfy com backup</li>
 		<li><code>nostrfy check</code> passa</li>
 		<li>Configurações strfry fundidas (ou relatório revisado)</li>
-		<li>Simulação revisada (sem bad signatures inesperadas)</li>
+		<li>Simulação revisada (sem bad signatures nem delegações inesperadas)</li>
 		<li>Migração concluída sem erros</li>
 		<li>Relay inicia; reconstrução grupos/papéis logada</li>
 		<li>Contagens batem (menos efêmeros/expirados)</li>

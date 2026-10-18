@@ -79,7 +79,7 @@ nostrfy relay list`;
 			<tr><td><code>new_pubkey_min_age_secs</code></td><td>integer</td><td><code>0</code></td><td>拒绝来自比该值更“年轻”的公钥的事件（秒；0 = 关闭）</td></tr>
 			<tr><td><code>max_events_per_min_per_pubkey</code></td><td>integer</td><td><code>0</code></td><td>每个公钥的发布速率限制（每分钟；0 = 无限制）</td></tr>
 			<tr><td><code>max_groups</code></td><td>integer</td><td><code>1000</code></td><td>内存中 NIP-29 群组存储的上限</td></tr>
-			<tr><td><code>require_auth</code></td><td>boolean</td><td><code>false</code></td><td>对 REQ/EVENT/COUNT/NEG 要求 NIP-42 认证</td></tr>
+			<tr><td><code>require_auth</code></td><td>boolean</td><td><code>false</code></td><td>对 REQ/EVENT/COUNT/NEG 要求 NIP-42 认证（REST API 读取需要 NIP-98）</td></tr>
 			<tr><td><code>send_auth_challenge</code></td><td>boolean</td><td><code>true</code></td><td>连接时发送 AUTH 挑战</td></tr>
 			<tr><td><code>enabled_nip78_auth</code></td><td>boolean</td><td><code>true</code></td><td>接受 kind 78/30078 事件前要求 NIP-42 AUTH</td></tr>
 			<tr><td><code>enabled_command_events</code></td><td>boolean</td><td><code>false</code></td><td>执行由管理员公钥发布的 kind:1 运维命令</td></tr>
@@ -89,7 +89,7 @@ nostrfy relay list`;
 	<h3>键详情</h3>
 	<ul>
 		<li>
-			<strong>private_key</strong> — 中继自身的密钥，用于签署中继生成的事件：NIP-29 群组元数据（39000-39005）和 NIP-43 角色/成员事件。用 <code>nostrfy genkey</code> 生成；请保密。它只在启动时读取一次，因此更改它需要重启。
+			<strong>private_key</strong> — 中继自身的密钥，用于签署中继生成的事件：NIP-29 群组元数据（39000-39005）和 NIP-43 角色/成员事件。用 <code>nostrfy genkey</code> 生成；请保密。它只在启动时读取一次，因此更改它需要重启。重启时还会修复已存储的群组元数据 — 旧密钥签署的中继事件会被移除，当前状态会用新密钥重新发布（群组状态本身按原样恢复，而非重建）。
 		</li>
 		<li>
 			<strong>public_url</strong> — 用于校验客户端发来的带 URL 标签：NIP-42 AUTH、NIP-62 消除和 NIP-98 管理认证。为空时，中继回退到 <code>host:port</code>，而绑定 <code>0.0.0.0</code> 或 <code>127.0.0.1</code> 时它永远不会匹配真实客户端 URL（会记录警告）。<strong>务必设置它。</strong>
@@ -118,6 +118,8 @@ nostrfy relay list`;
 			<tr><td><code>inbox_write_policy</code></td><td>string</td><td><code>"any"</code></td><td>谁可以写入 /inbox："any" 或 "relay"（事件仍须带 p 标签）</td></tr>
 			<tr><td><code>outbox_write_policy</code></td><td>string</td><td><code>"any"</code></td><td>谁可以写入 /outbox："any"（NIP-42 认证公钥自己的事件）或 "relay"</td></tr>
 			<tr><td><code>trusted_proxies</code></td><td>array of strings</td><td><code>[]</code></td><td>其 X-Forwarded-For 受信任的反向代理地址/CIDR（空 = 不信任任何代理）</td></tr>
+			<tr><td><code>landing_page_file</code></td><td>string</td><td><code>""</code></td><td>浏览器直接打开中继 URL 时显示的 HTML 文件，替代内置的诱饵页面（空 = 诱饵页面）</td></tr>
+			<tr><td><code>assets_dir</code></td><td>string</td><td><code>""</code></td><td>在 /assets/&lt;name&gt; 下提供的目录，用于着陆页（空 = 无 /assets/ 路由）</td></tr>
 		</tbody>
 	</table>
 	</div>
@@ -134,6 +136,8 @@ nostrfy relay list`;
 		<li>
 			<strong>trusted_proxies</strong> — 只列出代理自身的地址（同主机上 nginx/Caddy 用回环地址，云端用负载均衡器的源网段）。设置后，客户端 IP 从最后一个不受信任的 <code>X-Forwarded-For</code> 条目推导，用于按 IP 的上限、速率限制、<code>blockip</code> 和日志。切勿添加客户端能直接访问的地址 — 它们可以伪造该头并绕过按 IP 限制。启动时固定 — 需要重启。
 		</li>
+		<li><strong>landing_page_file</strong> — 默认情况下，浏览器直接打开中继 URL 会返回一个不透露任何中继信息的内置诱饵页面。将其指向一个 HTML 文件即可改为提供你自己的页面（中继规则、联系方式、统计等）；NIP-11 文档和 WebSocket 连接不受影响。文件按需读取，并在变化时重新读取，因此外部任务无需重启即可重新生成它。必须是最大 8 MiB 的普通文件（不跟随符号链接）；文件缺失时提供诱饵页面。SIGHUP 时生效。</li>
+		<li><strong>assets_dir</strong> — 在 <code>/assets/&lt;name&gt;</code> 下提供文件的目录（图片、CSS、JS）。只提供由字母、数字、<code>.</code>、<code>_</code> 和 <code>-</code> 组成的扁平 ASCII 文件名（不含点文件、子目录或符号链接）；未知扩展名以 <code>application/octet-stream</code> 发送。文件按请求读取，因此可以就地替换。启动时固定 — 需要重启。</li>
 	</ul>
 
 	<h2>[rpc] 段 — NIP-86 管理</h2>
@@ -179,7 +183,7 @@ nostrfy relay list`;
 			<tr><td><code>max_count</code></td><td>integer</td><td><code>2000</code></td><td>COUNT 结果的上限</td></tr>
 			<tr><td><code>max_sub_id_len</code></td><td>integer</td><td><code>64</code></td><td>订阅 id 最大长度（字符，非字节）</td></tr>
 			<tr><td><code>max_sub_bytes</code></td><td>integer</td><td><code>1048576</code></td><td>每连接的订阅过滤器总字节数</td></tr>
-			<tr><td><code>max_req_response_bytes</code></td><td>integer</td><td><code>33554432</code> (32 MB)</td><td>单个 REQ 响应可发送的总字节上限</td></tr>
+			<tr><td><code>max_req_response_bytes</code></td><td>integer</td><td><code>33554432</code> (32 MB)</td><td>单个 REQ 响应可发送的总字节数上限；能放入发送队列的响应会完整送达</td></tr>
 		</tbody>
 	</table>
 	</div>
@@ -220,7 +224,7 @@ nostrfy relay list`;
 		<tbody>
 			<tr><td><code>live_batch_interval_ms</code></td><td>integer</td><td><code>20</code></td><td>实时事件刷新频率（毫秒）</td></tr>
 			<tr><td><code>live_batch_size</code></td><td>integer</td><td><code>32</code></td><td>每个实时批次的最大事件数</td></tr>
-			<tr><td><code>live_buffer</code></td><td>integer</td><td><code>65536</code></td><td>实时扇出队列大小</td></tr>
+			<tr><td><code>live_buffer</code></td><td>integer</td><td><code>65536</code></td><td>实时扇出队列大小；超过 10,000,000 会在 check/启动时被拒绝，超过 1,000,000 会发出警告</td></tr>
 		</tbody>
 	</table>
 	</div>
@@ -241,7 +245,7 @@ nostrfy relay list`;
 			<tr><td><code>max_indexed_words</code></td><td>integer</td><td><code>32</code></td><td>每个事件内容被索引的单词数</td></tr>
 			<tr><td><code>meta_index</code></td><td>boolean</td><td><code>true</code></td><td>写入扫描预过滤使用的每事件元数据头</td></tr>
 			<tr><td><code>disabled_fsync</code></td><td>boolean</td><td><code>false</code></td><td>跳过每个写入批次后的同步磁盘刷新</td></tr>
-			<tr><td><code>db_buffer_size</code></td><td>integer</td><td><code>2048</code></td><td>每连接 WebSocket 初始缓冲区（字节）</td></tr>
+			<tr><td><code>db_buffer_size</code></td><td>integer</td><td><code>2048</code></td><td>每个连接的初始 WebSocket 缓冲区（字节）；必须小于由 max_ws_message_bytes / max_neg_items 推导的写缓冲区上限（否则在 check/启动时被拒绝）</td></tr>
 			<tr><td><code>db_request_timeout_secs</code></td><td>integer</td><td><code>30</code></td><td>数据库请求在失败前可等待的时长</td></tr>
 			<tr><td><code>max_db_queue_msgs</code></td><td>integer</td><td><code>4096</code></td><td>快速失败前排队的待处理消息上限</td></tr>
 			<tr><td><code>max_db_queue_events</code></td><td>integer</td><td><code>262144</code></td><td>快速失败前排队批次内的事件上限</td></tr>
@@ -272,7 +276,7 @@ nostrfy relay list`;
 		<tbody>
 			<tr><td><code>pid_file</code></td><td>string</td><td><code>"./nostrfy.pid"</code></td><td>PID 文件路径</td></tr>
 			<tr><td><code>log_file</code></td><td>string</td><td><code>"./nostrfy.log"</code></td><td>日志文件路径</td></tr>
-			<tr><td><code>stats_file</code></td><td>string</td><td><code>"./nostrfy.stats.json"</code></td><td>统计文件路径</td></tr>
+			<tr><td><code>stats_file</code></td><td>string</td><td><code>"./nostrfy.stats.json"</code></td><td>统计文件路径；/relay/stats 提供公开子集</td></tr>
 			<tr><td><code>stats_interval_secs</code></td><td>integer</td><td><code>5</code></td><td>统计写入间隔（秒）</td></tr>
 			<tr><td><code>max_log_size_bytes</code></td><td>integer</td><td><code>52428800</code> (50 MB)</td><td>日志轮转大小（0 = 不轮转）</td></tr>
 			<tr><td><code>max_log_files</code></td><td>integer</td><td><code>5</code></td><td>保留的轮转日志代数</td></tr>
@@ -280,6 +284,10 @@ nostrfy relay list`;
 	</table>
 	</div>
 	<p>路径相对于配置文件所在目录解析，因此守护进程更改工作目录后它们仍然有效。</p>
+
+	<p>
+		<code>/relay/stats</code> 无需令牌且可跨源读取，因此提供比统计文件更窄的视图：主机的可用磁盘空间和磁盘满标志、失败计数器（<code>db_errors</code>、<code>accept_errors</code>、<code>rebuild_failures</code>、<code>log_errors</code>）以及按原因分类的连接拒绝明细都会被省略 — 它们合在一起会成为匿名探测者的存储容量预言机。这些键保留在统计文件（<code>nostrfy stats</code> 会打印）和 <code>/metrics</code> 中。注意 <code>/metrics</code> 同样无需认证，如需对容量数字保密，请用 <code>api_host</code> 或反向代理隔离它。
+	</p>
 
 	<h2>[access] 段 — 访问控制</h2>
 	<div class="overflow-x-auto">
@@ -338,7 +346,7 @@ nostrfy relay list`;
 		<tbody>
 			<tr><td>relay.name、description、pubkey、contact、icon、post_policy、public_url</td><td>relay.private_key</td></tr>
 			<tr><td>reject_ephemeral、enabled_git、enabled_nip78_auth</td><td>relay.livekit_*、enabled_nips / disabled_nips</td></tr>
-			<tr><td>大部分 [limits]</td><td>api_host、trusted_proxies、metrics_enabled、ws_paths、database.*、daemon 大小、限制上限、blossom.*</td></tr>
+			<tr><td>大部分 [limits]、landing_page_file</td><td>api_host、trusted_proxies、metrics_enabled、ws_paths、assets_dir、database.*、daemon 大小、限制上限、blossom.*</td></tr>
 		</tbody>
 	</table>
 	</div>

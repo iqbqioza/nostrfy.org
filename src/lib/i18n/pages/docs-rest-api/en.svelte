@@ -229,10 +229,21 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</Callout>
 
 	<h2>Visibility rules</h2>
-	<p>The API is unauthenticated, so it withholds the same events as an anonymous WebSocket connection:</p>
+	<p>
+		The API applies the same per-event visibility rules as an anonymous WebSocket connection, and
+		<code>relay.require_auth</code> gates it like one: every request must then carry a NIP-98
+		<code>Authorization: Nostr &lt;base64 kind:27235 event&gt;</code> whose <code>u</code> tag is the exact
+		request URL (path and query; with <code>server.api_host</code> set, that host's URL) and whose
+		<code>method</code> tag is <code>GET</code>; the event must be fresh (60 seconds) and each authorization
+		is accepted once. Anonymous requests are refused with
+		<code>401 &#123;"error":"auth-required: this relay requires NIP-98 authorization"&#125;</code>. An
+		authorized caller still sees the anonymous-visibility event set — the API has no identity-scoped reads.
+		The following events are withheld:
+	</p>
 	<ul>
 		<li>NIP-70 protected events (carrying a <code>-</code> tag)</li>
 		<li>NIP-59 gift wraps (kind 1059)</li>
+		<li>NIP-78 application-specific events (kinds 78/30078, owner-only while <code>relay.enabled_nip78_auth</code> is set)</li>
 		<li>NIP-29 private/hidden group content (visible only to members)</li>
 	</ul>
 
@@ -253,6 +264,10 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 			<tr>
 				<td>400</td>
 				<td>Invalid identifier or query parameter</td>
+			</tr>
+			<tr>
+				<td>401</td>
+				<td>NIP-98 authorization required (<code>relay.require_auth</code> is set) — missing, invalid, expired or already-used authorization</td>
 			</tr>
 			<tr>
 				<td>403</td>

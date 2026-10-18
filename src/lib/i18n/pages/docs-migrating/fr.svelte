@@ -160,6 +160,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # appartenance NIP-
 		Un compteur <code>bad signature</code> non nul signifie que l’export contient des événements acceptés par strfry sans
 		vérification ; ils seront ignorés. Si vous leur faites confiance, passez <code>--no-verify</code> pour les importer quand même.
 	</p>
+	<p>Un compteur <code>bad delegation</code> non nul signifie que l’export contient des événements NIP-26 dont le jeton de délégation ne se vérifie pas. Le relais indexe aussi un événement délégué sous la pubkey du délégant, donc stocker un jeton forgé le publierait dans le fil d’un autre auteur — ces événements sont toujours ignorés (même avec <code>--no-verify</code>, qui ne relâche que la vérification de signature de l’<em>événement</em>).</p>
 
 	<h2>Migrer</h2>
 	<p>Choisissez un des trois modes d’entrée — tous produisent le même résultat :</p>
@@ -260,6 +261,10 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # appartenance NIP-
 					<td>La BD strfry contient des événements non vérifiés : inspectez-les ; importez avec <code>--no-verify</code> seulement si vous faites confiance à la source</td>
 				</tr>
 				<tr>
+					<td>Compteur <code>bad delegation</code> élevé</td>
+					<td>Les jetons de délégation NIP-26 de l’export ne se vérifient pas (strfry ne les vérifie pas) : les événements concernés sont ignorés et jamais publiés dans le fil du délégant ; aucun contournement, car le jeton est l’autorisation du délégant lui-même</td>
+				</tr>
+				<tr>
 					<td>Métadonnées NIP-29 manquantes après démarrage</td>
 					<td>Pas de <code>relay.private_key</code> : lancez <code>nostrfy genkey</code> et redémarrez</td>
 				</tr>
@@ -277,7 +282,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # appartenance NIP-
 		<li>Base strfry et config nostrfy sauvegardées</li>
 		<li><code>nostrfy check</code> passe</li>
 		<li>Réglages strfry fusionnés (ou rapport relu)</li>
-		<li>Essai à blanc relu (pas de bad signatures inattendues)</li>
+		<li>Essai à blanc relu (pas de bad signatures ni de délégations inattendues)</li>
 		<li>Migration terminée sans erreurs</li>
 		<li>Relais démarré ; reconstruction groupes/rôles journalisée</li>
 		<li>Comptes d’événements concordent (moins éphémères/expirés)</li>

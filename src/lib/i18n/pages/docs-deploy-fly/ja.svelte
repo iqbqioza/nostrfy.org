@@ -42,9 +42,7 @@ curl https://<your-app-name>.fly.dev/
 		<tbody>
 			<tr>
 				<td><code>Dockerfile</code></td>
-				<td>
-					コンテナイメージ — GitHub リリースアセットからビルド済みリリースバイナリ(x86_64 / aarch64、ビルドアーキテクチャで選択)をダウンロードし、sha256 チェックサムを検証します。Fly 上ではコンパイルは行われません
-				</td>
+				<td>コンテナイメージ — <strong>ビルド済みリリースバイナリを <code>install.sh</code> でインストール</strong>します(x86_64 / aarch64 を自動判別し、sha256 チェックサムを検証)。<code>NOSTRFY_VERSION</code> ビルド引数でリリースを固定できます。Fly 上でのコンパイルは発生しません</td>
 			</tr>
 			<tr>
 				<td><code>fly.toml</code></td>
@@ -119,10 +117,10 @@ curl https://<your-app-name>.fly.dev/
 	<h2>スケーリングと更新</h2>
 	<ul>
 		<li>
-			<strong>リレーを更新</strong>:<code>deploy/nostrfy.container.toml</code> を編集して再度 <code>fly deploy</code> — イメージは常に最新の GitHub リリースバイナリをダウンロードするため、更新は再デプロイだけです
+			<strong>リレーの更新</strong>: <code>deploy/nostrfy.container.toml</code> を編集して再度 <code>fly deploy</code> — イメージは常に<strong>最新</strong>の GitHub リリースバイナリをインストールするため、更新は再デプロイだけで済みます
 		</li>
 		<li>
-			<strong>バージョンを固定</strong>:<code>docker build --build-arg NOSTRFY_VERSION=v0.1.16 ...</code> または Dockerfile 内の <code>ARG</code> を変更
+			<strong>バージョンを固定</strong>:<code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
 		</li>
 		<li>
 			<strong>スケール</strong>:既定ではリレーは単一マシンです。<code>fly machines clone &lt;id&gt;</code> で 2 台目を作成できます。両方がボリュームを共有します(Fly ボリュームは同一リージョン内の複数マシンに対応)

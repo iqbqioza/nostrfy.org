@@ -79,7 +79,7 @@ nostrfy relay list`;
 			<tr><td><code>new_pubkey_min_age_secs</code></td><td>integer</td><td><code>0</code></td><td>Rifiuta eventi da pubkey più recenti di questo valore (secondi; 0 = disattivato)</td></tr>
 			<tr><td><code>max_events_per_min_per_pubkey</code></td><td>integer</td><td><code>0</code></td><td>Limite di pubblicazione per pubkey (al minuto; 0 = nessun limite)</td></tr>
 			<tr><td><code>max_groups</code></td><td>integer</td><td><code>1000</code></td><td>Limite dell’archivio gruppi NIP-29 in memoria</td></tr>
-			<tr><td><code>require_auth</code></td><td>boolean</td><td><code>false</code></td><td>Richiedi autenticazione NIP-42 per REQ/EVENT/COUNT/NEG</td></tr>
+			<tr><td><code>require_auth</code></td><td>boolean</td><td><code>false</code></td><td>Richiedi autenticazione NIP-42 per REQ/EVENT/COUNT/NEG (le letture via API REST richiedono NIP-98)</td></tr>
 			<tr><td><code>send_auth_challenge</code></td><td>boolean</td><td><code>true</code></td><td>Invia la challenge AUTH alla connessione</td></tr>
 			<tr><td><code>enabled_nip78_auth</code></td><td>boolean</td><td><code>true</code></td><td>Richiedi AUTH NIP-42 prima di accettare eventi kind 78/30078</td></tr>
 			<tr><td><code>enabled_command_events</code></td><td>boolean</td><td><code>false</code></td><td>Esegui comandi operatore kind:1 firmati dalla pubkey dell’admin</td></tr>
@@ -89,7 +89,7 @@ nostrfy relay list`;
 	<h3>Dettagli delle chiavi</h3>
 	<ul>
 		<li>
-			<strong>private_key</strong> — la chiave segreta propria del relay, usata per firmare eventi generati dal relay: metadati dei gruppi NIP-29 (39000-39005) ed eventi di ruolo/membri NIP-43. Generala con <code>nostrfy genkey</code>; tienila segreta. Viene letta una volta all’avvio, quindi modificarla richiede un riavvio.
+			<strong>private_key</strong> — la chiave segreta propria del relay, usata per firmare eventi generati dal relay: metadati dei gruppi NIP-29 (39000-39005) ed eventi di ruolo/membri NIP-43. Generala con <code>nostrfy genkey</code>; tienila segreta. Viene letta una volta all’avvio, quindi modificarla richiede un riavvio. Un riavvio cura anche i metadati dei gruppi memorizzati — gli eventi firmati dalla chiave precedente vengono rimossi e lo stato attuale viene ripubblicato con la nuova chiave (lo stato dei gruppi viene ripristinato così com’è, non ricostruito).
 		</li>
 		<li>
 			<strong>public_url</strong> — usata per convalidare i tag con URL dai client: AUTH NIP-42, vanish NIP-62 e auth admin NIP-98. Quando è vuota, il relay ripiega su <code>host:port</code>, che non corrisponde mai a una URL reale del client quando si usa il binding <code>0.0.0.0</code> o <code>127.0.0.1</code> (viene registrato un avviso). <strong>Impostala sempre.</strong>
@@ -118,6 +118,8 @@ nostrfy relay list`;
 			<tr><td><code>inbox_write_policy</code></td><td>string</td><td><code>"any"</code></td><td>Chi può scrivere su /inbox: "any" o "relay" (gli eventi devono comunque avere un tag p)</td></tr>
 			<tr><td><code>outbox_write_policy</code></td><td>string</td><td><code>"any"</code></td><td>Chi può scrivere su /outbox: "any" (i propri eventi della pubkey autenticata NIP-42) o "relay"</td></tr>
 			<tr><td><code>trusted_proxies</code></td><td>array of strings</td><td><code>[]</code></td><td>Indirizzi/CIDR dei reverse proxy il cui X-Forwarded-For è attendibile (vuoto = nessun proxy attendibile)</td></tr>
+			<tr><td><code>landing_page_file</code></td><td>string</td><td><code>""</code></td><td>File HTML mostrato a un browser che apre l’URL del relay al posto della pagina civetta integrata (vuoto = civetta)</td></tr>
+			<tr><td><code>assets_dir</code></td><td>string</td><td><code>""</code></td><td>Directory servito sotto /assets/&lt;name&gt; per la landing page (vuoto = nessuna route /assets/)</td></tr>
 		</tbody>
 	</table>
 	</div>
@@ -134,6 +136,8 @@ nostrfy relay list`;
 		<li>
 			<strong>trusted_proxies</strong> — elenca solo gli indirizzi propri del proxy (loopback per nginx/Caddy sullo stesso host, l’intervallo di origine del bilanciatore nel cloud). Se impostato, l’IP del client è derivato dall’ultima voce non attendibile di <code>X-Forwarded-For</code> per i limiti per IP, il rate limit, <code>blockip</code> e i log. Non aggiungere mai un indirizzo raggiungibile direttamente dai client — potrebbero falsificare l’header e aggirare i limiti per IP. Fisso all’avvio — richiede un riavvio.
 		</li>
+		<li><strong>landing_page_file</strong> — per impostazione predefinita, un browser che apre l’URL del relay riceve una pagina civetta integrata che non rivela nulla sul relay. Punta questo a un file HTML per servire una tua pagina (regole del relay, contatti, statistiche); il documento NIP-11 e le connessioni WebSocket non sono interessati. Il file viene letto su richiesta e riletto quando cambia, quindi un job esterno può rigenerarlo senza riavvio. Deve essere un file regolare di al massimo 8 MiB (i link simbolici non vengono seguiti); se manca, viene servita la pagina civetta. Si applica al SIGHUP.</li>
+		<li><strong>assets_dir</strong> — directory i cui file vengono serviti sotto <code>/assets/&lt;name&gt;</code> (immagini, CSS, JS per la landing page). Vengono serviti solo nomi piatti ASCII di lettere, cifre, <code>.</code>, <code>_</code> e <code>-</code> (niente file nascosti, sottodirectory o link simbolici); le estensioni sconosciute vengono inviate come <code>application/octet-stream</code>. I file vengono letti a ogni richiesta, quindi possono essere sostituiti sul posto. Fisso all’avvio — richiede un riavvio.</li>
 	</ul>
 
 	<h2>Sezione [rpc] — gestione NIP-86</h2>
@@ -179,7 +183,7 @@ nostrfy relay list`;
 			<tr><td><code>max_count</code></td><td>integer</td><td><code>2000</code></td><td>Tetto per i risultati COUNT</td></tr>
 			<tr><td><code>max_sub_id_len</code></td><td>integer</td><td><code>64</code></td><td>Lunghezza massima dell’id di sottoscrizione (caratteri, non byte)</td></tr>
 			<tr><td><code>max_sub_bytes</code></td><td>integer</td><td><code>1048576</code></td><td>Byte totali dei filtri di sottoscrizione per connessione</td></tr>
-			<tr><td><code>max_req_response_bytes</code></td><td>integer</td><td><code>33554432</code> (32 MB)</td><td>Tetto dei byte totali che una singola risposta REQ può inviare</td></tr>
+			<tr><td><code>max_req_response_bytes</code></td><td>integer</td><td><code>33554432</code> (32 MB)</td><td>Limite del totale di byte che una singola risposta REQ può inviare; le risposte che stanno nella coda in uscita vengono consegnate per intero</td></tr>
 		</tbody>
 	</table>
 	</div>
@@ -220,7 +224,7 @@ nostrfy relay list`;
 		<tbody>
 			<tr><td><code>live_batch_interval_ms</code></td><td>integer</td><td><code>20</code></td><td>Frequenza di flush degli eventi live (ms)</td></tr>
 			<tr><td><code>live_batch_size</code></td><td>integer</td><td><code>32</code></td><td>Eventi massimi per batch live</td></tr>
-			<tr><td><code>live_buffer</code></td><td>integer</td><td><code>65536</code></td><td>Dimensione della coda di fan-out live</td></tr>
+			<tr><td><code>live_buffer</code></td><td>integer</td><td><code>65536</code></td><td>Dimensione della coda di fan-out live; oltre 10.000.000 viene rifiutata al check/avvio, oltre 1.000.000 viene segnalata con un avviso</td></tr>
 		</tbody>
 	</table>
 	</div>
@@ -241,7 +245,7 @@ nostrfy relay list`;
 			<tr><td><code>max_indexed_words</code></td><td>integer</td><td><code>32</code></td><td>Parole del contenuto di ogni evento indicizzate per la ricerca</td></tr>
 			<tr><td><code>meta_index</code></td><td>boolean</td><td><code>true</code></td><td>Scrivi l’header di metadati per evento usato dal prefiltro di scansione</td></tr>
 			<tr><td><code>disabled_fsync</code></td><td>boolean</td><td><code>false</code></td><td>Salta il flush sincrono su disco dopo ogni batch di scrittura</td></tr>
-			<tr><td><code>db_buffer_size</code></td><td>integer</td><td><code>2048</code></td><td>Buffer WebSocket iniziale per connessione (byte)</td></tr>
+			<tr><td><code>db_buffer_size</code></td><td>integer</td><td><code>2048</code></td><td>Buffer WebSocket iniziale per connessione (byte); deve restare sotto il limite del buffer di scrittura derivato da max_ws_message_bytes / max_neg_items (altrimenti rifiutato al check/avvio)</td></tr>
 			<tr><td><code>db_request_timeout_secs</code></td><td>integer</td><td><code>30</code></td><td>Tempo massimo che una richiesta al database può attendere prima di fallire</td></tr>
 			<tr><td><code>max_db_queue_msgs</code></td><td>integer</td><td><code>4096</code></td><td>Messaggi massimi in coda prima di fallire in fretta</td></tr>
 			<tr><td><code>max_db_queue_events</code></td><td>integer</td><td><code>262144</code></td><td>Eventi massimi nei batch in coda prima di fallire in fretta</td></tr>
@@ -272,7 +276,7 @@ nostrfy relay list`;
 		<tbody>
 			<tr><td><code>pid_file</code></td><td>string</td><td><code>"./nostrfy.pid"</code></td><td>Percorso del file PID</td></tr>
 			<tr><td><code>log_file</code></td><td>string</td><td><code>"./nostrfy.log"</code></td><td>Percorso del file di log</td></tr>
-			<tr><td><code>stats_file</code></td><td>string</td><td><code>"./nostrfy.stats.json"</code></td><td>Percorso del file di statistiche</td></tr>
+			<tr><td><code>stats_file</code></td><td>string</td><td><code>"./nostrfy.stats.json"</code></td><td>Percorso del file di statistiche; un sottoinsieme pubblico è servito su /relay/stats</td></tr>
 			<tr><td><code>stats_interval_secs</code></td><td>integer</td><td><code>5</code></td><td>Intervallo di scrittura delle statistiche (secondi)</td></tr>
 			<tr><td><code>max_log_size_bytes</code></td><td>integer</td><td><code>52428800</code> (50 MB)</td><td>Dimensione di rotazione del log (0 = nessuna rotazione)</td></tr>
 			<tr><td><code>max_log_files</code></td><td>integer</td><td><code>5</code></td><td>Generazioni di log ruotati da conservare</td></tr>
@@ -280,6 +284,10 @@ nostrfy relay list`;
 	</table>
 	</div>
 	<p>I percorsi sono risolti rispetto alla directory del file di configurazione, quindi restano validi dopo che il demone cambia la sua directory di lavoro.</p>
+
+	<p>
+		<code>/relay/stats</code> non richiede token ed è leggibile cross-origin, quindi serve una vista più ristretta del file di statistiche: lo spazio libero su disco dell’host e il flag disco pieno, i contatori di errore (<code>db_errors</code>, <code>accept_errors</code>, <code>rebuild_failures</code>, <code>log_errors</code>) e la ripartizione dei rifiuti di connessione per motivo vengono omessi — insieme sarebbero un oracolo di capacità di archiviazione per un sondatore anonimo. Quelle chiavi restano nel file di statistiche (<code>nostrfy stats</code> le stampa) e in <code>/metrics</code>. Nota che anche <code>/metrics</code> non è autenticato: isolalo (<code>api_host</code> o reverse proxy) se i numeri di capacità devono restare privati.
+	</p>
 
 	<h2>Sezione [access] — controllo degli accessi</h2>
 	<div class="overflow-x-auto">
@@ -338,7 +346,7 @@ nostrfy relay list`;
 		<tbody>
 			<tr><td>relay.name, description, pubkey, contact, icon, post_policy, public_url</td><td>relay.private_key</td></tr>
 			<tr><td>reject_ephemeral, enabled_git, enabled_nip78_auth</td><td>relay.livekit_*, enabled_nips / disabled_nips</td></tr>
-			<tr><td>la maggior parte di [limits]</td><td>api_host, trusted_proxies, metrics_enabled, ws_paths, database.*, dimensioni del demone, tetti dei limiti, blossom.*</td></tr>
+			<tr><td>la maggior parte di [limits], landing_page_file</td><td>api_host, trusted_proxies, metrics_enabled, ws_paths, assets_dir, database.*, dimensioni del demone, tetti dei limiti, blossom.*</td></tr>
 		</tbody>
 	</table>
 	</div>

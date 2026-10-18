@@ -37,10 +37,7 @@ private_key = ""                          # execute 'nostrfy genkey' e cole a ch
 <div class="doc-body">
 	<h2>Um binário, várias plataformas</h2>
 	<p>
-		O nostrfy oferece binários pré-compilados para <strong>x86_64</strong> e <strong>aarch64</strong> (artefatos de
-		release do GitHub, verificados por checksum via <code>install.sh</code>), uma imagem de contêiner que
-		<strong>baixa esses binários</strong> (sem necessidade de compilação) e guias de implantação para as principais
-		plataformas.
+		O nostrfy oferece binários pré-compilados para <strong>x86_64</strong> e <strong>aarch64</strong> (artefatos de release do GitHub, verificados por checksum via <code>install.sh</code>), uma imagem de contêiner genérica que <strong>instala esses binários com <code>install.sh</code></strong> (sem necessidade de compilação) e guias de implantação para as principais plataformas.
 	</p>
 
 	<h2>Plataformas</h2>
@@ -105,9 +102,7 @@ private_key = ""                          # execute 'nostrfy genkey' e cole a ch
 			implantações de relay.
 		</li>
 		<li>
-			<strong>Contêiner</strong>: use o <code>Dockerfile</code> do repositório (baixa o binário de release no
-			momento do build) na Fly.io, Digital Ocean App Platform, AWS ECS, GCP Cloud Run ou Azure Container Apps. É
-			necessário armazenamento persistente para os dados LMDB (<code>/data</code>).
+			<strong>Contêiner</strong>: o <code>Dockerfile</code> do repositório instala o binário da release com <code>install.sh</code> (verificado por sha256; o build-arg <code>NOSTRFY_VERSION</code> fixa uma versão). Execute localmente com <code>docker compose up -d --build</code>, ou na Fly.io, DigitalOcean App Platform, AWS ECS, GCP Cloud Run ou Azure Container Apps. É necessário armazenamento persistente para os dados LMDB (<code>/data</code>).
 		</li>
 	</ul>
 

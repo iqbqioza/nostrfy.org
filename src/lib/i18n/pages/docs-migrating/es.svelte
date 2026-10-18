@@ -160,6 +160,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # membresía NIP-43
 		Un conteo <code>bad signature</code> distinto de cero significa que el export contiene eventos que strfry aceptó sin
 		verificación; se omitirán. Si confías en ellos, pasa <code>--no-verify</code> para importarlos igualmente.
 	</p>
+	<p>Un recuento <code>bad delegation</code> distinto de cero significa que la exportación contiene eventos NIP-26 cuyo token de delegación no se verifica. El relé también indexa un evento delegado bajo la pubkey del delegador, así que almacenar un token falsificado lo publicaría en el feed de otro autor — esos eventos siempre se omiten (incluso con <code>--no-verify</code>, que solo relaja la verificación de firma del <em>evento</em>).</p>
 
 	<h2>Migrar</h2>
 	<p>Elige uno de tres modos de entrada — todos producen el mismo resultado:</p>
@@ -258,6 +259,10 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # membresía NIP-43
 					<td>La BD strfry contiene eventos no verificados: inspecciónalos; importa con <code>--no-verify</code> solo si confías en la fuente</td>
 				</tr>
 				<tr>
+					<td>Recuento <code>bad delegation</code> alto</td>
+					<td>Los tokens de delegación NIP-26 de la exportación no se verifican (strfry no los comprueba): los eventos afectados se omiten y nunca se publican en el feed del delegador; no hay forma de saltarlo, porque el token es la autorización del propio delegador</td>
+				</tr>
+				<tr>
 					<td>Faltan metadatos NIP-29 tras el arranque</td>
 					<td>Sin <code>relay.private_key</code>: ejecuta <code>nostrfy genkey</code> y reinicia</td>
 				</tr>
@@ -275,7 +280,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # membresía NIP-43
 		<li>Base strfry y config nostrfy respaldadas</li>
 		<li><code>nostrfy check</code> pasa</li>
 		<li>Ajustes strfry fusionados (o informe revisado)</li>
-		<li>Simulacro revisado (sin bad signatures inesperadas)</li>
+		<li>Simulacro revisado (sin bad signatures ni delegaciones inesperadas)</li>
 		<li>Migración completada sin errores</li>
 		<li>El relé arranca; reconstrucción de grupos/roles registrada</li>
 		<li>Conteos coinciden (menos efímeros/caducados)</li>

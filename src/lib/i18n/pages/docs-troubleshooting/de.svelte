@@ -466,11 +466,10 @@ nostrfy --config nostrfy.toml start`;
 
 	<h3><code>disk is full: refusing to commit N events</code></h3>
 	<p>
-		<strong>Ursache:</strong> Weniger als 32 MB freier Plattenplatz. Schreibvorgänge stoppen (zum Schutz der Daten); Lesevorgänge laufen weiter.
+		<strong>Ursache:</strong> Weniger als 32 MB freier Plattenplatz. Schreibvorgänge stoppen (zum Schutz der Daten); Lesevorgänge laufen weiter, und <code>GET /health</code> antwortet währenddessen mit <code>503</code> und dem Grund "database is refusing writes". Die Kapazitätszahlen (<code>nostrfy_db_disk_full</code> / <code>nostrfy_db_free_bytes</code>) stehen in <code>/metrics</code> und im <code>nostrfy stats</code>-Snapshot — <code>/relay/stats</code> ist unauthentifiziert und cross-origin lesbar und lässt sie daher weg. (<code>/metrics</code> ist ebenfalls unauthentifiziert: isolieren Sie es über <code>api_host</code> oder den Reverse-Proxy, wenn der freie Speicher des Hosts privat bleiben soll.)
 	</p>
 	<p>
-		<strong>Lösung:</strong> Plattenplatz freigeben. Schreibvorgänge werden automatisch fortgesetzt, sobald Platz verfügbar ist.
-		(<code>df -h /path/to/data</code>)
+		<strong>Lösung:</strong> Plattenplatz freigeben. Schreibvorgänge werden automatisch fortgesetzt und <code>/health</code> liefert wieder <code>200</code>, sobald Platz verfügbar ist — kein Neustart nötig. (<code>df -h /path/to/data</code>)
 	</p>
 
 	<h3><code>nostrfy check</code> meldet <code>map_size must not exceed max_map_size</code></h3>

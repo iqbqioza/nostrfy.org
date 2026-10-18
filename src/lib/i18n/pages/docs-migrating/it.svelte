@@ -160,6 +160,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # appartenenza NIP-
 		Un conteggio <code>bad signature</code> diverso da zero significa che l’export contiene eventi accettati da strfry senza
 		verifica; saranno saltati. Se ti fidi, passa <code>--no-verify</code> per importarli comunque.
 	</p>
+	<p>Un conteggio <code>bad delegation</code> diverso da zero significa che l’export contiene eventi NIP-26 il cui token di delega non verifica. Il relay indicizza un evento delegato anche sotto la pubkey del delegante, quindi memorizzare un token falsificato lo pubblicherebbe nel feed di un altro autore — tali eventi vengono sempre saltati (anche con <code>--no-verify</code>, che allenta solo la verifica della firma dell’<em>evento</em>).</p>
 
 	<h2>Migrazione</h2>
 	<p>Scegli una delle tre modalità di input — producono tutte lo stesso risultato:</p>
@@ -259,6 +260,10 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # appartenenza NIP-
 					<td>Il DB strfry contiene eventi non verificati: ispezionali; importa con <code>--no-verify</code> solo se ti fidi della fonte</td>
 				</tr>
 				<tr>
+					<td>Conteggio <code>bad delegation</code> elevato</td>
+					<td>I token di delega NIP-26 dell’export non verificano (strfry non li controlla): gli eventi interessati vengono saltati e mai pubblicati nel feed del delegante; nessuna deroga, perché il token è l’autorizzazione del delegante stesso</td>
+				</tr>
+				<tr>
 					<td>Metadati NIP-29 mancanti dopo l’avvio</td>
 					<td>Nessun <code>relay.private_key</code>: esegui <code>nostrfy genkey</code> e riavvia</td>
 				</tr>
@@ -276,7 +281,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # appartenenza NIP-
 		<li>Database strfry e config nostrfy salvati</li>
 		<li><code>nostrfy check</code> passa</li>
 		<li>Impostazioni strfry unite (o report revisionato)</li>
-		<li>Dry run revisionato (nessuna bad signature inattesa)</li>
+		<li>Dry run revisionato (nessuna bad signature o delega inattesa)</li>
 		<li>Migrazione completata senza errori</li>
 		<li>Relay avviato; rebuild gruppi/ruoli loggato</li>
 		<li>Conteggi eventi corrispondono (meno effimeri/scaduti)</li>

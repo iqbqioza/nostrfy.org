@@ -35,9 +35,9 @@ private_key = ""                          # run 'nostrfy genkey' and paste the k
 	<h2>One binary, several platforms</h2>
 	<p>
 		nostrfy ships pre-built binaries for <strong>x86_64</strong> and <strong>aarch64</strong> (GitHub
-		release assets, checksum-verified by <code>install.sh</code>), a container image that
-		<strong>downloads those binaries</strong> (no compilation needed), and deployment guides for the
-		major platforms.
+		release assets, checksum-verified by <code>install.sh</code>), a generic container image that
+		<strong>installs those binaries with <code>install.sh</code></strong> (no compilation needed), and
+		deployment guides for the major platforms.
 	</p>
 
 	<h2>Platforms</h2>
@@ -102,9 +102,11 @@ private_key = ""                          # run 'nostrfy genkey' and paste the k
 			deployments.
 		</li>
 		<li>
-			<strong>Container</strong>: use the repository <code>Dockerfile</code> (downloads the release
-			binary at build time) on Fly.io, DigitalOcean App Platform, AWS ECS, GCP Cloud Run or Azure
-			Container Apps. Persistent storage is required for the LMDB data (<code>/data</code>).
+			<strong>Container</strong>: the repository <code>Dockerfile</code> installs the release binary with
+			<code>install.sh</code> (sha256-verified; the <code>NOSTRFY_VERSION</code> build-arg pins a release).
+			Run it locally with <code>docker compose up -d --build</code>, or on Fly.io, DigitalOcean App
+			Platform, AWS ECS, GCP Cloud Run or Azure Container Apps. Persistent storage is required for the
+			LMDB data (<code>/data</code>).
 		</li>
 	</ul>
 

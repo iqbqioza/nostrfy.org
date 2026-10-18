@@ -162,6 +162,12 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 membership
 		A non-zero <code>bad signature</code> count means the export contains events strfry accepted without
 		verification; they will be skipped. If you trust them, pass <code>--no-verify</code> to import them anyway.
 	</p>
+	<p>
+		A non-zero <code>bad delegation</code> count means the export contains NIP-26 events whose delegation
+		token does not verify. The relay indexes a delegated event under the delegator's pubkey too, so storing a
+		forged token would publish it in someone else's author feed — such events are always skipped (even with
+		<code>--no-verify</code>, which only relaxes the <em>event</em> signature check).
+	</p>
 
 	<h2>Migrate</h2>
 	<p>Pick one of three input modes — all produce the same result:</p>
@@ -262,6 +268,10 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 membership
 					<td>The strfry DB contains unverified events: inspect them; import with <code>--no-verify</code> only if you trust the source</td>
 				</tr>
 				<tr>
+					<td>High <code>bad delegation</code> count</td>
+					<td>The export's NIP-26 delegation tokens do not verify (strfry does not check them): the affected events are skipped and never published under the delegator's feed; there is no override, because the token is the delegator's own authorization</td>
+				</tr>
+				<tr>
 					<td>NIP-29 metadata missing after the start</td>
 					<td>No <code>relay.private_key</code>: run <code>nostrfy genkey</code> and restart</td>
 				</tr>
@@ -279,7 +289,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 membership
 		<li>strfry database and nostrfy config backed up</li>
 		<li><code>nostrfy check</code> passes</li>
 		<li>strfry settings merged (or the report reviewed)</li>
-		<li>Dry run reviewed (no unexpected bad signatures)</li>
+		<li>Dry run reviewed (no unexpected bad signatures or delegations)</li>
 		<li>Migration completed without errors</li>
 		<li>Relay starts; group/role rebuild logged</li>
 		<li>Event counts match (minus ephemeral/expired)</li>

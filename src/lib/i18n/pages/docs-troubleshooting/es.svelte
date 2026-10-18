@@ -528,12 +528,10 @@ nostrfy --config nostrfy.toml start`;
 
 	<h3><code>disk is full: refusing to commit N events</code></h3>
 	<p>
-		<strong>Causa:</strong> Menos de 32 MB de espacio libre en disco. Las escrituras se detienen (para
-		proteger los datos); las lecturas continúan.
+		<strong>Causa:</strong> Menos de 32 MB de espacio libre en disco. Las escrituras se detienen (para proteger los datos); las lecturas continúan, y <code>GET /health</code> responde <code>503</code> con el motivo "database is refusing writes" mientras dura. Las cifras de capacidad (<code>nostrfy_db_disk_full</code> / <code>nostrfy_db_free_bytes</code>) están en <code>/metrics</code> y en la instantánea de <code>nostrfy stats</code> — <code>/relay/stats</code> no está autenticado y es legible cross-origin, así que las omite. (<code>/metrics</code> tampoco está autenticado: aíslalo con <code>api_host</code> o el proxy inverso si el espacio libre del host debe seguir siendo privado.)
 	</p>
 	<p>
-		<strong>Solución:</strong> Libera espacio en disco. Las escrituras se reanudan automáticamente cuando
-		haya espacio disponible. (<code>df -h /path/to/data</code>)
+		<strong>Solución:</strong> Libera espacio en disco. Las escrituras se reanudan automáticamente y <code>/health</code> vuelve a <code>200</code> en cuanto haya espacio — sin reiniciar. (<code>df -h /path/to/data</code>)
 	</p>
 
 	<h3><code>nostrfy check</code> informa <code>map_size must not exceed max_map_size</code></h3>

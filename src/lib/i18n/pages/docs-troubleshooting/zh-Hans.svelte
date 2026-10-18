@@ -510,12 +510,10 @@ nostrfy --config nostrfy.toml start`;
 
 	<h3><code>disk is full: refusing to commit N events</code></h3>
 	<p>
-		<strong>原因：</strong>可用磁盘空间少于 32 MB。写入停止（以保护数据）；读取
-		继续。
+		<strong>原因：</strong>可用磁盘空间少于 32 MB。写入停止（以保护数据）；读取继续，在此期间 <code>GET /health</code> 会以 "database is refusing writes" 为由返回 <code>503</code>。容量数字（<code>nostrfy_db_disk_full</code> / <code>nostrfy_db_free_bytes</code>）在 <code>/metrics</code> 和 <code>nostrfy stats</code> 快照中 — <code>/relay/stats</code> 无需认证且可跨源读取，因此省略它们。（<code>/metrics</code> 同样无需认证：如需对主机可用空间保密，请用 <code>api_host</code> 或反向代理隔离它。）
 	</p>
 	<p>
-		<strong>修复：</strong>释放磁盘空间。一旦有空间，写入会自动恢复。
-		（<code>df -h /path/to/data</code>）
+		<strong>修复：</strong>释放磁盘空间。一旦有空间，写入会自动恢复，<code>/health</code> 也会返回 <code>200</code> — 无需重启。（<code>df -h /path/to/data</code>）
 	</p>
 
 	<h3><code>nostrfy check</code> 报告 <code>map_size must not exceed max_map_size</code></h3>

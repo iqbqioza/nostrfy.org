@@ -215,7 +215,7 @@ nostrfy relay list`;
 				<td><code>require_auth</code></td>
 				<td>boolean</td>
 				<td><code>false</code></td>
-				<td>Требовать аутентификацию NIP-42 для REQ/EVENT/COUNT/NEG</td>
+				<td>Требовать аутентификацию NIP-42 для REQ/EVENT/COUNT/NEG (чтение через REST API требует NIP-98)</td>
 			</tr>
 			<tr>
 				<td><code>send_auth_challenge</code></td>
@@ -243,7 +243,7 @@ nostrfy relay list`;
 		<li>
 			<strong>private_key</strong> — собственный секретный ключ релея, которым подписываются сгенерированные релеем события: метаданные
 			групп NIP-29 (39000-39005) и события ролей/участников NIP-43. Создайте командой <code>nostrfy genkey</code>; храните в
-			секрете. Читается один раз при запуске, поэтому его изменение требует перезапуска.
+			секрете. Читается один раз при запуске, поэтому его изменение требует перезапуска. Перезапуск также лечит сохранённые метаданные групп — события, подписанные прежним ключом, удаляются, а текущее состояние публикуется заново под новым ключом (само состояние групп восстанавливается как есть, а не перестраивается).
 		</li>
 		<li>
 			<strong>public_url</strong> — используется для проверки тегов с URL от клиентов: NIP-42 AUTH, NIP-62 vanish и
@@ -326,6 +326,18 @@ nostrfy relay list`;
 				<td><code>[]</code></td>
 				<td>Адреса/CIDR обратных прокси, чьему X-Forwarded-For доверяем (пусто = не доверять никому)</td>
 			</tr>
+			<tr>
+				<td><code>landing_page_file</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>HTML-файл, показываемый браузеру при открытии URL релея вместо встроенной страницы-приманки (пусто = приманка)</td>
+			</tr>
+			<tr>
+				<td><code>assets_dir</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>Каталог, отдаваемый по /assets/&lt;name&gt; для лендинга (пусто = маршрута /assets/ нет)</td>
+			</tr>
 		</tbody>
 	</table>
 	</div>
@@ -347,6 +359,12 @@ nostrfy relay list`;
 			записи <code>X-Forwarded-For</code> для лимитов на IP, ограничения скорости, <code>blockip</code> и журналов. Никогда
 			не добавляйте адрес, доступный клиентам напрямую — они смогут подделать заголовок и обойти per-IP лимиты.
 			Фиксируется при запуске — требует перезапуска.
+		</li>
+		<li>
+			<strong>landing_page_file</strong> — по умолчанию браузер при открытии URL релея получает встроенную страницу-приманку, ничего не раскрывающую о релее. Укажите здесь HTML-файл, чтобы отдавать свою страницу (правила релея, контакты, статистика); документ NIP-11 и WebSocket-соединения не затрагиваются. Файл читается по запросу и перечитывается при изменении, поэтому внешняя задача может пересоздавать его без перезапуска. Должен быть обычным файлом не более 8 MiB (символические ссылки не разыменовываются); если файла нет, отдаётся страница-приманка. Применяется по SIGHUP.
+		</li>
+		<li>
+			<strong>assets_dir</strong> — каталог, файлы которого отдаются по <code>/assets/&lt;name&gt;</code> (изображения, CSS, JS для лендинга). Отдаются только плоские ASCII-имена из букв, цифр, <code>.</code>, <code>_</code> и <code>-</code> (без точечных файлов, подкаталогов и симлинков); неизвестные расширения отправляются как <code>application/octet-stream</code>. Файлы читаются по запросу, поэтому их можно заменять на месте. Фиксируется при запуске — требует перезапуска.
 		</li>
 	</ul>
 
@@ -505,7 +523,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 MB)</td>
-				<td>Потолок суммарных байт, которые может отправить один ответ REQ</td>
+				<td>Предел общего числа байт, которое может отправить один ответ на REQ; ответы, помещающиеся в исходящую очередь, доставляются полностью</td>
 			</tr>
 		</tbody>
 	</table>
@@ -639,7 +657,7 @@ nostrfy relay list`;
 				<td><code>live_buffer</code></td>
 				<td>integer</td>
 				<td><code>65536</code></td>
-				<td>Размер очереди живой рассылки</td>
+				<td>Размер очереди живой рассылки; значение выше 10 000 000 отклоняется при check/запуске, выше 1 000 000 — предупреждение</td>
 			</tr>
 		</tbody>
 	</table>
@@ -727,7 +745,7 @@ nostrfy relay list`;
 				<td><code>db_buffer_size</code></td>
 				<td>integer</td>
 				<td><code>2048</code></td>
-				<td>Начальный WebSocket-буфер на соединение (байты)</td>
+				<td>Начальный WebSocket-буфер на соединение (байты); должен быть меньше предела буфера записи, выводимого из max_ws_message_bytes / max_neg_items (иначе отклоняется при check/запуске)</td>
 			</tr>
 			<tr>
 				<td><code>db_request_timeout_secs</code></td>
@@ -803,7 +821,7 @@ nostrfy relay list`;
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>Путь к файлу статистики</td>
+				<td>Путь к файлу статистики; публичное подмножество отдаётся на /relay/stats</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>
@@ -827,6 +845,10 @@ nostrfy relay list`;
 	</table>
 	</div>
 	<p>Пути разрешаются относительно каталога файла конфигурации, поэтому остаются корректными после смены рабочего каталога демоном.</p>
+
+	<p>
+		<code>/relay/stats</code> не требует токена и доступен из других источников (CORS), поэтому отдаёт более узкое представление, чем файл статистики: свободное место на диске и флаг «диск заполнен», счётчики сбоев (<code>db_errors</code>, <code>accept_errors</code>, <code>rebuild_failures</code>, <code>log_errors</code>) и разбивка отказов соединений по причинам опускаются — вместе они были бы оракулом ёмкости хранилища для анонимного зондирования. Эти ключи остаются в файле статистики (их печатает <code>nostrfy stats</code>) и в <code>/metrics</code>. Учтите, что <code>/metrics</code> тоже без аутентификации — изолируйте его (<code>api_host</code> или обратный прокси), если цифры ёмкости должны оставаться приватными.
+	</p>
 
 	<h2>Раздел [access] — контроль доступа</h2>
 		<div class="overflow-x-auto">
@@ -1000,8 +1022,8 @@ nostrfy relay list`;
 				<td>relay.livekit_*, enabled_nips / disabled_nips</td>
 			</tr>
 			<tr>
-				<td>большая часть [limits]</td>
-				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, database.*, размеры демона, лимиты, blossom.*</td>
+				<td>большая часть [limits], landing_page_file</td>
+				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, assets_dir, database.*, размеры демона, лимиты, blossom.*</td>
 			</tr>
 		</tbody>
 	</table>

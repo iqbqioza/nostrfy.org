@@ -37,10 +37,7 @@ private_key = ""                          # выполните 'nostrfy genkey' 
 <div class="doc-body">
 	<h2>Один бинарник, несколько платформ</h2>
 	<p>
-		nostrfy поставляет готовые бинарники для <strong>x86_64</strong> и <strong>aarch64</strong> (артефакты
-		релизов GitHub, проверяемые контрольной суммой через <code>install.sh</code>), образ контейнера, который
-		<strong>скачивает эти бинарники</strong> (компиляция не нужна), и руководства по развёртыванию для основных
-		платформ.
+		nostrfy поставляет готовые бинарники для <strong>x86_64</strong> и <strong>aarch64</strong> (артефакты релизов GitHub, проверяемые контрольной суммой через <code>install.sh</code>), универсальный образ контейнера, который <strong>устанавливает эти бинарники через <code>install.sh</code></strong> (компиляция не нужна), и руководства по развёртыванию для основных платформ.
 	</p>
 
 	<h2>Платформы</h2>
@@ -105,9 +102,7 @@ private_key = ""                          # выполните 'nostrfy genkey' 
 			развёртываний релея.
 		</li>
 		<li>
-			<strong>Контейнер</strong>: используйте <code>Dockerfile</code> из репозитория (скачивает релизный
-			бинарник во время сборки) на Fly.io, Digital Ocean App Platform, AWS ECS, GCP Cloud Run или Azure
-			Container Apps. Для данных LMDB (<code>/data</code>) требуется постоянное хранилище.
+			<strong>Контейнер</strong>: <code>Dockerfile</code> из репозитория устанавливает релизный бинарник через <code>install.sh</code> (с проверкой sha256; build-arg <code>NOSTRFY_VERSION</code> фиксирует версию). Запустите локально командой <code>docker compose up -d --build</code> или на Fly.io, DigitalOcean App Platform, AWS ECS, GCP Cloud Run или Azure Container Apps. Для данных LMDB требуется постоянное хранилище (<code>/data</code>).
 		</li>
 	</ul>
 

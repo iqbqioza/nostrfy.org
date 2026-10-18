@@ -65,7 +65,9 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 	<CodeBlock code={statsCode} lang="bash" />
 	<p>または HTTP 経由:</p>
 	<CodeBlock code={statsHttpCode} lang="bash" />
-	<p>接続数、承認／拒否されたイベント、DB サイズなどが表示されます。</p>
+	<p>
+		接続数、受信／受理／拒否されたイベント、DB サイズなどを表示します。<code>/relay/stats</code> はトークン不要でクロスオリジンからも読めるため、より狭い公開サブセットを返します:ホストの空きディスク容量、ディスク満杯フラグ、失敗カウンタ、理由別の接続拒否内訳は除外されます(匿名の探索者にとってのストレージ容量オラクル)。これらは <code>nostrfy stats</code> のファイルスナップショットと <code>/metrics</code> に残ります — <code>/metrics</code> も認証なしなので、容量の数値を非公開にしたい場合は <code>api_host</code> かリバースプロキシで隔離してください。
+	</p>
 	<h3>Prometheus メトリクス</h3>
 	<CodeBlock code={metricsCode} lang="bash" />
 
@@ -86,12 +88,12 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 				<td>private_key</td>
 			</tr>
 			<tr>
-				<td>大部分の [limits]、reject_ephemeral、enabled_git、enabled_nip78_auth</td>
+				<td>大部分の [limits]、reject_ephemeral、enabled_git、enabled_nip78_auth、landing_page_file</td>
 				<td>api_host、metrics_enabled、LiveKit 設定</td>
 			</tr>
 			<tr>
 				<td>—</td>
-				<td>enabled_nips / disabled_nips、server.host / port / ws_paths</td>
+				<td>enabled_nips / disabled_nips、server.host / port / ws_paths / assets_dir</td>
 			</tr>
 			<tr>
 				<td>—</td>

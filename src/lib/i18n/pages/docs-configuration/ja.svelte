@@ -215,7 +215,7 @@ nostrfy relay list`;
 				<td><code>require_auth</code></td>
 				<td>boolean</td>
 				<td><code>false</code></td>
-				<td>REQ/EVENT/COUNT/NEG に NIP-42 認証を要求</td>
+				<td>REQ/EVENT/COUNT/NEG に NIP-42 認証を要求(REST API の読み取りには NIP-98 が必要)</td>
 			</tr>
 			<tr>
 				<td><code>send_auth_challenge</code></td>
@@ -243,7 +243,7 @@ nostrfy relay list`;
 		<li>
 			<strong>private_key</strong> — リレー自身の秘密鍵で、リレー生成イベントの署名に使用します:NIP-29 グループ
 			メタデータ(39000-39005)と NIP-43 のロール／メンバーシップイベント。<code>nostrfy genkey</code> で生成し、厳重に
-			保管してください。起動時に一度だけ読み込まれるため、変更には再起動が必要です。
+			保管してください。起動時に一度だけ読み込まれるため、変更には再起動が必要です。再起動すると、保存済みのグループメタデータも修復されます — 以前の鍵による中継署名イベントは削除され、現在の状態が新しい鍵で再公開されます(グループ状態自体は再構築ではなくそのまま復元されます)。
 		</li>
 		<li>
 			<strong>public_url</strong> — クライアント由来の URL 付きタグの検証に使用します:NIP-42 AUTH、NIP-62 vanish、
@@ -325,6 +325,18 @@ nostrfy relay list`;
 				<td><code>[]</code></td>
 				<td>X-Forwarded-For を信頼するリバースプロキシのアドレス／CIDR(空 = プロキシを信頼しない)</td>
 			</tr>
+			<tr>
+				<td><code>landing_page_file</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>通常のブラウザでリレー URL を開いたときに、内蔵のデコイページの代わりに表示する HTML ファイル(空 = デコイ)</td>
+			</tr>
+			<tr>
+				<td><code>assets_dir</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>ランディングページ用に /assets/&lt;name&gt; で配信するディレクトリ(空 = /assets/ ルートなし)</td>
+			</tr>
 		</tbody>
 	</table>
 	</div>
@@ -344,6 +356,12 @@ nostrfy relay list`;
 			バランサーの送信元範囲)。設定すると、クライアント IP は信頼できない最後の <code>X-Forwarded-For</code>
 			エントリから導出され、IP ごとの上限、レート制限、<code>blockip</code>、ログに使用されます。クライアントが直接到達できるアドレスは
 			絶対に追加しないでください — ヘッダーを偽装して IP ごとの制限を回避される恐れがあります。起動時に固定 — 再起動が必要です。
+		</li>
+		<li>
+			<strong>landing_page_file</strong> — 既定では、ブラウザでリレー URL を開くと、リレーについて何も明かさない内蔵のデコイページが返されます。HTML ファイルを指定すると、代わりに独自ページ(リレーのルール、連絡先、統計など)を表示できます。NIP-11 ドキュメントと WebSocket 接続には影響しません。ファイルはリクエストごとに読まれ、変更されると再読込されるため、外部ジョブが再起動なしで再生成できます。最大 8 MiB の通常ファイルである必要があります(シンボリックリンクは辿りません)。ファイルが無い場合はデコイページが返されます。SIGHUP で反映されます。
+		</li>
+		<li>
+			<strong>assets_dir</strong> — ランディングページ用に <code>/assets/&lt;name&gt;</code> で配信するディレクトリ(画像、CSS、JS)。英数字と <code>.</code>、<code>_</code>、<code>-</code> のみのフラットなファイル名だけを配信します(ドットファイル、サブディレクトリ、シンボリックリンクは不可)。未知の拡張子は <code>application/octet-stream</code> で送られます。ファイルはリクエストごとに読まれるため、その場で置き換えられます。起動時に固定 — 再起動が必要です。
 		</li>
 	</ul>
 
@@ -502,7 +520,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 MB)</td>
-				<td>1回の REQ 応答が送信できる合計バイト数の上限</td>
+				<td>1 つの REQ レスポンスが送信できる総バイト数の上限。送信キューに収まるレスポンスは最後まで配信されます</td>
 			</tr>
 		</tbody>
 	</table>
@@ -636,7 +654,7 @@ nostrfy relay list`;
 				<td><code>live_buffer</code></td>
 				<td>integer</td>
 				<td><code>65536</code></td>
-				<td>ライブファンアウトのキューサイズ</td>
+				<td>ライブファンアウトのキューサイズ。10,000,000 を超えると check/起動時に拒否され、1,000,000 を超えると警告されます</td>
 			</tr>
 		</tbody>
 	</table>
@@ -724,7 +742,7 @@ nostrfy relay list`;
 				<td><code>db_buffer_size</code></td>
 				<td>integer</td>
 				<td><code>2048</code></td>
-				<td>接続ごとの初期 WebSocket バッファ(バイト)</td>
+				<td>接続ごとの WebSocket 初期バッファ(バイト)。max_ws_message_bytes / max_neg_items から導かれる書き込みバッファ上限より小さい必要があります(超えると check/起動時に拒否)</td>
 			</tr>
 			<tr>
 				<td><code>db_request_timeout_secs</code></td>
@@ -800,7 +818,7 @@ nostrfy relay list`;
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>統計ファイルのパス</td>
+				<td>統計ファイルのパス。/relay/stats では公開サブセットが提供されます</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>
@@ -824,6 +842,10 @@ nostrfy relay list`;
 	</table>
 	</div>
 	<p>パスは設定ファイルのあるディレクトリを基準に解決されるため、デーモンが作業ディレクトリを変更した後も有効です。</p>
+
+	<p>
+		<code>/relay/stats</code> はトークン不要でクロスオリジンからも読めるため、統計ファイルより狭いビューを返します。ホストの空きディスク容量とディスク満杯フラグ、失敗カウンタ(<code>db_errors</code>、<code>accept_errors</code>、<code>rebuild_failures</code>、<code>log_errors</code>)、理由別の接続拒否内訳は除外されます — これらが揃うと匿名の探索者にとってストレージ容量のオラクルになるためです。これらは統計ファイル(<code>nostrfy stats</code> が表示)と <code>/metrics</code> に残ります。<code>/metrics</code> も認証なしなので、容量の数値を非公開にしたい場合は <code>api_host</code> かリバースプロキシで隔離してください。
+	</p>
 
 	<h2>セクション [access] — アクセス制御</h2>
 		<div class="overflow-x-auto">
@@ -994,8 +1016,8 @@ nostrfy relay list`;
 				<td>relay.livekit_*, enabled_nips / disabled_nips</td>
 			</tr>
 			<tr>
-				<td>[limits] のほとんど</td>
-				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, database.*, daemon サイズ, 上限値, blossom.*</td>
+				<td>[limits] のほとんど, landing_page_file</td>
+				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, assets_dir, database.*, daemon サイズ, 上限値, blossom.*</td>
 			</tr>
 		</tbody>
 	</table>

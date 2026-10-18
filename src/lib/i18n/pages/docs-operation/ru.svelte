@@ -65,7 +65,9 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 	<CodeBlock code={statsCode} lang="bash" />
 	<p>Или по HTTP:</p>
 	<CodeBlock code={statsHttpCode} lang="bash" />
-	<p>Показывает соединения, принятые/отклонённые события, размер БД и другое.</p>
+	<p>
+		Показывает соединения, принятые/отклонённые события, размер БД и другое. <code>/relay/stats</code> не требует токена и доступен из других источников, поэтому отдаёт более узкое публичное подмножество: свободное место на диске и флаг «диск заполнен», счётчики сбоев и разбивка отказов соединений по причинам опускаются (оракул ёмкости хранилища для анонимного зондирования). Они остаются в файловом снимке <code>nostrfy stats</code> и в <code>/metrics</code> — который тоже без аутентификации, так что изолируйте его (<code>api_host</code> или обратный прокси), если цифры ёмкости должны оставаться приватными.
+	</p>
 	<h3>Метрики Prometheus</h3>
 	<CodeBlock code={metricsCode} lang="bash" />
 
@@ -86,12 +88,12 @@ stats_file = "/var/lib/nostrfy-b/stats.json"`;
 				<td>private_key</td>
 			</tr>
 			<tr>
-				<td>большинство [limits], reject_ephemeral, enabled_git, enabled_nip78_auth</td>
+				<td>большинство [limits], reject_ephemeral, enabled_git, enabled_nip78_auth, landing_page_file</td>
 				<td>api_host, metrics_enabled, настройки LiveKit</td>
 			</tr>
 			<tr>
 				<td>—</td>
-				<td>enabled_nips / disabled_nips, server.host / port / ws_paths</td>
+				<td>enabled_nips / disabled_nips, server.host / port / ws_paths / assets_dir</td>
 			</tr>
 			<tr>
 				<td>—</td>

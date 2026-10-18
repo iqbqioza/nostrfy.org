@@ -210,11 +210,14 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 	</Callout>
 
 	<h2>Regole di visibilità</h2>
-	<p>L’API non è autenticata, quindi trattiene gli stessi eventi di una connessione WebSocket anonima:</p>
+	<p>
+		L’API applica le stesse regole di visibilità per evento di una connessione WebSocket anonima, e <code>relay.require_auth</code> la filtra allo stesso modo: ogni richiesta deve quindi portare un <code>Authorization: Nostr &lt;base64 kind:27235 event&gt;</code> NIP-98 il cui tag <code>u</code> sia l’URL esatta della richiesta (percorso e query; con <code>server.api_host</code> impostato, l’URL di quell’host) e il cui tag <code>method</code> sia <code>GET</code>; l’evento deve essere fresco (60 secondi) e ogni autorizzazione è accettata una volta sola. Le richieste anonime vengono rifiutate con <code>401 &#123;"error":"auth-required: this relay requires NIP-98 authorization"&#125;</code>. Un chiamante autorizzato vede comunque solo l’insieme di eventi a visibilità anonima — l’API non ha letture legate all’identità. I seguenti eventi vengono trattenuti:
+	</p>
 	<ul>
 		<li>Eventi protetti NIP-70 (con tag <code>-</code>)</li>
 		<li>Gift wrap NIP-59 (kind 1059)</li>
 		<li>Contenuto di gruppo privato/nascosto NIP-29 (visibile solo ai membri)</li>
+		<li>Eventi specifici dell’applicazione NIP-78 (kind 78/30078, solo per il proprietario finché <code>relay.enabled_nip78_auth</code> è impostato)</li>
 	</ul>
 
 	<h2>Errori e codici di stato</h2>
@@ -234,6 +237,10 @@ curl "http://127.0.0.1:8080/api/v1/nevent1..."`;
 			<tr>
 				<td>400</td>
 				<td>Identificatore o parametro di query non valido</td>
+			</tr>
+			<tr>
+				<td>401</td>
+				<td>Autorizzazione NIP-98 richiesta (<code>relay.require_auth</code> è impostato) — autorizzazione assente, non valida, scaduta o già usata</td>
 			</tr>
 			<tr>
 				<td>403</td>

@@ -42,9 +42,7 @@ curl https://<your-app-name>.fly.dev/
 		<tbody>
 			<tr>
 				<td><code>Dockerfile</code></td>
-				<td>
-					Container-Image — <strong>lädt das vorgefertigte Release-Binary</strong> aus den GitHub-Release-Assets (x86_64 / aarch64, je nach Build-Architektur) herunter und prüft seine sha256-Prüfsumme. Auf Fly findet keine Kompilierung statt
-				</td>
+				<td>Container-Image — <strong>installiert das vorgefertigte Release-Binary mit <code>install.sh</code></strong> (erkennt x86_64 / aarch64 automatisch, verifiziert die sha256-Prüfsumme); das Build-Arg <code>NOSTRFY_VERSION</code> pinnt ein Release. Auf Fly findet keine Kompilierung statt</td>
 			</tr>
 			<tr>
 				<td><code>fly.toml</code></td>
@@ -119,10 +117,10 @@ curl https://<your-app-name>.fly.dev/
 	<h2>Skalierung und Updates</h2>
 	<ul>
 		<li>
-			<strong>Relay aktualisieren</strong>: <code>deploy/nostrfy.container.toml</code> bearbeiten und erneut <code>fly deploy</code> — das Image lädt immer das <strong>neueste</strong> GitHub-Release-Binary, ein Update ist also ein einfaches erneutes Bereitstellen
+			<strong>Das Relay aktualisieren</strong>: <code>deploy/nostrfy.container.toml</code> bearbeiten und erneut <code>fly deploy</code> — das Image installiert immer das <strong>neueste</strong> GitHub-Release-Binary, ein Update ist also ein einfaches Redeploy
 		</li>
 		<li>
-			<strong>Version pinnen</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.16 ...</code> oder das <code>ARG</code> im Dockerfile ändern
+			<strong>Version pinnen</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
 		</li>
 		<li>
 			<strong>Skalieren</strong>: Standard ist eine einzelne Machine. <code>fly machines clone &lt;id&gt;</code> erstellt eine zweite Machine; beide teilen sich das Volume (Fly-Volumes unterstützen mehrere Machines in derselben Region)

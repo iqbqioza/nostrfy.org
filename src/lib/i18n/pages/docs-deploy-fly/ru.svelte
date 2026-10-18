@@ -42,9 +42,7 @@ curl https://<your-app-name>.fly.dev/
 		<tbody>
 			<tr>
 				<td><code>Dockerfile</code></td>
-				<td>
-					Образ контейнера — <strong>скачивает готовый бинарник релиза</strong> из GitHub release assets (x86_64 / aarch64, выбирается архитектурой сборки) и проверяет его sha256-контрольную сумму. Компиляция на Fly не выполняется
-				</td>
+				<td>Образ контейнера — <strong>устанавливает готовый релизный бинарник через <code>install.sh</code></strong> (автоопределение x86_64 / aarch64, проверка sha256); build-arg <code>NOSTRFY_VERSION</code> фиксирует релиз. Компиляция на Fly не выполняется</td>
 			</tr>
 			<tr>
 				<td><code>fly.toml</code></td>
@@ -119,10 +117,10 @@ curl https://<your-app-name>.fly.dev/
 	<h2>Масштабирование и обновления</h2>
 	<ul>
 		<li>
-			<strong>Обновление релея</strong>: отредактируйте <code>deploy/nostrfy.container.toml</code> и снова выполните <code>fly deploy</code> — образ всегда скачивает <strong>последний</strong> бинарник релиза GitHub, поэтому обновление — это простое повторное развёртывание
+			<strong>Обновление релея</strong>: отредактируйте <code>deploy/nostrfy.container.toml</code> и снова выполните <code>fly deploy</code> — образ всегда устанавливает <strong>последний</strong> релизный бинарник GitHub, так что обновление — это просто повторное развёртывание
 		</li>
 		<li>
-			<strong>Фиксация версии</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.16 ...</code> или измените <code>ARG</code> в Dockerfile
+			<strong>Фиксация версии</strong>: <code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
 		</li>
 		<li>
 			<strong>Масштаб</strong>: по умолчанию релей — одна машина. <code>fly machines clone &lt;id&gt;</code> создаёт вторую машину; обе используют общий том (тома Fly поддерживают несколько машин в одном регионе)

@@ -1,4 +1,4 @@
-const latestRelease = 'v0.1.16';
+const latestRelease = 'v0.1.22';
 
 export const site = {
 	name: 'nostrfy',

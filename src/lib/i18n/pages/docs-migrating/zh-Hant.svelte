@@ -160,6 +160,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 成員清�
 		非零的 <code>bad signature</code> 計數意味著匯出包含 strfry 未經
 		驗證就接受的事件；它們會被跳過。如果信任它們，傳 <code>--no-verify</code> 仍然匯入。
 	</p>
+	<p>非零的 <code>bad delegation</code> 計數意味著匯出中包含委派權杖無法驗證的 NIP-26 事件。中繼還會以委派者的公鑰為委派事件建立索引，因此儲存偽造權杖會將其發布到他人的作者動態中 — 此類事件一律被跳過（即使使用 <code>--no-verify</code>，它只放寬<em>事件</em>簽章檢查）。</p>
 
 	<h2>遷移</h2>
 	<p>選擇三種輸入模式之一 — 結果完全相同：</p>
@@ -259,6 +260,10 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 成員清�
 					<td>strfry 資料庫包含未驗證的事件：檢查它們；僅當信任來源時才用 <code>--no-verify</code> 匯入</td>
 				</tr>
 				<tr>
+					<td><code>bad delegation</code> 計數偏高</td>
+					<td>匯出的 NIP-26 委派權杖無法驗證（strfry 不檢查它們）：受影響的事件會被跳過，絕不會發布到委派者的動態中；無法覆寫，因為權杖是委派者本人的授權</td>
+				</tr>
+				<tr>
 					<td>啟動後缺少 NIP-29 中繼資料</td>
 					<td>沒有 <code>relay.private_key</code>：執行 <code>nostrfy genkey</code> 並重新啟動</td>
 				</tr>
@@ -276,7 +281,7 @@ nak req --auth --force-pre-auth --sec <nsec> -k 13534 "$R"   # NIP-43 成員清�
 		<li>strfry 資料庫與 nostrfy 設定已備份</li>
 		<li><code>nostrfy check</code> 通過</li>
 		<li>strfry 設定已合併（或報告已審閱）</li>
-		<li>dry run 已審閱（無意外的壞簽章）</li>
+		<li>dry run 已審閱（無意外的壞簽章或委派）</li>
 		<li>遷移無錯誤完成</li>
 		<li>中繼啟動；群組/角色重建已記錄</li>
 		<li>事件數量相符（減去臨時/過期）</li>

@@ -37,9 +37,7 @@ private_key = ""                          # 运行 'nostrfy genkey' 并粘贴密
 <div class="doc-body">
 	<h2>一个二进制，多个平台</h2>
 	<p>
-		nostrfy 提供 <strong>x86_64</strong> 和 <strong>aarch64</strong> 的预编译二进制（GitHub
-		发布资产，由 <code>install.sh</code> 校验和验证）、一个
-		<strong>下载这些二进制</strong>的容器镜像（无需编译），以及主要平台的部署指南。
+		nostrfy 提供 <strong>x86_64</strong> 和 <strong>aarch64</strong> 的预编译二进制（GitHub 发布资产，由 <code>install.sh</code> 校验和验证）、一个用 <code>install.sh</code> <strong>安装这些二进制</strong>的通用容器镜像（无需编译），以及主要平台的部署指南。
 	</p>
 
 	<h2>平台</h2>
@@ -104,9 +102,7 @@ private_key = ""                          # 运行 'nostrfy genkey' 并粘贴密
 			部署推荐。
 		</li>
 		<li>
-			<strong>容器</strong>：在 Fly.io、Digital Ocean App Platform、AWS ECS、GCP Cloud Run 或 Azure
-			Container Apps 上使用仓库的 <code>Dockerfile</code>（构建时下载发布
-			二进制）。LMDB 数据需要持久存储（<code>/data</code>）。
+			<strong>容器</strong>：仓库中的 <code>Dockerfile</code> 用 <code>install.sh</code> 安装发布二进制（经 sha256 验证；<code>NOSTRFY_VERSION</code> 构建参数可固定版本）。本地用 <code>docker compose up -d --build</code> 运行，或部署到 Fly.io、DigitalOcean App Platform、AWS ECS、GCP Cloud Run 或 Azure Container Apps。LMDB 数据需要持久存储（<code>/data</code>）。
 		</li>
 	</ul>
 

@@ -212,7 +212,7 @@ nostrfy relay list`;
 				<td><code>require_auth</code></td>
 				<td>boolean</td>
 				<td><code>false</code></td>
-				<td>Require NIP-42 authentication for REQ/EVENT/COUNT/NEG</td>
+				<td>Require NIP-42 authentication for REQ/EVENT/COUNT/NEG (REST API reads require NIP-98)</td>
 			</tr>
 			<tr>
 				<td><code>send_auth_challenge</code></td>
@@ -240,7 +240,9 @@ nostrfy relay list`;
 		<li>
 			<strong>private_key</strong> — the relay's own secret key, used to sign relay-generated events: NIP-29 group
 			metadata (39000-39005) and NIP-43 role/membership events. Generate with <code>nostrfy genkey</code>; keep it
-			secret. It is read once at startup, so changing it requires a restart.
+			secret. It is read once at startup, so changing it requires a restart; that restart also heals the stored
+			group metadata — the previous key's relay-signed events are removed and the current state is republished
+			under the new key (the group state itself is restored as-is, not rebuilt).
 		</li>
 		<li>
 			<strong>public_url</strong> — used to validate URL-bearing tags from clients: NIP-42 AUTH, NIP-62 vanish and
@@ -323,6 +325,18 @@ nostrfy relay list`;
 				<td><code>[]</code></td>
 				<td>Reverse-proxy addresses/CIDRs whose X-Forwarded-For is trusted (empty = trust no proxy)</td>
 			</tr>
+			<tr>
+				<td><code>landing_page_file</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>HTML file served to a plain browser GET of the relay URL instead of the built-in decoy page (empty = decoy)</td>
+			</tr>
+			<tr>
+				<td><code>assets_dir</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>Directory served under /assets/&lt;name&gt; for the landing page (empty = no /assets/ route)</td>
+			</tr>
 		</tbody>
 	</table>
 	</div>
@@ -344,6 +358,21 @@ nostrfy relay list`;
 			<code>X-Forwarded-For</code> entry for the per-IP caps, rate limit, <code>blockip</code> and the logs. Never
 			add an address clients can reach directly — they could spoof the header and bypass the per-IP limits.
 			Fixed at startup — requires a restart.
+		</li>
+		<li>
+			<strong>landing_page_file</strong> — by default a plain browser GET of the relay URL is answered with a
+			built-in decoy page that reveals nothing about the relay. Point this at an HTML file to serve your own
+			page instead (relay rules, contact, statistics); the NIP-11 document and WebSocket connections are
+			unaffected. The file is read on demand and re-read when it changes, so an external job can regenerate
+			it without a restart. It must be a regular file of at most 8 MiB (symlinks are not followed); when it
+			is missing, the decoy page is served. Applies on SIGHUP.
+		</li>
+		<li>
+			<strong>assets_dir</strong> — a directory whose files are served under <code>/assets/&lt;name&gt;</code>
+			(images, CSS, JS for the landing page). Only flat ASCII names of letters, digits, <code>.</code>,
+			<code>_</code> and <code>-</code> are served (no dot-files, subdirectories or symlinks); unknown
+			extensions are sent as <code>application/octet-stream</code>. Files are read per request, so they can
+			be replaced in place. Fixed at startup — requires a restart.
 		</li>
 	</ul>
 
@@ -502,7 +531,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 MB)</td>
-				<td>Ceiling for the total bytes a single REQ response may send</td>
+				<td>Ceiling for the total bytes a single REQ response may send; responses that fit the outgoing queue are delivered in full</td>
 			</tr>
 		</tbody>
 	</table>
@@ -636,7 +665,7 @@ nostrfy relay list`;
 				<td><code>live_buffer</code></td>
 				<td>integer</td>
 				<td><code>65536</code></td>
-				<td>Live fan-out queue size</td>
+				<td>Live fan-out queue size; above 10,000,000 is rejected at check/startup, above 1,000,000 is warned about</td>
 			</tr>
 		</tbody>
 	</table>
@@ -724,7 +753,7 @@ nostrfy relay list`;
 				<td><code>db_buffer_size</code></td>
 				<td>integer</td>
 				<td><code>2048</code></td>
-				<td>Initial per-connection WebSocket buffer (bytes)</td>
+				<td>Initial per-connection WebSocket buffer (bytes); must stay below the write-buffer bound derived from max_ws_message_bytes / max_neg_items (rejected at check/startup otherwise)</td>
 			</tr>
 			<tr>
 				<td><code>db_request_timeout_secs</code></td>
@@ -800,7 +829,7 @@ nostrfy relay list`;
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>Statistics file path</td>
+				<td>Statistics file path; a public subset is served at /relay/stats</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>
@@ -824,6 +853,15 @@ nostrfy relay list`;
 	</table>
 	</div>
 	<p>Paths are resolved against the config file's directory, so they stay valid after the daemon changes its working directory.</p>
+	<p>
+		<code>/relay/stats</code> needs no token and is readable cross-origin, so it serves a narrower view than
+		the stats file: the host's free disk space and disk-full flag, the failure counters (<code>db_errors</code>,
+		<code>accept_errors</code>, <code>rebuild_failures</code>, <code>log_errors</code>) and the per-reason
+		connection-refusal breakdown are left out — together they would be a storage-capacity oracle for anonymous
+		probers. They stay in the stats file (<code>nostrfy stats</code> prints them) and in <code>/metrics</code>.
+		Note <code>/metrics</code> is unauthenticated too, so isolate it (<code>api_host</code> or the reverse
+		proxy) if the capacity figures must stay private.
+	</p>
 
 	<h2>Section [access] — access control</h2>
 		<div class="overflow-x-auto">
@@ -997,8 +1035,8 @@ nostrfy relay list`;
 				<td>relay.livekit_*, enabled_nips / disabled_nips</td>
 			</tr>
 			<tr>
-				<td>most of [limits]</td>
-				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, database.*, daemon sizes, limit caps, blossom.*</td>
+				<td>most of [limits], landing_page_file (read per request)</td>
+				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, assets_dir, database.*, daemon sizes, limit caps, blossom.*</td>
 			</tr>
 		</tbody>
 	</table>

@@ -468,11 +468,10 @@ nostrfy --config nostrfy.toml start`;
 
 	<h3><code>disk is full: refusing to commit N events</code></h3>
 	<p>
-		<strong>Причина:</strong> менее 32 МБ свободного места на диске. Записи останавливаются (для защиты данных); чтения продолжаются.
+		<strong>Причина:</strong> менее 32 МБ свободного места на диске. Записи останавливаются (для защиты данных); чтения продолжаются, и <code>GET /health</code> в это время отвечает <code>503</code> с причиной "database is refusing writes". Цифры ёмкости (<code>nostrfy_db_disk_full</code> / <code>nostrfy_db_free_bytes</code>) есть в <code>/metrics</code> и в снимке <code>nostrfy stats</code> — <code>/relay/stats</code> не требует аутентификации и доступен из других источников, поэтому опускает их. (<code>/metrics</code> тоже без аутентификации: изолируйте его через <code>api_host</code> или обратный прокси, если свободное место хоста должно оставаться приватным.)
 	</p>
 	<p>
-		<strong>Исправление:</strong> освободите место на диске. Записи возобновятся автоматически, как только место появится.
-		(<code>df -h /path/to/data</code>)
+		<strong>Исправление:</strong> освободите место на диске. Записи возобновятся автоматически, и <code>/health</code> вернётся к <code>200</code>, как только место появится — перезапуск не нужен. (<code>df -h /path/to/data</code>)
 	</p>
 
 	<h3><code>nostrfy check</code> сообщает <code>map_size must not exceed max_map_size</code></h3>

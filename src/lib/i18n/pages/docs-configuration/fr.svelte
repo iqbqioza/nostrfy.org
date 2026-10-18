@@ -215,7 +215,7 @@ nostrfy relay list`;
 				<td><code>require_auth</code></td>
 				<td>boolean</td>
 				<td><code>false</code></td>
-				<td>Exiger l’authentification NIP-42 pour REQ/EVENT/COUNT/NEG</td>
+				<td>Exiger l’authentification NIP-42 pour REQ/EVENT/COUNT/NEG (les lectures via l’API REST exigent NIP-98)</td>
 			</tr>
 			<tr>
 				<td><code>send_auth_challenge</code></td>
@@ -243,7 +243,7 @@ nostrfy relay list`;
 		<li>
 			<strong>private_key</strong> — clé secrète propre au relais, utilisée pour signer les événements générés par le relais : métadonnées
 			de groupes NIP-29 (39000–39005) et événements de rôles/membres NIP-43. Générez-la avec <code>nostrfy genkey</code> ; gardez-la
-			secrète. Elle est lue une fois au démarrage, donc toute modification exige un redémarrage.
+			secrète. Elle est lue une fois au démarrage, donc toute modification exige un redémarrage. Un redémarrage répare aussi les métadonnées de groupes stockées — les événements signés par l’ancienne clé sont supprimés et l’état actuel est republié sous la nouvelle clé (l’état des groupes lui-même est restauré tel quel, pas reconstruit).
 		</li>
 		<li>
 			<strong>public_url</strong> — utilisée pour valider les tags porteurs d’URL des clients : AUTH NIP-42, vanish NIP-62 et
@@ -325,6 +325,18 @@ nostrfy relay list`;
 				<td><code>[]</code></td>
 				<td>Adresses/CIDRs de reverse-proxy dont le X-Forwarded-For est de confiance (vide = aucun proxy de confiance)</td>
 			</tr>
+			<tr>
+				<td><code>landing_page_file</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>Fichier HTML affiché à un navigateur ouvrant l’URL du relais, à la place de la page leurre intégrée (vide = leurre)</td>
+			</tr>
+			<tr>
+				<td><code>assets_dir</code></td>
+				<td>string</td>
+				<td><code>""</code></td>
+				<td>Répertoire servi sous /assets/&lt;name&gt; pour la page d’accueil (vide = pas de route /assets/)</td>
+			</tr>
 		</tbody>
 	</table>
 	</div>
@@ -346,6 +358,12 @@ nostrfy relay list`;
 			<code>X-Forwarded-For</code> non de confiance pour les plafonds par IP, la limite de débit, <code>blockip</code> et les logs. N’ajoutez jamais
 			une adresse joignable directement par les clients — ils pourraient falsifier l’en-tête et contourner les limites par IP.
 			Figé au démarrage — exige un redémarrage.
+		</li>
+		<li>
+			<strong>landing_page_file</strong> — par défaut, un navigateur ouvrant l’URL du relais reçoit une page leurre intégrée qui ne révèle rien sur le relais. Pointez ceci vers un fichier HTML pour servir votre propre page (règles du relais, contact, statistiques) ; le document NIP-11 et les connexions WebSocket ne sont pas affectés. Le fichier est lu à la demande et relu lorsqu’il change, donc une tâche externe peut le régénérer sans redémarrage. Il doit être un fichier régulier d’au plus 8 MiB (les liens symboliques ne sont pas suivis) ; s’il manque, la page leurre est servie. S’applique au SIGHUP.
+		</li>
+		<li>
+			<strong>assets_dir</strong> — répertoire dont les fichiers sont servis sous <code>/assets/&lt;name&gt;</code> (images, CSS, JS de la page d’accueil). Seuls des noms plats en ASCII (lettres, chiffres, <code>.</code>, <code>_</code>, <code>-</code>) sont servis (pas de fichiers cachés, sous-répertoires ni liens symboliques) ; les extensions inconnues sont envoyées en <code>application/octet-stream</code>. Les fichiers sont lus à chaque requête et peuvent donc être remplacés sur place. Figé au démarrage — exige un redémarrage.
 		</li>
 	</ul>
 
@@ -504,7 +522,7 @@ nostrfy relay list`;
 				<td><code>max_req_response_bytes</code></td>
 				<td>integer</td>
 				<td><code>33554432</code> (32 Mo)</td>
-				<td>Plafond pour le total d’octets qu’une seule réponse REQ peut envoyer</td>
+				<td>Plafond du total d’octets qu’une réponse REQ peut envoyer ; les réponses qui tiennent dans la file sortante sont livrées en entier</td>
 			</tr>
 		</tbody>
 	</table>
@@ -638,7 +656,7 @@ nostrfy relay list`;
 				<td><code>live_buffer</code></td>
 				<td>integer</td>
 				<td><code>65536</code></td>
-				<td>Taille de la file de diffusion live</td>
+				<td>Taille de la file de diffusion live ; au-delà de 10 000 000, refusé au check/démarrage ; au-delà de 1 000 000, avertissement</td>
 			</tr>
 		</tbody>
 	</table>
@@ -726,7 +744,7 @@ nostrfy relay list`;
 				<td><code>db_buffer_size</code></td>
 				<td>integer</td>
 				<td><code>2048</code></td>
-				<td>Tampon WebSocket initial par connexion (octets)</td>
+				<td>Tampon WebSocket initial par connexion (octets) ; doit rester sous la limite de tampon d’écriture dérivée de max_ws_message_bytes / max_neg_items (sinon refusé au check/démarrage)</td>
 			</tr>
 			<tr>
 				<td><code>db_request_timeout_secs</code></td>
@@ -802,7 +820,7 @@ nostrfy relay list`;
 				<td><code>stats_file</code></td>
 				<td>string</td>
 				<td><code>"./nostrfy.stats.json"</code></td>
-				<td>Chemin du fichier de statistiques</td>
+				<td>Chemin du fichier de statistiques ; un sous-ensemble public est servi sur /relay/stats</td>
 			</tr>
 			<tr>
 				<td><code>stats_interval_secs</code></td>
@@ -826,6 +844,10 @@ nostrfy relay list`;
 	</table>
 	</div>
 	<p>Les chemins sont résolus par rapport au répertoire du fichier de configuration, donc ils restent valides après que le démon change son répertoire de travail.</p>
+
+	<p>
+		<code>/relay/stats</code> ne demande aucun jeton et est lisible en cross-origin, il sert donc une vue plus étroite que le fichier de statistiques : l’espace disque libre de l’hôte et l’indicateur de disque plein, les compteurs d’échecs (<code>db_errors</code>, <code>accept_errors</code>, <code>rebuild_failures</code>, <code>log_errors</code>) et la répartition des refus de connexion par motif sont omis — ensemble, ils constitueraient un oracle de capacité de stockage pour un sondeur anonyme. Ces clés restent dans le fichier de statistiques (<code>nostrfy stats</code> les affiche) et dans <code>/metrics</code>. Notez que <code>/metrics</code> n’est pas authentifié non plus : isolez-le (<code>api_host</code> ou reverse-proxy) si les chiffres de capacité doivent rester privés.
+	</p>
 
 	<h2>Section [access] — contrôle d’accès</h2>
 		<div class="overflow-x-auto">
@@ -999,8 +1021,8 @@ nostrfy relay list`;
 				<td>relay.livekit_*, enabled_nips / disabled_nips</td>
 			</tr>
 			<tr>
-				<td>la plupart des limites</td>
-				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, database.*, tailles du démon, plafonds de limites, blossom.*</td>
+				<td>la plupart des limites, landing_page_file</td>
+				<td>api_host, trusted_proxies, metrics_enabled, ws_paths, assets_dir, database.*, tailles du démon, plafonds de limites, blossom.*</td>
 			</tr>
 		</tbody>
 	</table>

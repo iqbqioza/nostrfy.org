@@ -42,11 +42,7 @@ curl https://<your-app-name>.fly.dev/
 		<tbody>
 			<tr>
 				<td><code>Dockerfile</code></td>
-				<td>
-					容器镜像 — 从 GitHub 发布资产<strong>下载预编译的发布二进制</strong>
-					（x86_64 / aarch64，按构建架构选择）并验证其
-					sha256 校验和。Fly 上不发生编译
-				</td>
+				<td>容器镜像 — 用 <code>install.sh</code> <strong>安装预编译的发布二进制</strong>（自动识别 x86_64 / aarch64，验证 sha256 校验和）；<code>NOSTRFY_VERSION</code> 构建参数可固定版本。Fly 上不进行编译</td>
 			</tr>
 			<tr>
 				<td><code>fly.toml</code></td>
@@ -125,13 +121,10 @@ curl https://<your-app-name>.fly.dev/
 	<h2>扩缩容与更新</h2>
 	<ul>
 		<li>
-			<strong>更新中继</strong>：编辑 <code>deploy/nostrfy.container.toml</code> 并
-			再次 <code>fly deploy</code> — 镜像总是下载<strong>最新</strong>的 GitHub
-			发布二进制，因此更新只是简单的重新部署
+			<strong>更新中继</strong>：编辑 <code>deploy/nostrfy.container.toml</code> 后再次 <code>fly deploy</code> — 镜像总是安装<strong>最新</strong>的 GitHub 发布二进制，因此更新就是一次简单的重新部署
 		</li>
 		<li>
-			<strong>固定版本</strong>：<code>docker build --build-arg NOSTRFY_VERSION=v0.1.16 ...</code>
-			或更改 Dockerfile 中的 <code>ARG</code>
+			<strong>固定版本</strong>：<code>docker build --build-arg NOSTRFY_VERSION=v0.1.22 ...</code>
 		</li>
 		<li>
 			<strong>扩容</strong>：中继默认是单台机器。
