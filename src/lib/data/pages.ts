@@ -37,6 +37,6 @@ export const pages: PageEntry[] = [
 ];
 
 /** Bump when page content changes across the site. */
-export const siteLastmod = '2026-09-25';
+export const siteLastmod = '2026-10-19';
 
 export const siteUrl = 'https://nostrfy.org';

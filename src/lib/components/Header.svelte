@@ -29,14 +29,9 @@
 		return $page.url.pathname.startsWith(href) || $page.url.pathname === href;
 	}
 
-	function remember(target: Locale) {
+	function closeMenus() {
 		open = false;
 		if (langDetails) langDetails.open = false;
-		try {
-			localStorage.setItem('nostrfy-lang', target);
-		} catch {
-			/* storage unavailable */
-		}
 	}
 </script>
 
@@ -80,7 +75,7 @@
 					{#each locales as target (target)}
 						<a
 							href={localePath(target, $page.url.pathname)}
-							onclick={() => remember(target)}
+							onclick={closeMenus}
 							class="flex items-center justify-between px-3.5 py-2 text-sm transition-colors {target === locale
 								? 'text-accent-300'
 								: 'text-zinc-300 hover:bg-surface/70 hover:text-white'}"
@@ -138,7 +133,7 @@
 						{#each locales as target (target)}
 							<a
 								href={localePath(target, $page.url.pathname)}
-								onclick={() => remember(target)}
+								onclick={closeMenus}
 								class="rounded-lg px-3 py-2 text-sm font-medium {target === locale
 									? 'bg-accent-500/10 text-accent-200'
 									: 'text-zinc-400 hover:text-zinc-100'}"

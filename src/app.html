@@ -2,31 +2,6 @@
 <html lang="%lang%">
 	<head>
 		<meta charset="utf-8" />
-		<script>
-			(function () {
-				try {
-					var path = location.pathname;
-					var match = path.match(/^\/(zh-Hans|zh-Hant|ja|ru|de|fr|es|pt|it)(?=\/|$)/);
-					var current = match ? match[1] : 'en';
-					var stored = localStorage.getItem('nostrfy-lang');
-					if (stored) return;
-					var primary = String(
-						(navigator.languages && navigator.languages[0]) || navigator.language || ''
-					).toLowerCase();
-					var base = primary.split('-')[0];
-					var want = 'en';
-					if (base === 'zh') {
-						want = /hant|tw|hk|mo/.test(primary) ? 'zh-Hant' : 'zh-Hans';
-					} else if (['ja', 'ru', 'de', 'fr', 'es', 'pt', 'it'].indexOf(base) !== -1) {
-						want = base;
-					}
-					if (want === current) return;
-					var rest = path.replace(/^\/(zh-Hans|zh-Hant|ja|ru|de|fr|es|pt|it)(?=\/|$)/, '') || '/';
-					var target = want === 'en' ? rest : '/' + want + (rest === '/' ? '/' : rest);
-					location.replace(target + location.search + location.hash);
-				} catch (e) {}
-			})();
-		</script>
 		<link rel="icon" href="%sveltekit.assets%/favicon.ico?v=2" sizes="any" />
 		<link rel="icon" href="%sveltekit.assets%/favicon-32x32.png?v=2" sizes="32x32" type="image/png" />
 		<link rel="icon" href="%sveltekit.assets%/favicon-16x16.png?v=2" sizes="16x16" type="image/png" />
